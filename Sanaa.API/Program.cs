@@ -67,6 +67,7 @@ namespace Sanaa.API
 
             builder.Services.AddScoped<IServiceService, ServiceService>();
             builder.Services.AddScoped<IFreelancerService, FreelancerService>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

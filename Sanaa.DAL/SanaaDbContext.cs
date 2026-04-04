@@ -17,6 +17,7 @@ namespace Sanaa.DAL
         public DbSet<Service> Services { get; set; }
         public DbSet<FreelancerService> FreelancerServices { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         // هاي الميثود بنستخدمها عشان نكتب إعدادات متقدمة للداتا بيس (Fluent API)
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,6 +40,25 @@ namespace Sanaa.DAL
                 .HasOne(o => o.Freelancer)
                 .WithMany()
                 .HasForeignKey(o => o.FreelancerID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // 4. إيقاف الحذف المتسلسل للتقييمات (عشان ما يصير Error 1785)
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Client)
+                .WithMany()
+                .HasForeignKey(r => r.ClientID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Freelancer)
+                .WithMany()
+                .HasForeignKey(r => r.FreelancerID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Order)
+                .WithMany()
+                .HasForeignKey(r => r.OrderID)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
