@@ -24,6 +24,8 @@ namespace Sanaa.API
                 });
 
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+
 
             // 🌟 التعديل الأول: كود الـ Swagger الجديد انحط هون بدل السطر القديم
             builder.Services.AddSwaggerGen(c =>

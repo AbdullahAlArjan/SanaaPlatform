@@ -16,16 +16,30 @@ namespace Sanaa.DAL
         public DbSet<FreelancerProfile> FreelancerProfiles { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<FreelancerService> FreelancerServices { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         // هاي الميثود بنستخدمها عشان نكتب إعدادات متقدمة للداتا بيس (Fluent API)
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // هون بنحل مشكلة الجدول الوسيط اللي حكينا عنها!
-            // بنحكي للـ EF إنه هاد الجدول إله مفتاح مركب (Composite Key) مكون من حقلين
+            // 1. تعريف المفتاح المركب لجدول الكسر (عشان يختفي الإيرور الجديد)
             modelBuilder.Entity<FreelancerService>()
                 .HasKey(fs => new { fs.FreelancerID, fs.ServiceID });
+
+            // 2. إيقاف الحذف المتسلسل لجهة الزبون في الطلبات (عشان إيرور اللوب القديم)
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Client)
+                .WithMany()
+                .HasForeignKey(o => o.ClientID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // 3. إيقاف الحذف المتسلسل لجهة الصنايعي في الطلبات
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Freelancer)
+                .WithMany()
+                .HasForeignKey(o => o.FreelancerID)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
