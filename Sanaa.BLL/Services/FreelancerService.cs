@@ -66,5 +66,46 @@ namespace Sanaa.BLL.Services
                 Services = profile.FreelancerServices.Select(fs => fs.Service.Title).ToList()
             };
         }
+
+        public async Task<IEnumerable<FreelancerProfileResponse>> SearchFreelancersAsync(string? profession, string? city, int? serviceId)
+        {
+            // 1. بنجهز الطلب الأساسي مع الجداول المرتبطة (بدون ما نبعثه للداتا بيس لسا)
+            var query = _context.FreelancerProfiles
+                .Include(p => p.FreelancerServices)
+                    .ThenInclude(fs => fs.Service)
+                .AsQueryable(); // AsQueryable يعني "استنى شوي لا تنفذ، لسا بدي أضيف فلاتر"
+
+            // 2. إذا العميل كتب اسم مهنة، بنفلتر عليها (Contains عشان تجيب الكلمة حتى لو جزء من الجملة)
+            if (!string.IsNullOrEmpty(profession))
+            {
+                query = query.Where(p => p.Profession.Contains(profession));
+            }
+
+            // 3. إذا العميل حدد مدينة، بنفلتر عليها
+            if (!string.IsNullOrEmpty(city))
+            {
+                query = query.Where(p => p.City == city);
+            }
+
+            // 4. إذا العميل اختار رقم خدمة معينة (مثلا خدمة رقم 1)، بنجيب العمال اللي عندهم هاي الخدمة
+            if (serviceId.HasValue && serviceId.Value > 0)
+            {
+                query = query.Where(p => p.FreelancerServices.Any(fs => fs.ServiceID == serviceId.Value));
+            }
+
+            // 5. هسا بعد ما ركبنا كل الفلاتر، بنبعث الطلب للداتا بيس
+            var profiles = await query.ToListAsync();
+
+            // 6. بنحول النتيجة لـ DTO النظيف تبعنا
+            return profiles.Select(p => new FreelancerProfileResponse
+            {
+                UserID = p.FreelancerID,
+                Profession = p.Profession,
+                ExperienceYears = p.ExperienceYears,
+                City = p.City,
+                AverageRating = p.AverageRating,
+                Services = p.FreelancerServices.Select(fs => fs.Service.Title).ToList()
+            });
+        }
     }
 }

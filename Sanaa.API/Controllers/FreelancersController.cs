@@ -47,5 +47,17 @@ namespace Sanaa.API.Controllers
 
             return Ok(profile);
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string? profession, [FromQuery] string? city, [FromQuery] int? serviceId)
+        {
+            // بنمرر البيانات اللي إجت من الرابط للـ Service
+            var results = await _freelancerService.SearchFreelancersAsync(profession, city, serviceId);
+
+            if (!results.Any())
+                return NotFound("لم يتم العثور على صنايعية تطابق عملية البحث.");
+
+            return Ok(results);
+        }
     }
 }
