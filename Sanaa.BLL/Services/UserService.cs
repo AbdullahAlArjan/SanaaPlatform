@@ -114,5 +114,36 @@ namespace Sanaa.BLL.Services
             // إذا كل إشي تمام، بنولد التذكرة وبنرجعها
             return GenerateJwtToken(user);
         }
+        // دالة إحصائيات النظام
+        public async Task<AdminDashboardStatsDto> GetSystemStatsAsync()
+        {
+            var totalUsers = await _context.Users.CountAsync();
+
+            // بنعد كم صنايعي عندنا
+            var totalFreelancers = await _context.Users.CountAsync(u => u.Role == "Freelancer");
+
+            // بنعد الحسابات اللي الـ IsActive تبعها true
+            var activeUsers = await _context.Users.CountAsync(u => u.IsActive);
+
+            return new AdminDashboardStatsDto
+            {
+                TotalUsers = totalUsers,
+                TotalFreelancers = totalFreelancers,
+                ActiveUsers = activeUsers
+            };
+        }
+
+        // دالة حظر / فك حظر المستخدم (Toggle)
+        public async Task<bool> ToggleUserStatusAsync(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+
+            // السحر هون: إذا كان true بصير false، وإذا كان false بصير true
+            user.IsActive = !user.IsActive;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

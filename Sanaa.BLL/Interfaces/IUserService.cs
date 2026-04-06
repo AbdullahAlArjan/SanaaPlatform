@@ -12,5 +12,8 @@ namespace Sanaa.BLL.Interfaces
         Task<User> GetUserByIdAsync(int id);
         Task<bool> CreateUserAsync(User user);
         Task<string> LoginAsync(string email, string password);
+
+        Task<AdminDashboardStatsDto> GetSystemStatsAsync();
+        Task<bool> ToggleUserStatusAsync(int userId);
     }
 }
