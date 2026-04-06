@@ -68,6 +68,7 @@ namespace Sanaa.API
             builder.Services.AddScoped<IServiceService, ServiceService>();
             builder.Services.AddScoped<IFreelancerService, FreelancerService>();
             builder.Services.AddScoped<IReviewService, ReviewService>();
+            builder.Services.AddScoped<IImageService, ImageService>();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -93,10 +94,13 @@ namespace Sanaa.API
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            if (!app.Environment.IsDevelopment())
+                app.UseHttpsRedirection();
             app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
           
+            app.UseStaticFiles();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
