@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Sanaa.DAL;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Sanaa.API.Hubs;
+using Sanaa.API.Services;
 using Sanaa.BLL.Interfaces;
 using Sanaa.BLL.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Sanaa.DAL;
 using System.Text;
-using Microsoft.OpenApi.Models;
 
 namespace Sanaa.API
 {
@@ -68,6 +70,9 @@ namespace Sanaa.API
             builder.Services.AddScoped<IServiceService, ServiceService>();
             builder.Services.AddScoped<IFreelancerService, FreelancerService>();
             builder.Services.AddScoped<IReviewService, ReviewService>();
+            // بنحكي للسيرفر: لما الـ BLL يطلب INotificationService، أعطيه SignalRNotificationService
+            builder.Services.AddScoped<INotificationService, SignalRNotificationService>();
+            builder.Services.AddSignalR();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -101,6 +106,7 @@ namespace Sanaa.API
             app.UseAuthorization();
 
             app.MapControllers();
+            app.MapHub<NotificationHub>("/notificationHub");
 
             app.Run();
         }

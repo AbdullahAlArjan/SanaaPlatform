@@ -15,9 +15,12 @@ namespace Sanaa.BLL.Services
     {
         private readonly SanaaDbContext _context;
 
-        public OrderService(SanaaDbContext context)
+        private readonly INotificationService _notificationService;
+
+        public OrderService(SanaaDbContext context, INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         // 1. إنشاء طلب جديد
@@ -34,6 +37,8 @@ namespace Sanaa.BLL.Services
 
             _context.Orders.Add(order);
             return await _context.SaveChangesAsync() > 0;
+            // بنفترض إنك بتعرف مين الصنايعي اللي إجاله الطلب (مثلاً FreelancerId)
+            await _notificationService.SendNotificationToUserAsync(order.FreelancerID, $"إجالك طلب جديد من {order.Client}! 🚀");
         }
 
         // 2. جلب طلبات صنايعي معين
