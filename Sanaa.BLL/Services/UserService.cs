@@ -1,16 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BCrypt.Net;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Sanaa.BLL.DTOs;
 using Sanaa.BLL.Interfaces;
-using System.IdentityModel.Tokens.Jwt;
 using Sanaa.DAL;
-using System.Security.Claims;
-using System.Text;
 using Sanaa.DAL.Entities;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
-using BCrypt.Net;
-using Microsoft.EntityFrameworkCore;
+using Sanaa.BLL.DTOs;
 namespace Sanaa.BLL.Services
 {
     // بنخلي الكلاس يورث من الـ Interface عشان نلتزم بالعقد
@@ -50,9 +52,30 @@ namespace Sanaa.BLL.Services
         }
 
         // 2. جلب كل المستخدمين (استخدام EF)
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<IEnumerable<User>> GetAllUsersAsync(UserSearchFilterDto filter)
         {
-            return await _context.Users.ToListAsync();
+            // 1. بنجيب اليوزرز وبنشبك معهم جدول البروفايل عشان نقدر نفلتر منه
+            var query = _context.Users.Include(u => u.FreelancerProfile).AsQueryable();
+
+            // 2. فلترة الاسم (استخدمنا FullName زي ما هو عندك)
+            if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+            {
+                query = query.Where(u => u.FullName.Contains(filter.SearchTerm));
+            }
+
+            // 3. فلترة المدينة (بندخل على جدول FreelancerProfile وبنفلتر)
+            if (!string.IsNullOrWhiteSpace(filter.City))
+            {
+                query = query.Where(u => u.FreelancerProfile != null && u.FreelancerProfile.City == filter.City);
+            }
+
+            // 4. فلترة المهنة (من جدول FreelancerProfile كمان)
+            if (!string.IsNullOrWhiteSpace(filter.Profession))
+            {
+                query = query.Where(u => u.FreelancerProfile != null && u.FreelancerProfile.Profession == filter.Profession);
+            }
+
+            return await query.ToListAsync();
         }
 
         // 3. جلب مستخدم معين بالـ ID مع تفاصيل شغله (استخدام LINQ + Include)

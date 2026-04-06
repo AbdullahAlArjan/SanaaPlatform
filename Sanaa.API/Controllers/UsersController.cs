@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Sanaa.API.DTOs;
+using Sanaa.BLL.DTOs;
 using Sanaa.BLL.Interfaces;
 using Sanaa.DAL.Entities;
-using Sanaa.API.DTOs;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Sanaa.API.Controllers
 {
@@ -20,12 +21,17 @@ namespace Sanaa.API.Controllers
 
         [Authorize]
         [HttpGet] // طلب جلب بيانات
-        public async Task<IActionResult> GetUsers()
+        [HttpGet]
+        [Authorize] // خليها محمية زي ما اتفقنا
+        public async Task<IActionResult> GetAllUsers([FromQuery] UserSearchFilterDto filter)
         {
-            var users = await _userService.GetAllUsersAsync();
-            return Ok(users); // برجع البيانات مع حالة 200 (نجاح)
-        }
+            var users = await _userService.GetAllUsersAsync(filter);
 
+            if (!users.Any())
+                return NotFound("لم يتم العثور على عمال بهذه المواصفات.");
+
+            return Ok(users);
+        }
         [HttpPost] // طلب إضافة مستخدم
         public async Task<IActionResult> AddUser(User user)
         {
