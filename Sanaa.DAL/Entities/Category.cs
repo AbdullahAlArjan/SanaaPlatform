@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Sanaa.DAL.Entities
 {
@@ -17,6 +18,7 @@ namespace Sanaa.DAL.Entities
         public string ImageUrl { get; set; }
 
         // Navigation Property: قسم واحد → خدمات كثيرة (One-to-Many)
+        [JsonIgnore] // منع circular reference مع Swagger
         public virtual ICollection<Service> Services { get; set; } = new List<Service>();
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Sanaa.DAL.Entities
 {
@@ -31,9 +32,11 @@ namespace Sanaa.DAL.Entities
 
         // علاقة Many-to-One مع القسم
         [ForeignKey("CategoryID")]
+        [JsonIgnore] // منع circular reference مع Swagger (Service → Category → Services → ...)
         public virtual Category Category { get; set; }
 
         // علاقة Many-to-Many مع المستقلين عن طريق الجدول الوسيط
+        [JsonIgnore]
         public virtual ICollection<FreelancerService> FreelancerServices { get; set; } = new List<FreelancerService>();
     }
 }
