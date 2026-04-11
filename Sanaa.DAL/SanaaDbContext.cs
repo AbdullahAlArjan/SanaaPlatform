@@ -22,6 +22,7 @@ namespace Sanaa.DAL
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         // هاي الميثود بنستخدمها عشان نكتب إعدادات متقدمة للداتا بيس (Fluent API)
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -103,6 +104,13 @@ namespace Sanaa.DAL
             modelBuilder.Entity<Report>()
                 .HasIndex(r => new { r.ReporterID, r.TargetType, r.TargetID })
                 .IsUnique();
+
+            // RefreshTokens: Cascade delete (حذف اليوزر يحذف توكناته)
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(rt => rt.User)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

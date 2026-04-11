@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Sanaa API (HTTPS)",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "Sanaa.API", "--launch-profile", "https"],
+      "port": 7101
+    },
+    {
+      "name": "Sanaa API (HTTP)",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "Sanaa.API", "--launch-profile", "http"],
+      "port": 5172
+    }
+  ]
+}

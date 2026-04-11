@@ -38,5 +38,6 @@ namespace Sanaa.DAL.Entities
         public virtual FreelancerProfile? FreelancerProfile { get; set; }
         public virtual ICollection<OtpCode> OtpCodes { get; set; } = new List<OtpCode>();
         public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
+        public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }

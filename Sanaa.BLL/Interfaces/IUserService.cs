@@ -11,7 +11,9 @@ namespace Sanaa.BLL.Interfaces
         Task<IEnumerable<User>> GetAllUsersAsync(UserSearchFilterDto filter);
         Task<User> GetUserByIdAsync(int id);
         Task<bool> CreateUserAsync(User user);
-        Task<string> LoginAsync(string email, string password);
+        Task<LoginResponse?> LoginAsync(string email, string password);
+        Task<LoginResponse?> RefreshTokenAsync(string refreshToken);
+        Task<bool> RevokeTokenAsync(string refreshToken);
 
         Task<AdminDashboardStatsDto> GetSystemStatsAsync();
         Task<bool> ToggleUserStatusAsync(int userId);

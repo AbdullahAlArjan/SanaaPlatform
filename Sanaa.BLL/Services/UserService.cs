@@ -1,6 +1,5 @@
 ﻿using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Sanaa.BLL.DTOs;
@@ -10,9 +9,9 @@ using Sanaa.DAL.Entities;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Sanaa.BLL.DTOs;
 namespace Sanaa.BLL.Services
 {
     // بنخلي الكلاس يورث من الـ Interface عشان نلتزم بالعقد
@@ -27,7 +26,7 @@ namespace Sanaa.BLL.Services
             _context = context; 
             _configuration = configuration;
         }
-        private string GenerateJwtToken(User user)
+        private (string token, DateTime expiry) GenerateJwtToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -41,14 +40,22 @@ namespace Sanaa.BLL.Services
         new Claim(ClaimTypes.Role, user.Role) // هاد اللي بحدد شو مسموحله يعمل
             };
 
+            var expiry = DateTime.UtcNow.AddMinutes(15);
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(1), // التذكرة صالحة ليوم واحد
+                expires: expiry,
                 signingCredentials: credentials);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return (new JwtSecurityTokenHandler().WriteToken(token), expiry);
+        }
+
+        private static string GenerateRefreshToken()
+        {
+            var bytes = new byte[64];
+            RandomNumberGenerator.Fill(bytes);
+            return Convert.ToBase64String(bytes);
         }
 
         // 2. جلب كل المستخدمين (استخدام EF)
@@ -101,23 +108,70 @@ namespace Sanaa.BLL.Services
             return result > 0;
         }
 
-        public async Task<string> LoginAsync(string email, string password)
+        public async Task<LoginResponse?> LoginAsync(string email, string password)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
-            // التأكد من الإيميل والباسورد المشفر
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-            {
                 return null;
-            }
 
-            // إذا الإيميل ما تم التحقق منه بعد
+            // sentinel value as a special LoginResponse with empty token
             if (!user.IsEmailVerified)
-            {
-                return "EMAIL_NOT_VERIFIED";
-            }
+                return new LoginResponse { AccessToken = "EMAIL_NOT_VERIFIED", RefreshToken = string.Empty };
 
-            return GenerateJwtToken(user);
+            return await CreateLoginResponseAsync(user);
+        }
+
+        private async Task<LoginResponse> CreateLoginResponseAsync(User user)
+        {
+            var (accessToken, expiry) = GenerateJwtToken(user);
+            var refreshTokenValue = GenerateRefreshToken();
+
+            _context.RefreshTokens.Add(new RefreshToken
+            {
+                UserId = user.UserID,
+                Token = refreshTokenValue,
+                ExpiresAt = DateTime.UtcNow.AddDays(7),
+                IsRevoked = false,
+                CreatedAt = DateTime.UtcNow
+            });
+            await _context.SaveChangesAsync();
+
+            return new LoginResponse
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshTokenValue,
+                AccessTokenExpiry = expiry
+            };
+        }
+
+        public async Task<LoginResponse?> RefreshTokenAsync(string refreshToken)
+        {
+            var token = await _context.RefreshTokens
+                .Include(rt => rt.User)
+                .FirstOrDefaultAsync(rt => rt.Token == refreshToken
+                                        && !rt.IsRevoked
+                                        && rt.ExpiresAt > DateTime.UtcNow);
+
+            if (token == null) return null;
+
+            // Token rotation: revoke the old token and issue a new pair
+            token.IsRevoked = true;
+            await _context.SaveChangesAsync();
+
+            return await CreateLoginResponseAsync(token.User);
+        }
+
+        public async Task<bool> RevokeTokenAsync(string refreshToken)
+        {
+            var token = await _context.RefreshTokens
+                .FirstOrDefaultAsync(rt => rt.Token == refreshToken && !rt.IsRevoked);
+
+            if (token == null) return false;
+
+            token.IsRevoked = true;
+            await _context.SaveChangesAsync();
+            return true;
         }
         // دالة إحصائيات النظام
         public async Task<AdminDashboardStatsDto> GetSystemStatsAsync()

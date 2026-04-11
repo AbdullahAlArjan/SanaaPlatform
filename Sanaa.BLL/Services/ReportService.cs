@@ -43,7 +43,7 @@ namespace Sanaa.BLL.Services
             return true;
         }
 
-        public async Task<IEnumerable<ReportResponse>> GetAllReportsAsync(string? statusFilter)
+        public async Task<PagedResponse<ReportResponse>> GetAllReportsAsync(string? statusFilter, int pageNumber, int pageSize)
         {
             var query = _context.Reports
                 .Include(r => r.Reporter)
@@ -55,21 +55,33 @@ namespace Sanaa.BLL.Services
                 query = query.Where(r => r.Status == status);
             }
 
-            var reports = await query.OrderByDescending(r => r.CreatedAt).ToListAsync();
+            query = query.OrderByDescending(r => r.CreatedAt);
 
-            return reports.Select(r => new ReportResponse
+            var totalCount = await query.CountAsync();
+            var reports = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResponse<ReportResponse>
             {
-                ReportID = r.ReportID,
-                ReporterID = r.ReporterID,
-                ReporterName = r.Reporter.FullName,
-                TargetType = r.TargetType.ToString(),
-                TargetID = r.TargetID,
-                Reason = r.Reason,
-                Description = r.Description,
-                Status = r.Status.ToString(),
-                CreatedAt = r.CreatedAt,
-                AdminNotes = r.AdminNotes
-            });
+                Data = reports.Select(r => new ReportResponse
+                {
+                    ReportID = r.ReportID,
+                    ReporterID = r.ReporterID,
+                    ReporterName = r.Reporter.FullName,
+                    TargetType = r.TargetType.ToString(),
+                    TargetID = r.TargetID,
+                    Reason = r.Reason,
+                    Description = r.Description,
+                    Status = r.Status.ToString(),
+                    CreatedAt = r.CreatedAt,
+                    AdminNotes = r.AdminNotes
+                }),
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
 
         public async Task<bool> UpdateReportStatusAsync(int reportId, UpdateReportStatusRequest request)

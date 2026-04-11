@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Sanaa.API.DTOs;
 using Sanaa.BLL.DTOs;
 using Sanaa.BLL.Interfaces;
@@ -20,9 +21,7 @@ namespace Sanaa.API.Controllers
         }
 
         [Authorize]
-        [HttpGet] // طلب جلب بيانات
         [HttpGet]
-        [Authorize] // خليها محمية زي ما اتفقنا
         public async Task<IActionResult> GetAllUsers([FromQuery] UserSearchFilterDto filter)
         {
             var users = await _userService.GetAllUsersAsync(filter);
@@ -40,18 +39,19 @@ namespace Sanaa.API.Controllers
             return BadRequest("فشلت عملية الإضافة");
         }
 
+        [EnableRateLimiting("LoginPolicy")]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var token = await _userService.LoginAsync(request.Email, request.Password);
+            var response = await _userService.LoginAsync(request.Email, request.Password);
 
-            if (token == null)
+            if (response == null)
                 return Unauthorized("الإيميل أو كلمة المرور غلط");
 
-            if (token == "EMAIL_NOT_VERIFIED")
+            if (response.AccessToken == "EMAIL_NOT_VERIFIED")
                 return StatusCode(403, "يرجى التحقق من بريدك الإلكتروني أولاً. أرسل رمز التحقق عبر POST /api/auth/send-otp");
 
-            return Ok(new { Token = token });
+            return Ok(response);
         }
     }
 }

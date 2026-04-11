@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Sanaa.BLL.Interfaces;
 using Sanaa.DAL;
 using Sanaa.DAL.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Sanaa.BLL.DTOs;
 
@@ -12,10 +14,12 @@ namespace Sanaa.BLL.Services
     public class FreelancerService : IFreelancerService
     {
         private readonly SanaaDbContext _context;
+        private readonly IFileUploadService _fileUploadService;
 
-        public FreelancerService(SanaaDbContext context)
+        public FreelancerService(SanaaDbContext context, IFileUploadService fileUploadService)
         {
             _context = context;
+            _fileUploadService = fileUploadService;
         }
 
         public async Task<bool> CreateProfileAsync(int userId, string profession, int experienceYears, string city, List<int> serviceIds)
@@ -106,6 +110,69 @@ namespace Sanaa.BLL.Services
                 AverageRating = p.AverageRating,
                 Services = p.FreelancerServices.Select(fs => fs.Service.Title).ToList()
             });
+        }
+
+        public async Task<string> UploadProfileImageAsync(int freelancerId, IFormFile file)
+        {
+            var profile = await _context.FreelancerProfiles.FindAsync(freelancerId);
+            if (profile == null)
+                throw new ArgumentException("الملف الشخصي غير موجود");
+
+            // حذف الصورة القديمة إن وجدت
+            if (!string.IsNullOrEmpty(profile.ProfileImageUrl))
+                _fileUploadService.DeleteImage(profile.ProfileImageUrl);
+
+            profile.ProfileImageUrl = await _fileUploadService.SaveImageAsync(file, "profiles");
+            await _context.SaveChangesAsync();
+            return profile.ProfileImageUrl;
+        }
+
+        public async Task<List<string>> AddPortfolioImageAsync(int freelancerId, IFormFile file)
+        {
+            var profile = await _context.FreelancerProfiles.FindAsync(freelancerId);
+            if (profile == null)
+                throw new ArgumentException("الملف الشخصي غير موجود");
+
+            var images = string.IsNullOrEmpty(profile.PortfolioImagesJson)
+                ? []
+                : JsonSerializer.Deserialize<List<string>>(profile.PortfolioImagesJson) ?? [];
+
+            if (images.Count >= 5)
+                throw new InvalidOperationException("وصلت للحد الأقصى (5 صور)");
+
+            var url = await _fileUploadService.SaveImageAsync(file, "portfolio");
+            images.Add(url);
+            profile.PortfolioImagesJson = JsonSerializer.Serialize(images);
+            await _context.SaveChangesAsync();
+            return images;
+        }
+
+        public async Task<List<string>> RemovePortfolioImageAsync(int freelancerId, string imageUrl)
+        {
+            var profile = await _context.FreelancerProfiles.FindAsync(freelancerId);
+            if (profile == null)
+                throw new ArgumentException("الملف الشخصي غير موجود");
+
+            var images = string.IsNullOrEmpty(profile.PortfolioImagesJson)
+                ? []
+                : JsonSerializer.Deserialize<List<string>>(profile.PortfolioImagesJson) ?? [];
+
+            if (!images.Remove(imageUrl))
+                throw new ArgumentException("الصورة غير موجودة");
+
+            _fileUploadService.DeleteImage(imageUrl);
+            profile.PortfolioImagesJson = images.Count > 0 ? JsonSerializer.Serialize(images) : null;
+            await _context.SaveChangesAsync();
+            return images;
+        }
+
+        public async Task<List<string>> GetPortfolioImagesAsync(int freelancerId)
+        {
+            var profile = await _context.FreelancerProfiles.FindAsync(freelancerId);
+            if (profile == null || string.IsNullOrEmpty(profile.PortfolioImagesJson))
+                return [];
+
+            return JsonSerializer.Deserialize<List<string>>(profile.PortfolioImagesJson) ?? [];
         }
     }
 }
