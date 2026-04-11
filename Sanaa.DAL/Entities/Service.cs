@@ -10,7 +10,8 @@ namespace Sanaa.DAL.Entities
         [Key]
         public int ServiceID { get; set; }
 
-        // رح نضيف الـ CategoryID بعدين بس نعمل جدول الأقسام، عشان نمشي حبة حبة
+        // FK للقسم (nullable عشان الخدمات الموجودة ما تنكسر)
+        public int? CategoryID { get; set; }
 
         [Required(ErrorMessage = "عنوان الخدمة مطلوب")]
         [MaxLength(100)]
@@ -27,6 +28,10 @@ namespace Sanaa.DAL.Entities
         public bool IsActive { get; set; } = true;
 
         // ⬇️ Navigation Properties ⬇️
+
+        // علاقة Many-to-One مع القسم
+        [ForeignKey("CategoryID")]
+        public virtual Category Category { get; set; }
 
         // علاقة Many-to-Many مع المستقلين عن طريق الجدول الوسيط
         public virtual ICollection<FreelancerService> FreelancerServices { get; set; } = new List<FreelancerService>();

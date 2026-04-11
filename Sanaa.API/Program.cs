@@ -83,6 +83,7 @@ namespace Sanaa.API
             builder.Services.AddScoped<IChatbotService, ChatbotService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IFileUploadService, Sanaa.API.Services.FileUploadService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             // Rate Limiting: حماية من الـ abuse
             builder.Services.AddRateLimiter(options =>

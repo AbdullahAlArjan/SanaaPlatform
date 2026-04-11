@@ -23,6 +23,7 @@ namespace Sanaa.DAL
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         // هاي الميثود بنستخدمها عشان نكتب إعدادات متقدمة للداتا بيس (Fluent API)
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -111,6 +112,13 @@ namespace Sanaa.DAL
                 .WithMany(u => u.RefreshTokens)
                 .HasForeignKey(rt => rt.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Category - Service: One-to-Many (حذف القسم يخلي الخدمات بدون قسم)
+            modelBuilder.Entity<Service>()
+                .HasOne(s => s.Category)
+                .WithMany(c => c.Services)
+                .HasForeignKey(s => s.CategoryID)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
