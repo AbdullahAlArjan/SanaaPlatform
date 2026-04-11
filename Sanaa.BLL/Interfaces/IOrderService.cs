@@ -9,7 +9,7 @@ namespace Sanaa.BLL.Interfaces
     public interface IOrderService
     {
         Task<bool> CreateOrderAsync(CreateOrderRequest request);
-        Task<IEnumerable<OrderResponse>> GetOrdersForFreelancerAsync(int freelancerId);
+        Task<PagedResponse<OrderResponse>> GetOrdersForFreelancerAsync(int freelancerId, int pageNumber, int pageSize);
         Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus status);
     }
 }

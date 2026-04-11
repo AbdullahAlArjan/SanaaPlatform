@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Sanaa.BLL.DTOs;
@@ -11,10 +12,12 @@ namespace Sanaa.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IOtpService _otpService;
+        private readonly IUserService _userService;
 
-        public AuthController(IOtpService otpService)
+        public AuthController(IOtpService otpService, IUserService userService)
         {
             _otpService = otpService;
+            _userService = userService;
         }
 
         [EnableRateLimiting("OtpPolicy")]
@@ -60,6 +63,24 @@ namespace Sanaa.API.Controllers
             if (!result) return BadRequest("الرمز غير صحيح أو منتهي الصلاحية");
 
             return Ok("تم تغيير كلمة المرور بنجاح");
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        {
+            var response = await _userService.RefreshTokenAsync(request.RefreshToken);
+            if (response == null)
+                return Unauthorized("الـ Refresh Token غير صحيح أو منتهي الصلاحية");
+
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request)
+        {
+            await _userService.RevokeTokenAsync(request.RefreshToken);
+            return Ok("تم تسجيل الخروج بنجاح");
         }
     }
 }

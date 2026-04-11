@@ -27,9 +27,9 @@ namespace Sanaa.API.Controllers
         }
 
         [HttpGet("freelancer/{freelancerId}")]
-        public async Task<IActionResult> GetFreelancerOrders(int freelancerId)
+        public async Task<IActionResult> GetFreelancerOrders(int freelancerId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var orders = await _orderService.GetOrdersForFreelancerAsync(freelancerId);
+            var orders = await _orderService.GetOrdersForFreelancerAsync(freelancerId, pageNumber, pageSize);
             return Ok(orders);
         }
 

@@ -14,17 +14,20 @@ namespace Sanaa.BLL.Services
         private readonly IConfiguration _configuration;
         private readonly INotificationService _notificationService;
         private readonly IInvoiceService _invoiceService;
+        private readonly IEmailService _emailService;
 
         public PaymentService(
             SanaaDbContext context,
             IConfiguration configuration,
             INotificationService notificationService,
-            IInvoiceService invoiceService)
+            IInvoiceService invoiceService,
+            IEmailService emailService)
         {
             _context = context;
             _configuration = configuration;
             _notificationService = notificationService;
             _invoiceService = invoiceService;
+            _emailService = emailService;
             StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"];
         }
 
@@ -104,10 +107,28 @@ namespace Sanaa.BLL.Services
                 await _invoiceService.GenerateInvoiceAsync(
                     payment.OrderId, payment.Id, payment.Amount);
 
-                // إشعار الصنايعي
+                // إشعار الصنايعي عبر SignalR
                 await _notificationService.SendNotificationToUserAsync(
                     payment.Order.FreelancerID,
                     $"تم استلام الدفعة بنجاح للطلب رقم {payment.OrderId} - قيمة: {payment.Amount} JOD");
+
+                // إيميل للزبون والصنايعي
+                var clientUser = await _context.Users.FindAsync(payment.Order.ClientID);
+                var freelancerUser = await _context.Users.FindAsync(payment.Order.FreelancerID);
+
+                var paymentEmailBody = (string name) =>
+                    $"<div dir='rtl'><h3>مرحباً {name}</h3>" +
+                    $"<p>تم تأكيد الدفعة بنجاح للطلب رقم <strong>{payment.OrderId}</strong>.</p>" +
+                    $"<p>المبلغ: <strong>{payment.Amount} JOD</strong></p>" +
+                    $"<p>شكراً لاستخدامك منصة صناع.</p></div>";
+
+                if (clientUser != null)
+                    await _emailService.SendAsync(clientUser.Email, clientUser.FullName,
+                        "تأكيد الدفع - منصة صناع", paymentEmailBody(clientUser.FullName));
+
+                if (freelancerUser != null)
+                    await _emailService.SendAsync(freelancerUser.Email, freelancerUser.FullName,
+                        "تأكيد استلام الدفع - منصة صناع", paymentEmailBody(freelancerUser.FullName));
             }
 
             return true;

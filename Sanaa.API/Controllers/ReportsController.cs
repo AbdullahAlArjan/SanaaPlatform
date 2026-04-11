@@ -34,9 +34,9 @@ namespace Sanaa.API.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAllReports([FromQuery] string? status)
+        public async Task<IActionResult> GetAllReports([FromQuery] string? status, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var reports = await _reportService.GetAllReportsAsync(status);
+            var reports = await _reportService.GetAllReportsAsync(status, pageNumber, pageSize);
             return Ok(reports);
         }
 

@@ -27,6 +27,11 @@ namespace Sanaa.DAL.Entities
         [Column(TypeName = "decimal(3,2)")]
         public decimal AverageRating { get; set; } = 0;
 
+        [MaxLength(500)]
+        public string? ProfileImageUrl { get; set; }
+
+        // JSON array of up to 5 portfolio image URLs — no separate table needed
+        public string? PortfolioImagesJson { get; set; }
 
         // ⬇️ Navigation Properties (العلاقات) ⬇️
 
