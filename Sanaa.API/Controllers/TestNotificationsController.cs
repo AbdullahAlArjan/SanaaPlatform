@@ -23,7 +23,7 @@ namespace Sanaa.API.Controllers
             // السيرفر بيحكي: "يا كل الناس اللي شابكين، استقبلوا هاي الرسالة على قناة اسمها ReceiveNotification"
             await _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
 
-            return Ok(new { Info = "تم إرسال الإشعار اللحظي بنجاح! 🚀", Message = message });
+            return Ok(new { Info = "تم إرسال الإشعار اللحظي بنجاح!", Message = message });
         }
     }
 }
