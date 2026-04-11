@@ -43,11 +43,13 @@ namespace Sanaa.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            // هسا النتيجة رح تكون string (التوكن)
             var token = await _userService.LoginAsync(request.Email, request.Password);
 
             if (token == null)
                 return Unauthorized("الإيميل أو كلمة المرور غلط");
+
+            if (token == "EMAIL_NOT_VERIFIED")
+                return StatusCode(403, "يرجى التحقق من بريدك الإلكتروني أولاً. أرسل رمز التحقق عبر POST /api/auth/send-otp");
 
             return Ok(new { Token = token });
         }

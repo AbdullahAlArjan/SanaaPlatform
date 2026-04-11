@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -72,6 +74,41 @@ namespace Sanaa.API
             builder.Services.AddScoped<IReviewService, ReviewService>();
             // بنحكي للسيرفر: لما الـ BLL يطلب INotificationService، أعطيه SignalRNotificationService
             builder.Services.AddScoped<INotificationService, SignalRNotificationService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IOtpService, OtpService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+            builder.Services.AddScoped<IReportService, ReportService>();
+            builder.Services.AddScoped<IChatbotService, ChatbotService>();
+
+            // Rate Limiting: حماية من الـ abuse
+            builder.Services.AddRateLimiter(options =>
+            {
+                // سياسة صارمة لـ OTP: 3 طلبات كل 10 دقائق لكل IP
+                options.AddFixedWindowLimiter("OtpPolicy", opt =>
+                {
+                    opt.PermitLimit = 3;
+                    opt.Window = TimeSpan.FromMinutes(10);
+                    opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    opt.QueueLimit = 0;
+                });
+
+                // سياسة عامة للـ Chatbot: 20 رسالة في الدقيقة
+                options.AddFixedWindowLimiter("ChatbotPolicy", opt =>
+                {
+                    opt.PermitLimit = 20;
+                    opt.Window = TimeSpan.FromMinutes(1);
+                    opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    opt.QueueLimit = 0;
+                });
+
+                options.OnRejected = async (context, token) =>
+                {
+                    context.HttpContext.Response.StatusCode = 429;
+                    await context.HttpContext.Response.WriteAsync(
+                        "طلبات كثيرة جداً. حاول مرة أخرى لاحقاً.", token);
+                };
+            });
             builder.Services.AddSignalR();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -98,10 +135,18 @@ namespace Sanaa.API
                 app.UseSwaggerUI();
             }
 
+            // مطلوب عشان Stripe Webhook يقدر يقرأ الـ raw body للتحقق من الـ signature
+            app.Use(async (context, next) =>
+            {
+                context.Request.EnableBuffering();
+                await next();
+            });
+
             app.UseHttpsRedirection();
             app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
           
+            app.UseRateLimiter();
             app.UseAuthentication();
             app.UseAuthorization();
 

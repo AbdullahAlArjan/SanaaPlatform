@@ -108,10 +108,15 @@ namespace Sanaa.BLL.Services
             // التأكد من الإيميل والباسورد المشفر
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             {
-                return null; // إذا في غلط بنرجع null
+                return null;
             }
 
-            // إذا كل إشي تمام، بنولد التذكرة وبنرجعها
+            // إذا الإيميل ما تم التحقق منه بعد
+            if (!user.IsEmailVerified)
+            {
+                return "EMAIL_NOT_VERIFIED";
+            }
+
             return GenerateJwtToken(user);
         }
         // دالة إحصائيات النظام

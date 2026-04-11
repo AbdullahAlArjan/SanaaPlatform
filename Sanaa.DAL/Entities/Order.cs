@@ -26,6 +26,12 @@ namespace Sanaa.DAL.Entities
 
         // 4. حالة الطلب (الافتراضي: قيد الانتظار)
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
+
+        // 5. حالة الدفع (null = ما صار دفع بعد)
+        public PaymentStatus? PaymentStatus { get; set; }
+
+        public virtual Payment? Payment { get; set; }
+        public virtual Invoice? Invoice { get; set; }
     }
 
     // هاد Enum بيسهل علينا التعامل مع حالات الطلب بدل ما نستخدم أرقام مبهمة
