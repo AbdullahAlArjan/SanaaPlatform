@@ -63,6 +63,7 @@ namespace Sanaa.API.Controllers
 
         [Authorize]
         [HttpPost("profile-image")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> UploadProfileImage([FromForm] IFormFile file)
         {
             var freelancerId = GetCurrentUserId();
@@ -78,6 +79,7 @@ namespace Sanaa.API.Controllers
 
         [Authorize]
         [HttpPost("portfolio")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddPortfolioImage([FromForm] IFormFile file)
         {
             var freelancerId = GetCurrentUserId();

@@ -21,9 +21,7 @@ namespace Sanaa.API.Controllers
         }
 
         [Authorize]
-        [HttpGet] // طلب جلب بيانات
         [HttpGet]
-        [Authorize] // خليها محمية زي ما اتفقنا
         public async Task<IActionResult> GetAllUsers([FromQuery] UserSearchFilterDto filter)
         {
             var users = await _userService.GetAllUsersAsync(filter);
