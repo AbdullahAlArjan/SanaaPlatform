@@ -64,14 +64,14 @@ namespace Sanaa.API.Controllers
         [Authorize]
         [HttpPost("profile-image")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadProfileImage([FromForm] IFormFile file)
+        public async Task<IActionResult> UploadProfileImage([FromForm] UploadImageRequest request)
         {
             var freelancerId = GetCurrentUserId();
             if (freelancerId == null) return Unauthorized();
 
             try
             {
-                var url = await _freelancerService.UploadProfileImageAsync(freelancerId.Value, file);
+                var url = await _freelancerService.UploadProfileImageAsync(freelancerId.Value, request.File);
                 return Ok(new { ImageUrl = url });
             }
             catch (ArgumentException ex) { return BadRequest(ex.Message); }
@@ -80,14 +80,14 @@ namespace Sanaa.API.Controllers
         [Authorize]
         [HttpPost("portfolio")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> AddPortfolioImage([FromForm] IFormFile file)
+        public async Task<IActionResult> AddPortfolioImage([FromForm] UploadImageRequest request)
         {
             var freelancerId = GetCurrentUserId();
             if (freelancerId == null) return Unauthorized();
 
             try
             {
-                var images = await _freelancerService.AddPortfolioImageAsync(freelancerId.Value, file);
+                var images = await _freelancerService.AddPortfolioImageAsync(freelancerId.Value, request.File);
                 return Ok(images);
             }
             catch (ArgumentException ex) { return BadRequest(ex.Message); }
