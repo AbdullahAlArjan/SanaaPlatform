@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sanaa.DAL.Entities
@@ -32,6 +33,10 @@ namespace Sanaa.DAL.Entities
 
         public bool IsActive { get; set; } = true;
 
+        public bool IsEmailVerified { get; set; } = false;
+
         public virtual FreelancerProfile? FreelancerProfile { get; set; }
+        public virtual ICollection<OtpCode> OtpCodes { get; set; } = new List<OtpCode>();
+        public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
     }
 }
