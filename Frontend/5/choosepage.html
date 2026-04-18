@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana'a - Choose Your Path</title>
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="RegiserStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Choose Page Specific CSS -->
+    <style>
+        /* ==============================================
+           CHOOSE PATH PAGE ENHANCEMENTS
+           ============================================== */
+        
+        .choose-path-container {
+            max-width: 600px;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success-color);
+            margin-bottom: 1.5rem;
+            animation: bounce 1s ease infinite alternate;
+        }
+        
+        .path-description {
+            margin: 1.5rem 0;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+        
+        .path-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .path-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+        
+        .path-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .path-card.freelancer {
+            border-left-color: var(--primary-color);
+        }
+        
+        .path-card.customer {
+            border-left-color: var(--secondary-color);
+        }
+        
+        .path-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .path-title i {
+            font-size: 1.5rem;
+        }
+        
+        .path-details {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .choose-path-container {
+                padding: 1.5rem;
+            }
+            
+            .success-icon {
+                font-size: 3rem;
+            }
+            
+            .path-card {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container choose-path-container">
+        <!-- Success Content -->
+        <div class="success-screen" id="successScreen" style="display: flex; position: relative;">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Registration Successful!</h2>
+            <p class="path-description">Welcome to Sana'a, the Jordanian marketplace for professions and freelance work.</p>
+            <p class="path-description">Please choose how you'd like to proceed:</p>
+            
+            <!-- Path Options -->
+            <div class="path-options">
+                <div class="path-card freelancer" onclick="registerAsFreelancer()">
+                    <div class="path-title">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Register as Freelancer</span>
+                    </div>
+                    <p class="path-details">Offer your services and skills to clients across Jordan</p>
+                </div>
+                
+                <div class="path-card customer" onclick="continueAsCustomer()">
+                    <div class="path-title">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Continue as Customer</span>
+                    </div>
+                    <p class="path-details">Browse and hire skilled professionals for your needs</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Redirect Functions
+        function registerAsFreelancer() {
+            window.location.href = 'FreelancerReg.html';
+        }
+
+        function continueAsCustomer() {
+            window.location.href = '../../main page/mainlogin.html';
+        }
+        
+        // Add animation delay for elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.path-card, .success-icon');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

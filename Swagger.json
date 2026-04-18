@@ -1,0 +1,1941 @@
+{
+  openapi 3.0.1,
+  info {
+    title Sanaa API,
+    version v1
+  },
+  paths {
+    apiAdmindashboard-stats {
+      get {
+        tags [
+          Admin
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiAdmintoggle-user-status{id} {
+      put {
+        tags [
+          Admin
+        ],
+        parameters [
+          {
+            name id,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiAdminusers{id} {
+      delete {
+        tags [
+          Admin
+        ],
+        parameters [
+          {
+            name id,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiAdminusersdeleted {
+      get {
+        tags [
+          Admin
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiAdminfreelancerspending {
+      get {
+        tags [
+          Admin
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiAdminfreelancers{id}approve {
+      put {
+        tags [
+          Admin
+        ],
+        parameters [
+          {
+            name id,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiAdminfreelancers{id}reject {
+      put {
+        tags [
+          Admin
+        ],
+        parameters [
+          {
+            name id,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiauthsend-otp {
+      post {
+        tags [
+          Auth
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasSendOtpRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasSendOtpRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasSendOtpRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiauthverify-otp {
+      post {
+        tags [
+          Auth
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasVerifyOtpRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasVerifyOtpRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasVerifyOtpRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiauthforgot-password {
+      post {
+        tags [
+          Auth
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasForgotPasswordRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasForgotPasswordRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasForgotPasswordRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiauthreset-password {
+      post {
+        tags [
+          Auth
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasResetPasswordRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasResetPasswordRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasResetPasswordRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiauthrefresh {
+      post {
+        tags [
+          Auth
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasRefreshTokenRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasRefreshTokenRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasRefreshTokenRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiauthlogout {
+      post {
+        tags [
+          Auth
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasRefreshTokenRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasRefreshTokenRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasRefreshTokenRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiCategories {
+      get {
+        tags [
+          Categories
+        ],
+        parameters [
+          {
+            name search,
+            in query,
+            schema {
+              type string
+            }
+          },
+          {
+            name page,
+            in query,
+            schema {
+              type integer,
+              format int32,
+              default 1
+            }
+          },
+          {
+            name pageSize,
+            in query,
+            schema {
+              type integer,
+              format int32,
+              default 10
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      },
+      post {
+        tags [
+          Categories
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasCreateCategoryDto
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasCreateCategoryDto
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasCreateCategoryDto
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiCategories{id} {
+      get {
+        tags [
+          Categories
+        ],
+        parameters [
+          {
+            name id,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      },
+      put {
+        tags [
+          Categories
+        ],
+        parameters [
+          {
+            name id,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasCreateCategoryDto
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasCreateCategoryDto
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasCreateCategoryDto
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      },
+      delete {
+        tags [
+          Categories
+        ],
+        parameters [
+          {
+            name id,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiChatbotmessage {
+      post {
+        tags [
+          Chatbot
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasChatbotRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasChatbotRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasChatbotRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiFreelancerscreate-profile {
+      post {
+        tags [
+          Freelancers
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasCreateProfileRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasCreateProfileRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasCreateProfileRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiFreelancers{userId} {
+      get {
+        tags [
+          Freelancers
+        ],
+        parameters [
+          {
+            name userId,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiFreelancerssearch {
+      get {
+        tags [
+          Freelancers
+        ],
+        parameters [
+          {
+            name profession,
+            in query,
+            schema {
+              type string
+            }
+          },
+          {
+            name city,
+            in query,
+            schema {
+              type string
+            }
+          },
+          {
+            name serviceId,
+            in query,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiFreelancersprofile-image {
+      post {
+        tags [
+          Freelancers
+        ],
+        requestBody {
+          content {
+            multipartform-data {
+              schema {
+                type object,
+                properties {
+                  file {
+                    type string,
+                    format binary
+                  }
+                }
+              },
+              encoding {
+                file {
+                  style form
+                }
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiFreelancersportfolio {
+      post {
+        tags [
+          Freelancers
+        ],
+        requestBody {
+          content {
+            multipartform-data {
+              schema {
+                type object,
+                properties {
+                  file {
+                    type string,
+                    format binary
+                  }
+                }
+              },
+              encoding {
+                file {
+                  style form
+                }
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      },
+      delete {
+        tags [
+          Freelancers
+        ],
+        parameters [
+          {
+            name imageUrl,
+            in query,
+            schema {
+              type string
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiFreelancers{userId}portfolio {
+      get {
+        tags [
+          Freelancers
+        ],
+        parameters [
+          {
+            name userId,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiInvoicesorder{orderId} {
+      get {
+        tags [
+          Invoices
+        ],
+        parameters [
+          {
+            name orderId,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiOrderscreate {
+      post {
+        tags [
+          Orders
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasCreateOrderRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasCreateOrderRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasCreateOrderRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiOrdersfreelancer{freelancerId} {
+      get {
+        tags [
+          Orders
+        ],
+        parameters [
+          {
+            name freelancerId,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          },
+          {
+            name pageNumber,
+            in query,
+            schema {
+              type integer,
+              format int32,
+              default 1
+            }
+          },
+          {
+            name pageSize,
+            in query,
+            schema {
+              type integer,
+              format int32,
+              default 10
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiOrders{orderId}status {
+      put {
+        tags [
+          Orders
+        ],
+        parameters [
+          {
+            name orderId,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          },
+          {
+            name status,
+            in query,
+            schema {
+              $ref #componentsschemasOrderStatus
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiPaymentscreate-intent {
+      post {
+        tags [
+          Payments
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasCreatePaymentIntentRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasCreatePaymentIntentRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasCreatePaymentIntentRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiPaymentswebhook {
+      post {
+        tags [
+          Payments
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiReports {
+      post {
+        tags [
+          Reports
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasSubmitReportRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasSubmitReportRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasSubmitReportRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      },
+      get {
+        tags [
+          Reports
+        ],
+        parameters [
+          {
+            name status,
+            in query,
+            schema {
+              type string
+            }
+          },
+          {
+            name pageNumber,
+            in query,
+            schema {
+              type integer,
+              format int32,
+              default 1
+            }
+          },
+          {
+            name pageSize,
+            in query,
+            schema {
+              type integer,
+              format int32,
+              default 10
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiReports{id}status {
+      put {
+        tags [
+          Reports
+        ],
+        parameters [
+          {
+            name id,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasUpdateReportStatusRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasUpdateReportStatusRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasUpdateReportStatusRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiReviewsadd {
+      post {
+        tags [
+          Reviews
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasCreateReviewRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasCreateReviewRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasCreateReviewRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiReviewsfreelancer{freelancerId} {
+      get {
+        tags [
+          Reviews
+        ],
+        parameters [
+          {
+            name freelancerId,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiServices {
+      get {
+        tags [
+          Services
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      },
+      post {
+        tags [
+          Services
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasService
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasService
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasService
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiServices{id} {
+      get {
+        tags [
+          Services
+        ],
+        parameters [
+          {
+            name id,
+            in path,
+            required true,
+            schema {
+              type integer,
+              format int32
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiTestNotificationssend-alert {
+      post {
+        tags [
+          TestNotifications
+        ],
+        parameters [
+          {
+            name message,
+            in query,
+            schema {
+              type string
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiUsers {
+      get {
+        tags [
+          Users
+        ],
+        parameters [
+          {
+            name SearchTerm,
+            in query,
+            schema {
+              type string
+            }
+          },
+          {
+            name City,
+            in query,
+            schema {
+              type string
+            }
+          },
+          {
+            name Profession,
+            in query,
+            schema {
+              type string
+            }
+          }
+        ],
+        responses {
+          200 {
+            description OK
+          }
+        }
+      },
+      post {
+        tags [
+          Users
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasUser
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasUser
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasUser
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    apiUserslogin {
+      post {
+        tags [
+          Users
+        ],
+        requestBody {
+          content {
+            applicationjson {
+              schema {
+                $ref #componentsschemasLoginRequest
+              }
+            },
+            textjson {
+              schema {
+                $ref #componentsschemasLoginRequest
+              }
+            },
+            application+json {
+              schema {
+                $ref #componentsschemasLoginRequest
+              }
+            }
+          }
+        },
+        responses {
+          200 {
+            description OK
+          }
+        }
+      }
+    },
+    WeatherForecast {
+      get {
+        tags [
+          WeatherForecast
+        ],
+        operationId GetWeatherForecast,
+        responses {
+          200 {
+            description OK,
+            content {
+              textplain {
+                schema {
+                  type array,
+                  items {
+                    $ref #componentsschemasWeatherForecast
+                  }
+                }
+              },
+              applicationjson {
+                schema {
+                  type array,
+                  items {
+                    $ref #componentsschemasWeatherForecast
+                  }
+                }
+              },
+              textjson {
+                schema {
+                  type array,
+                  items {
+                    $ref #componentsschemasWeatherForecast
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  components {
+    schemas {
+      ApprovalStatus {
+        enum [
+          0,
+          1,
+          2
+        ],
+        type integer,
+        format int32
+      },
+      ChatMessageDto {
+        type object,
+        properties {
+          role {
+            type string,
+            nullable true
+          },
+          content {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      ChatbotRequest {
+        type object,
+        properties {
+          message {
+            type string,
+            nullable true
+          },
+          conversationHistory {
+            type array,
+            items {
+              $ref #componentsschemasChatMessageDto
+            },
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      CreateCategoryDto {
+        required [
+          name
+        ],
+        type object,
+        properties {
+          name {
+            maxLength 100,
+            minLength 1,
+            type string
+          },
+          description {
+            type string,
+            nullable true
+          },
+          imageUrl {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      CreateOrderRequest {
+        type object,
+        properties {
+          clientID {
+            type integer,
+            format int32
+          },
+          freelancerID {
+            type integer,
+            format int32
+          },
+          description {
+            type string,
+            nullable true
+          },
+          location {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      CreatePaymentIntentRequest {
+        type object,
+        properties {
+          orderId {
+            type integer,
+            format int32
+          },
+          amount {
+            type number,
+            format double
+          }
+        },
+        additionalProperties false
+      },
+      CreateProfileRequest {
+        type object,
+        properties {
+          userID {
+            type integer,
+            format int32
+          },
+          profession {
+            type string,
+            nullable true
+          },
+          experienceYears {
+            type integer,
+            format int32
+          },
+          city {
+            type string,
+            nullable true
+          },
+          serviceIds {
+            type array,
+            items {
+              type integer,
+              format int32
+            },
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      CreateReviewRequest {
+        type object,
+        properties {
+          orderID {
+            type integer,
+            format int32
+          },
+          clientID {
+            type integer,
+            format int32
+          },
+          freelancerID {
+            type integer,
+            format int32
+          },
+          rating {
+            type integer,
+            format int32
+          },
+          comment {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      ForgotPasswordRequest {
+        type object,
+        properties {
+          email {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      FreelancerProfile {
+        required [
+          profession
+        ],
+        type object,
+        properties {
+          freelancerID {
+            type integer,
+            format int32
+          },
+          profession {
+            maxLength 100,
+            minLength 1,
+            type string
+          },
+          experienceYears {
+            type integer,
+            format int32
+          },
+          city {
+            maxLength 50,
+            type string,
+            nullable true
+          },
+          availabilityStatus {
+            maxLength 20,
+            type string,
+            nullable true
+          },
+          averageRating {
+            type number,
+            format double
+          },
+          profileImageUrl {
+            maxLength 500,
+            type string,
+            nullable true
+          },
+          portfolioImagesJson {
+            type string,
+            nullable true
+          },
+          approvalStatus {
+            $ref #componentsschemasApprovalStatus
+          },
+          user {
+            $ref #componentsschemasUser
+          },
+          freelancerServices {
+            type array,
+            items {
+              $ref #componentsschemasFreelancerService
+            },
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      FreelancerService {
+        type object,
+        properties {
+          freelancerID {
+            type integer,
+            format int32
+          },
+          freelancerProfile {
+            $ref #componentsschemasFreelancerProfile
+          },
+          serviceID {
+            type integer,
+            format int32
+          },
+          service {
+            $ref #componentsschemasService
+          },
+          customPrice {
+            type number,
+            format double,
+            nullable true
+          },
+          isAvailable {
+            type boolean
+          }
+        },
+        additionalProperties false
+      },
+      LoginRequest {
+        type object,
+        properties {
+          email {
+            type string,
+            nullable true
+          },
+          password {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      OrderStatus {
+        enum [
+          0,
+          1,
+          2,
+          3
+        ],
+        type integer,
+        format int32
+      },
+      OtpCode {
+        required [
+          code
+        ],
+        type object,
+        properties {
+          id {
+            type integer,
+            format int32
+          },
+          userId {
+            type integer,
+            format int32
+          },
+          user {
+            $ref #componentsschemasUser
+          },
+          code {
+            maxLength 10,
+            minLength 1,
+            type string
+          },
+          purpose {
+            $ref #componentsschemasOtpPurpose
+          },
+          expiresAt {
+            type string,
+            format date-time
+          },
+          isUsed {
+            type boolean
+          },
+          createdAt {
+            type string,
+            format date-time
+          }
+        },
+        additionalProperties false
+      },
+      OtpPurpose {
+        enum [
+          0,
+          1
+        ],
+        type integer,
+        format int32
+      },
+      RefreshToken {
+        required [
+          token
+        ],
+        type object,
+        properties {
+          id {
+            type integer,
+            format int32
+          },
+          userId {
+            type integer,
+            format int32
+          },
+          user {
+            $ref #componentsschemasUser
+          },
+          token {
+            maxLength 128,
+            minLength 1,
+            type string
+          },
+          expiresAt {
+            type string,
+            format date-time
+          },
+          isRevoked {
+            type boolean
+          },
+          createdAt {
+            type string,
+            format date-time
+          }
+        },
+        additionalProperties false
+      },
+      RefreshTokenRequest {
+        type object,
+        properties {
+          refreshToken {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      Report {
+        required [
+          reason
+        ],
+        type object,
+        properties {
+          reportID {
+            type integer,
+            format int32
+          },
+          reporterID {
+            type integer,
+            format int32
+          },
+          reporter {
+            $ref #componentsschemasUser
+          },
+          targetType {
+            $ref #componentsschemasReportTargetType
+          },
+          targetID {
+            type integer,
+            format int32
+          },
+          reason {
+            maxLength 200,
+            minLength 1,
+            type string
+          },
+          description {
+            maxLength 1000,
+            type string,
+            nullable true
+          },
+          status {
+            $ref #componentsschemasReportStatus
+          },
+          createdAt {
+            type string,
+            format date-time
+          },
+          reviewedAt {
+            type string,
+            format date-time,
+            nullable true
+          },
+          adminNotes {
+            maxLength 500,
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      ReportStatus {
+        enum [
+          0,
+          1,
+          2,
+          3
+        ],
+        type integer,
+        format int32
+      },
+      ReportTargetType {
+        enum [
+          0,
+          1,
+          2
+        ],
+        type integer,
+        format int32
+      },
+      ResetPasswordRequest {
+        type object,
+        properties {
+          email {
+            type string,
+            nullable true
+          },
+          code {
+            type string,
+            nullable true
+          },
+          newPassword {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      SendOtpRequest {
+        type object,
+        properties {
+          email {
+            type string,
+            nullable true
+          },
+          purpose {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      Service {
+        required [
+          title
+        ],
+        type object,
+        properties {
+          serviceID {
+            type integer,
+            format int32
+          },
+          categoryID {
+            type integer,
+            format int32,
+            nullable true
+          },
+          title {
+            maxLength 100,
+            minLength 1,
+            type string
+          },
+          description {
+            type string,
+            nullable true
+          },
+          basePrice {
+            type number,
+            format double
+          },
+          createdAt {
+            type string,
+            format date-time
+          },
+          isActive {
+            type boolean
+          }
+        },
+        additionalProperties false
+      },
+      SubmitReportRequest {
+        type object,
+        properties {
+          targetType {
+            type string,
+            nullable true
+          },
+          targetID {
+            type integer,
+            format int32
+          },
+          reason {
+            type string,
+            nullable true
+          },
+          description {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      UpdateReportStatusRequest {
+        type object,
+        properties {
+          status {
+            type string,
+            nullable true
+          },
+          adminNotes {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      User {
+        required [
+          email,
+          fullName,
+          passwordHash,
+          role
+        ],
+        type object,
+        properties {
+          userID {
+            type integer,
+            format int32
+          },
+          fullName {
+            maxLength 100,
+            minLength 1,
+            type string
+          },
+          email {
+            maxLength 150,
+            minLength 1,
+            type string,
+            format email
+          },
+          passwordHash {
+            maxLength 255,
+            minLength 1,
+            type string
+          },
+          phone {
+            maxLength 20,
+            type string,
+            nullable true
+          },
+          role {
+            maxLength 20,
+            minLength 1,
+            type string
+          },
+          joinDate {
+            type string,
+            format date-time
+          },
+          isActive {
+            type boolean
+          },
+          isEmailVerified {
+            type boolean
+          },
+          isDeleted {
+            type boolean
+          },
+          deletedAt {
+            type string,
+            format date-time,
+            nullable true
+          },
+          freelancerProfile {
+            $ref #componentsschemasFreelancerProfile
+          },
+          otpCodes {
+            type array,
+            items {
+              $ref #componentsschemasOtpCode
+            },
+            nullable true
+          },
+          reports {
+            type array,
+            items {
+              $ref #componentsschemasReport
+            },
+            nullable true
+          },
+          refreshTokens {
+            type array,
+            items {
+              $ref #componentsschemasRefreshToken
+            },
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      VerifyOtpRequest {
+        type object,
+        properties {
+          email {
+            type string,
+            nullable true
+          },
+          code {
+            type string,
+            nullable true
+          },
+          purpose {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      },
+      WeatherForecast {
+        type object,
+        properties {
+          date {
+            type string,
+            format date
+          },
+          temperatureC {
+            type integer,
+            format int32
+          },
+          temperatureF {
+            type integer,
+            format int32,
+            readOnly true
+          },
+          summary {
+            type string,
+            nullable true
+          }
+        },
+        additionalProperties false
+      }
+    },
+    securitySchemes {
+      Bearer {
+        type apiKey,
+        description الرجاء إدخال التوكن بهذا الشكل Bearer {your_token},
+        name Authorization,
+        in header
+      }
+    }
+  },
+  security [
+    {
+      Bearer [ ]
+    }
+  ]
+}

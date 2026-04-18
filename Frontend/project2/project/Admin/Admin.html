@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana'a Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Navigation -->
+        <nav class="admin-nav">
+            <div class="brand">
+                <h1>Sana'a</h1>
+            </div>
+            <div class="nav-group">
+                <button class="nav-btn active" data-section="dashboard">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </button>
+                <button class="nav-btn" data-section="verification">
+                    <i class="fas fa-user-check"></i> Verifications <span class="badge">3</span>
+                </button>
+                <button class="nav-btn" data-section="reports">
+                    <i class="fas fa-flag"></i> Reports <span class="badge">3</span>
+                </button>
+            </div>
+            <div class="admin-actions">
+                <!-- Notification Icon -->
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">2</span>
+                    <div class="notification-dropdown">
+                        <div class="notification-header">
+                            <h4>Notifications</h4>
+                            <button class="mark-all-read">Mark all as read</button>
+                        </div>
+                        <div class="notification-list">
+                            <div class="notification-item unread">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <div class="notification-content">
+                                    <p>New verification request from Sarah Johnson</p>
+                                    <small>2 mins ago</small>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <i class="fas fa-check-circle"></i>
+                                <div class="notification-content">
+                                    <p>Report #45 resolved</p>
+                                    <small>1 hour ago</small>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <div class="notification-content">
+                                    <p>New report submitted by John Designers</p>
+                                    <small>3 hours ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Admin Profile -->
+                <div class="admin-profile">
+                    <div>
+                        <h4>Admin User</h4>
+                        <p>Super Admin</p>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="admin-section active">
+            <h2>📊 Website Analytics</h2>
+            <div class="stats-grid" class="analysis-metrics">
+                <div class="stat-card">
+                    <i class="fas fa-users stat-icon"></i>
+                    <h3>Total Customers</h3>
+                    <p class="stat-number" id="total-customers">2489</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-laptop-code stat-icon"></i>
+                    <h3>Active Freelancers</h3>
+                    <p class="stat-number" id="active-freelancers" >1234</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-eye stat-icon"></i>
+                    <h3>Live Visitors</h3>
+                    <p class="stat-number" id="live-visitors">382</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-handshake stat-icon"></i>
+                    <h3>Active Projects</h3>
+                    <p class="stat-number" id="active-projects">892</p>
+                </div>
+            </div>
+
+           
+                <h3>📅 Recent Activities</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Action</th>
+                            <th>Details</th>
+                            <th>Admin</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activity-table-body">
+                        <!-- Existing rows -->
+                        <tr>
+                            <td>2023-08-15 14:30</td>
+                            <td>Account Approved</td>
+                            <td>Freelancer "Alex Turner" (Graphic Design)</td>
+                            <td>Admin User</td>
+                        </tr>
+                        <tr>
+                            <td>2023-08-15 13:45</td>
+                            <td>Report Resolved</td>
+                            <td>Report #45 (Missed Deadline)</td>
+                            <td>Admin User</td>
+                        </tr>
+                        <tr>
+                            <td>2023-08-15 12:15</td>
+                            <td>New Registration</td>
+                            <td>Client "Tech Corp Inc"</td>
+                            <td>System</td>
+                        </tr>
+                        <tr>
+                            <td>2023-08-15 11:00</td>
+                            <td>Project Completed</td>
+                            <td>Project "E-commerce Website" marked as completed</td>
+                            <td>Admin User</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+        <!-- Verification Section -->
+        <section id="verification" class="admin-section">
+            <h2>🔍 Pending Verifications</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Profession</th>
+                        <th>Contact</th>
+                        <th>Document</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sarah Johnson</td>
+                        <td>Graphic Designer</td>
+                        <td>sarah@design.com<br>+1 555-0199</td>
+                        <td>
+                            <button class="btn btn-view" data-document="id_document.pdf">
+                                <i class="fas fa-file-pdf"></i> View Document
+                            </button>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-approve">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button class="btn btn-reject">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Michael Chen</td>
+                        <td>Web Developer</td>
+                        <td>michael@dev.com<br>+1 555-2345</td>
+                        <td>
+                            <button class="btn btn-view" data-document="certification.pdf">
+                                <i class="fas fa-file-pdf"></i> View Document
+                            </button>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-approve">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button class="btn btn-reject">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Emma Watson</td>
+                        <td>Content Writer</td>
+                        <td>emma@writer.com<br>+1 555-6789</td>
+                        <td>
+                            <button class="btn btn-view" data-document="portfolio.pdf">
+                                <i class="fas fa-file-pdf"></i> View Document
+                            </button>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-approve">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button class="btn btn-reject">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="admin-section">
+            <h2>🚩 Active Reports</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Freelancer</th>
+                        <th>Description</th>
+                        <th>Attachment</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-id="1">
+                        <td>John Designers</td>
+                        <td>
+                            <span class="status-badge status-urgent">URGENT</span><br>
+                            Missed project deadline by 2 weeks
+                        </td>
+                        <td>
+                            <button class="btn btn-view" data-attachment="contract.pdf">
+                                <i class="fas fa-file-pdf"></i> View PDF
+                            </button>
+                        </td>
+                        <td class="report-status">Open</td>
+                        <td>2023-08-14</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-resolve">
+                                    <i class="fas fa-check-circle"></i> Resolve
+                                </button>
+                                <button class="btn btn-close">
+                                    <i class="fas fa-times-circle"></i> Close
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-id="2">
+                        <td>Emma Developer</td>
+                        <td>
+                            <span class="status-badge status-pending">PENDING</span><br>
+                            Code plagiarism detected in submission
+                        </td>
+                        <td>
+                            <button class="btn btn-view" data-attachment="code.zip">
+                                <i class="fas fa-file-archive"></i> View ZIP
+                            </button>
+                        </td>
+                        <td class="report-status">In Review</td>
+                        <td>2023-08-13</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-resolve">
+                                    <i class="fas fa-check-circle"></i> Resolve
+                                </button>
+                                <button class="btn btn-close">
+                                    <i class="fas fa-times-circle"></i> Close
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-id="3">
+                        <td>Alex Turner</td>
+                        <td>
+                            <span class="status-badge status-pending">PENDING</span><br>
+                            Poor communication with client
+                        </td>
+                        <td>
+                            <button class="btn btn-view" data-attachment="chat_logs.pdf">
+                                <i class="fas fa-file-pdf"></i> View PDF
+                            </button>
+                        </td>
+                        <td class="report-status">Open</td>
+                        <td>2023-08-12</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-resolve">
+                                    <i class="fas fa-check-circle"></i> Resolve
+                                </button>
+                                <button class="btn btn-close">
+                                    <i class="fas fa-times-circle"></i> Close
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <canvas id="analysis-chart"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>

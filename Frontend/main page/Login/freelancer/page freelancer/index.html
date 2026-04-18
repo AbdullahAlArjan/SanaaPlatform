@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelancer Profile - Sana'a</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+<div class="top-bar">
+    <div class="top-bar-left">
+        <a href="C:/Users/abdba/Desktop/project/main page/index.html" class="website-name">Sana'a</a>
+    </div>
+    <div class="top-bar-right">
+        <div class="notification-icon" id="notificationIcon">
+            <i class="fas fa-bell"></i>
+            <span class="notification-count" id="notificationCount">3</span>
+            <!-- Notification Dropdown -->
+            <div class="notification-dropdown" id="notificationDropdown">
+                <div class="notification-header">
+                    <h4>Notifications</h4>
+                    <button class="mark-all-read" id="markAllRead">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="notification-list" id="notificationList">
+                    <div class="notification-item unread">
+                        <p>New project request from Client A</p>
+                    </div>
+                    <div class="notification-item unread">
+                        <p>Your service was featured</p>
+                    </div>
+                    <div class="notification-item unread">
+                        <p>Payment received for Logo Design</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="container">
+        <!-- Profile Section -->
+        <section class="profile-section">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Profile Card -->
+                <article class="profile-card">
+                    <img src="a2.jpeg" class="profile-pic" alt="Abd Balasmeh, Graphic Designer">
+                    <h2>Abd Balasmeh</h2>
+                    <p class="profession">Graphic Designer</p>
+                    <div class="profile-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Amman, Jordan</p>
+                        <p><i class="fas fa-birthday-cake"></i> 22 years old</p>
+                    </div>
+
+                    <!-- Report Button -->
+                    <button class="report-btn">Report Profile</button>
+                </article>
+
+                <!-- Availability Card -->
+                <div class="info-card availability-card">
+                    <div class="availability-status">
+                        <span class="status-dot available"></span>
+                        <div>
+                            <h4>Available Now</h4>
+                            <p>Typically responds in 2 hours</p>
+                        </div>
+                    </div>
+                    <div class="work-hours">
+                        <p><i class="fas fa-clock"></i> Working Hours: 9 AM - 5 PM (GMT+3)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="right-column">
+                <!-- Communication Section -->
+                <article class="info-card communication-card">
+                    <h3><i class="fas fa-phone"></i> Communication</h3>
+                    <div class="contact-info">
+                        <p>Phone: +962 7 9703 7825</p>
+                        <div class="whatsapp-button">
+                            <button class="btn btn-secondary">
+                                <i class="fab fa-whatsapp"></i> WhatsApp Me
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- About Section -->
+                    <div class="about-section">
+                        <h3><i class="fas fa-user"></i> About Me</h3>
+                        <p>Professional graphic designer with 5+ years experience creating visual solutions for businesses. Specialized in brand identity, digital illustrations, and marketing materials.</p>
+                    </div>
+                </article>
+
+                <!-- Statistics Section -->
+                <div class="info-card stats-card">
+                    <h3><i class="fas fa-chart-line"></i> Statistics</h3>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4>4.9/5</h4>
+                                <p>Average Rating</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4>127</h4>
+                                <p>Completed Projects</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services Section -->
+                <section class="services-section">
+                    <h2 class="section-title">Services</h2>
+                    <div class="services-grid">
+                        <div class="service-card">
+                            <i class="fas fa-code service-icon"></i>
+                            <h3>Web Development</h3>
+                            <p>Building responsive and dynamic websites tailored to client needs.</p>
+                        </div>
+                        <div class="service-card">
+                            <i class="fas fa-paint-brush service-icon"></i>
+                            <h3>UI/UX Design</h3>
+                            <p>Creating user-friendly interfaces and experiences for applications.</p>
+                        </div>
+                        <div class="service-card">
+                            <i class="fas fa-search service-icon"></i>
+                            <h3>SEO Optimization</h3>
+                            <p>Enhancing website visibility and search engine ranking.</p>
+                        </div>
+                        <div class="service-card">
+                            <i class="fas fa-video service-icon"></i>
+                            <h3>Video Editing</h3>
+                            <p>Professional video editing and post-production services.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

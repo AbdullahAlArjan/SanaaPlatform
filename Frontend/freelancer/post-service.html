@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post New Service - Sana'a</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <a href="../../../main page/index.html" class="website-name">Sana'a</a>
+            </div>
+            <div class="top-bar-right">
+                <a href="../freelancer.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Profile
+                </a>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <h1><i class="fas fa-plus-circle"></i> Post New Service</h1>
+        </div>
+
+        <div class="form-container">
+            <form id="post-service-form">
+                <!-- Service Name -->
+                <div class="form-group">
+                    <label for="service-name">Name of the Service:</label>
+                    <input type="text" id="service-name" placeholder="Enter service name" required>
+                </div>
+                
+                <!-- Category -->
+                <div class="form-group">
+                    <label for="service-category">Category:</label>
+                    <select id="service-category" required>
+                        <option value="">Select a category</option>
+                        <option value="Graphic Design">Graphic Design</option>
+                        <option value="Programming">Programming</option>
+                        <option value="Content Writing">Content Writing</option>
+                        <option value="Digital Marketing">Digital Marketing</option>
+                        <option value="Video Editing">Video Editing</option>
+                        <option value="Translation">Translation</option>
+                        <option value="Music Production">Music Production</option>
+                        <option value="Photography">Photography</option>
+                        <option value="Business Consulting">Business Consulting</option>
+                        <option value="3D Modeling">3D Modeling</option>
+                        <option value="Voice Over">Voice Over</option>
+                        <option value="Data Entry">Data Entry</option>
+                    </select>
+                </div>
+                
+                <!-- Service Description -->
+                <div class="form-group">
+                    <label for="service-description">Service Description:</label>
+                    <textarea id="service-description" rows="4" placeholder="Describe your service" required></textarea>
+                </div>
+                
+                <!-- Price -->
+                <div class="form-group">
+                    <label for="service-price">Price ($):</label>
+                    <input type="number" id="service-price" placeholder="Enter price" required>
+                </div>
+                
+                <!-- Estimation Time -->
+                <div class="form-group">
+                    <label for="service-estimation-time">Estimation Time:</label>
+                    <input type="text" id="service-estimation-time" placeholder="e.g., 2 weeks" required>
+                </div>
+                
+                <!-- Required Tools -->
+                <div class="form-group">
+                    <label for="service-tools">Required Tools:</label>
+                    <input type="text" id="service-tools" placeholder="e.g., Photoshop, Illustrator" required>
+                </div>
+                
+                <!-- Availability -->
+                <div class="form-group">
+                    <label for="service-availability">Availability:</label>
+                    <select id="service-availability" required>
+                        <option value="active">Active</option>
+                        <option value="deactive">Deactive</option>
+                    </select>
+                </div>
+                
+                <!-- Attachment (Picture or Document) -->
+                <div class="form-group">
+                    <label for="service-attachment">Attachment (Picture or Document):</label>
+                    <input type="file" id="service-attachment" accept="image/*, .pdf, .doc, .docx">
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Post Service</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='../freelancer.html'">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

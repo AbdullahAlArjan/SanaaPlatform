@@ -1,0 +1,638 @@
+/* General Styles */
+:root {
+    --primary: #2c3e50;       /* الكحلي الرئيسي */
+    --accent: #3498db;        /* الأسود (بديل الأخضر) */
+    --verified: #3498db;      /* أزرق مشرق للتوثيق والأيقونات */
+    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --white: #ffffff;
+    --text-dark: #2d3436;
+}
+
+/* Auth Container Styles */
+.auth-container {
+    display: flex;
+    align-items: center;
+}
+
+/* User Profile Styles */
+.user-profile {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.user-avatar:hover {
+    transform: scale(1.1);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.dropdown-content a:hover {
+    background-color: #f5f5f5;
+}
+
+#logoutBtn {
+    color: #ff4444;
+}
+
+/* Show dropdown when user-profile is hovered */
+.user-profile:hover .dropdown-content {
+    display: block;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Tajawal', 'Arial', sans-serif;
+}
+
+body {
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-dark);
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 8%;
+    background-color: var(--primary); /* كحلي */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--white);
+    text-decoration: none;
+}
+
+.auth-buttons button {
+    margin-right: 1rem;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+     background: transparent; 
+    color: white; 
+    border: 1px solid white !important;
+}
+
+
+.auth-buttons button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+    background: white; /* يتحول للأزرق عند التمرير */
+    color: var(--primary);
+}
+
+/* Search Section */
+.search-section {
+    text-align: center;
+    padding: 5rem 5%;
+}
+
+.search-section h1 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.search-section p {
+    color: #636e72;
+    margin-bottom: 2rem;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+}
+
+.search-bar input {
+    width: 70%;
+    padding: 1.2rem;
+    border: 1px solid var(--primary);
+    border-radius: 0 30px 30px 0;
+    outline: none;
+    font-size: 1rem;
+}
+
+/* زر البحث - أسود */
+.search-bar button {
+    padding: 0 2.5rem;
+    border: none;
+    border-radius: 30px 0 0 30px;
+    background-color: var(--accent);
+    color: white;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: 0.3s;
+}
+
+.search-bar button:hover {
+    background-color: var(--primary);
+}
+
+/* زر كافة الفئات - أسود بحدود زرقاء */
+.all-categories {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: var(--accent);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    transition: 0.3s;
+    border: 1px solid var(--verified);
+}
+
+.all-categories:hover {
+    background-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+/* Categories Grid */
+.popular-categories { padding: 3rem 8%; }
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+}
+
+.category-card {
+    background: var(--white);
+    padding: 2.5rem 1rem;
+    text-align: center;
+    border-radius: 15px;
+    text-decoration: none;
+    color: var(--primary);
+    transition: 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* أيقونات التصنيفات - أزرق مشرق */
+.category-card i {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+    color: var(--verified);
+}
+
+.category-card:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-10px);
+}
+
+.category-card:hover i {
+    color: white;
+}
+
+/* Freelancer Cards */
+.top-freelancers { padding: 3rem 8%; }
+
+.freelancers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.freelancer-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    position: relative;
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: 0.3s;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.verified-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--verified);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.freelancer-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    border: 3px solid var(--primary); /* حدود كحلية حول الصورة */
+}
+
+.rating { color: #f1c40f; margin-bottom: 1rem; }
+
+/* Footer */
+.main-footer {
+    background-color: #2c3e50;
+    color: white;
+    padding: 2rem 5%;
+    margin-top: auto;
+  }
+  
+  .footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-section h3 {
+    margin-bottom: 1rem;
+    color: var( --accent);
+  }
+  
+  .social-links {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .social-links a {
+      color: white;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none; /* Remove underline */
+    }
+    
+    .social-links a:hover {
+      color: var(--accent); /* Hover color */
+    }
+    
+    /* X Logo Image */
+    .x-logo {
+      width: 24px; /* Adjust size to match other icons */
+      height: 24px;
+      filter: brightness(0) invert(1); /* Make the logo white */
+      transition: filter 0.3s;
+    }
+    
+    .x-icon:hover .x-logo {
+        filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(100deg); /* Match hover color */
+      }
+      
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .auth-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    
+    .auth-buttons button {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .search-bar input {
+        width: 70%;
+    }
+    
+    .category-card {
+        padding: 1.5rem;
+    }
+    
+    .freelancer-card {
+        padding: 1rem;
+    }
+}
+
+/* Profile Menu Styles */
+.user-profile {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    object-fit: cover;
+  }
+  
+  .profile-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .profile-menu a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+  }
+  
+  .profile-menu a:hover {
+    background-color: #f1f1f1;
+  }
+  
+  #logoutBtn {
+    color: #ff4444;
+  }
+
+
+
+
+  
+
+
+  /* --- Chatbot Main Styles --- */
+:root {
+    --chat-primary: #2c3e50;
+    --chat-accent: #2ed573;
+    --chat-bg: rgba(255, 255, 255, 0.95);
+}
+
+/* تنسيق الأسئلة المقترحة */
+.chat-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+}
+
+.chat-suggestions button {
+    background: white;
+    border: 1.5px solid var(--chat-primary);
+    color: var(--chat-primary);
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.chat-suggestions button:hover {
+    background: var(--chat-primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.chatbot-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 2000;
+    direction: rtl;
+}
+
+/* الزر العائم */
+.chat-trigger-btn {
+    width: 65px;
+    height: 65px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+}
+
+.chat-trigger-btn:hover {
+    transform: scale(1.1) rotate(-5deg);
+    background-color: #2c3e50;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    background: #ff4757;
+    color: white;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+/* نافذة الدردشة */
+.chat-card {
+    position: absolute;
+    bottom: 85px;
+    right: 0;
+    width: 360px;
+    max-height: 500px;
+    background: var(--chat-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(30px) scale(0.9);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat-card.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* الهيدر */
+.chat-header-main {
+    background: var(--chat-primary);
+    padding: 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.bot-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bot-profile i {
+    font-size: 1.5rem;
+    background: rgba(255,255,255,0.1);
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    background: var(--chat-accent);
+    border-radius: 50%;
+    position: absolute;
+    margin-top: 25px;
+    margin-right: 30px;
+    border: 2px solid var(--chat-primary);
+}
+
+.bot-details h4 { font-size: 1rem; margin: 0; }
+.bot-details span { font-size: 0.75rem; opacity: 0.8; }
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* محتوى الدردشة */
+.chat-content {
+    flex: 1;
+    padding: 1.5rem;
+    height: 300px;
+    overflow-y: auto;
+}
+
+.msg {
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.bot-msg {
+    background: #f1f2f6;
+    color: var(--chat-primary);
+    border-bottom-right-radius: 2px;
+}
+
+/* منطقة الإدخال */
+.chat-input-area {
+    padding: 1rem;
+    display: flex;
+    gap: 10px;
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+.chat-input-area input {
+    flex: 1;
+    border: 1px solid #e1e8ef;
+    padding: 10px 15px;
+    border-radius: 25px;
+    outline: none;
+    transition: border 0.3s;
+}
+
+.chat-input-area input:focus {
+    border-color: var(--chat-primary);
+}
+
+.send-icon-btn {
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.send-icon-btn:hover {
+    transform: rotate(-15deg);
+    background: var(--accent);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .chat-card {
+        width: 300px;
+        bottom: 80px;
+        right: -10px;
+    }
+}
+
+  

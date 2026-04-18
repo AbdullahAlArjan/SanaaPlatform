@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana'a - Home</title>
+    <link rel="stylesheet" href="mainlogincss.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <a href="mainlogin.html" class="logo">Sana'a</a>
+        <div class="user-profile">
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" 
+                 alt="User" 
+                 class="user-avatar"
+                 id="userAvatar">
+            <div class="dropdown-content" id="dropdownContent">
+                <a href="Login/Customer/customer.html"><i class="fas fa-user"></i> View Profile</a>
+                <a href="index.html" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+    <!-- Search Section -->
+    <section class="search-section">
+        <h1>Find the Perfect Freelance Services</h1>
+        <form id="searchForm" class="search-bar">
+            <input type="text" placeholder="Example: Logo Design..." id="searchInput" name="search">
+            <button type="submit" id="searchBtn">Search</button>
+        </form>
+        <a href="categories/cat.html" class="all-categories">Browse All Categories</a>
+    </section>
+
+    <!-- Popular Categories -->
+    <section class="popular-categories">
+        <h2>Most Popular Categories</h2>
+        <div class="categories-grid">
+            <a href="post2/post.html" class="category-card">Graphic Design</a>
+            <a href="services.html?category=programming" class="category-card">Programming</a>
+            <a href="services.html?category=content-writing" class="category-card">Content Writing</a>
+            <a href="services.html?category=digital-marketing" class="category-card">Digital Marketing</a>
+            <a href="services.html?category=web-development" class="category-card">Web Development</a>
+            <a href="services.html?category=video-editing" class="category-card">Video Editing</a>
+        </div>
+    </section>
+
+    <!-- Top Freelancers -->
+    <section class="top-freelancers">
+        <h2>Top Freelancers</h2>
+        <div class="freelancers-grid">
+            <a href="freelancer-profile.html?id=1" class="freelancer-card">
+                <img src="a1.jpeg" alt="John Doe">
+                <h3>John Doe</h3>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5</span>
+                </div>
+                <p>Graphic Designer</p>
+            </a>
+            <a href="freelancer-profile.html?id=2" class="freelancer-card">
+                <img src="a2.jpeg" alt="Jane Smith">
+                <h3>Jane Smith</h3>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <span>4.0</span>
+                </div>
+                <p>Web Developer</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Spacing -->
+    <div class="spacing"></div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: info@sanaa.com</p>
+                <p>Phone: +1 234 567 890</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/" class="fab fa-facebook" target="_blank" rel="noopener noreferrer"></a>
+                    <a href="https://x.com" class="x-icon" target="_blank" rel="noopener noreferrer">
+                        <img src="twitter.png" alt="X (Twitter)" class="x-logo">
+                    </a>
+                    <a href="https://www.instagram.com/" class="fab fa-instagram" target="_blank" rel="noopener noreferrer"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Sana'a. All rights reserved</p>
+        </div>
+    </footer>
+
+    <script src="jsmainlogin.js"></script>
+</body>
+</html>

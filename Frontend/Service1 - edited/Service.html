@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Design Service - Sana'a</title>
+    <link rel="stylesheet" href="servicestyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <a href="../../../../main page/index.html" class="logo">Sana'a</a>
+        </div>
+        <div class="auth-links">
+            <!-- Links for non-logged-in users -->
+            <a href="../../../../main page/Login/Login.html" id="login-link">Login</a>
+            <a href="../../../../main page/Login/Register.html" id="register-link">Register</a>
+
+            <!-- Avatar and name for logged-in users -->
+            <div id="user-profile" class="user-profile" style="display: none;">
+                <img src="image/m1.png" alt="User Avatar" class="user-avatar">
+                <span class="username">User</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Side: Service Image and Details -->
+        <div class="left-side">
+            <!-- Service Images Section -->
+            <div class="service-images">
+                <!-- Main Images -->
+                <div class="main-images">
+                    <button class="arrow prev">❮</button>
+                    <div class="slides-container">
+                        <img src="image/logo1.png" alt="Service 1" class="active">
+                        <img src="image/logo2.png" alt="Service 2">
+                        <img src="image/logo3.png" alt="Service 3">
+                        <img src="image/logo4.png" alt="Service 4">
+                        <img src="image/logo5.png" alt="Service 5">
+                    </div>
+                    <button class="arrow next">❯</button>
+                </div>
+            
+                <!-- Thumbnails -->
+                <div class="thumbnails">
+                    <img src="image/logo1.png" alt="Thumb 1" class="active">
+                    <img src="image/logo2.png" alt="Thumb 2">
+                    <img src="image/logo3.png" alt="Thumb 3">
+                    <img src="image/logo4.png" alt="Thumb 4">
+                    <img src="image/logo5.png" alt="Thumb 5">
+                </div>
+            </div>
+
+            <!-- Service Title and Description -->
+            <div class="service-info">
+                <h1>Logo Design</h1>
+                <div class="rating-summary">
+                    <span class="stars">★★★★☆</span>
+                    <span class="rating">4.8</span>
+                    <span class="reviews">(128 reviews)</span>
+                </div>
+                <p class="description">
+                    Professional logo design service that delivers unique and memorable branding solutions. 
+                    I'll create a custom logo that represents your brand identity perfectly. 
+                    Includes 3 initial concepts, unlimited revisions, and all file formats.
+                </p>
+                <p class="availability">
+                    <i class="fas fa-check-circle"></i> <strong>Availability:</strong> Active
+                </p>
+            </div>
+
+            <!-- Comment Section -->
+            <div class="comment-section">
+                <h2><i class="fas fa-comments"></i> Customer Reviews</h2>
+                <div class="comment-form">
+                    <textarea id="comment-input" placeholder="Share your experience with this service..."></textarea>
+                    <button id="submit-comment" class="btn btn-comment-submit">Submit Review</button>
+                </div>
+                <div class="comments-list">
+                    <!-- Example Comments -->
+                    <div class="comment">
+                        <div class="comment-author">
+                            <img src="../../../../main page/a1.jpeg" alt="User Avatar">
+                            <div class="author-info">
+                                <span class="name">ahmad khaled</span>
+                                <span class="rating">★★★★★</span>
+                            </div>
+                        </div>
+                        <p class="comment-text">Great service! The logo design was exactly what I needed for my startup. The designer understood my vision perfectly.</p>
+                        <p class="comment-date">2 days ago</p>
+                    </div>
+                    <div class="comment">
+                        <div class="comment-author">
+                            <img src="image/m1.jpg" alt="User Avatar">
+                            <div class="author-info">
+                                <span class="name">heba mohammad</span>
+                                <span class="rating">★★★★☆</span>
+                            </div>
+                        </div>
+                        <p class="comment-text">Very professional and fast delivery. The logo was modern and clean, just what I wanted. Would order again!</p>
+                        <p class="comment-date">1 week ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Service Details -->
+        <div class="right-side">
+            <div class="service-details">
+                <div class="price">Price $70</div>
+                <div class="meta-info">
+                    <p><i class="fas fa-clock"></i> Delivery Time: 3 Days</p>
+                    <p><i class="fas fa-users"></i> 150+ satisfied customers</p>
+                    <p><i class="fas fa-tools"></i> Tools: Photoshop, Illustrator</p>
+                    <p><i class="fas fa-medal"></i> Top Seller</p>
+                </div>
+
+                <div class="button-group">
+                    <a href="place-order.html" class="btn btn-order">
+                        <i class="fas fa-shopping-cart"></i> Place Order
+                    </a>
+                    <a href="https://wa.me/962000000000" target="_blank" class="btn btn-message">
+                        <i class="fas fa-envelope"></i> Message Freelancer
+                     </a>
+                    <a href="report-service.html" class="btn btn-report">
+                        <i class="fas fa-flag"></i> Report
+                    </a>
+                    <a href="rate-service.html" class="btn btn-rating">
+                        <i class="fas fa-star"></i> Rate Service
+                    </a>
+                </div>
+            </div>
+
+            <!-- Service Owner Card -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-user-tie"></i> Service Provider
+                </div>
+                <div class="card-body">
+                    <div class="owner-info">
+                        <a href="../../../../main page/Login/freelancer/page freelancer/index.html" class="profile-link">
+                            <div class="avatar">
+                                <img src="../../../../main page/a2.jpeg" alt="Owner Avatar">
+                            </div>
+                            <div class="details">
+                                <h3>
+                                    Abd
+                                    <img class="verification-badge" src="https://khamsat.hsoubcdn.com/assets/images/verification-badge-f5965383075555aa8eee4d3e33aff856645f43585e7ac1fa56eed14203f46e00.svg" title="Verified Identity">
+                                </h3>
+                                <p><i class="fas fa-map-marker-alt"></i> Amman, Jordan</p>
+                                <p><i class="fas fa-clock"></i> Avg. Response: 2 hours</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <div class="stat">
+                            <span class="value">4.9/5</span>
+                            <span class="label">Rating</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">98%</span>
+                            <span class="label">Completion</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">127</span>
+                            <span class="label">Orders</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-envelope"></i> Email: info@sanaa.com</p>
+                <p><i class="fas fa-phone"></i> Phone: +1 234 567 890</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/" class="fab fa-facebook" target="_blank"></a>
+                    <a href="https://x.com" class="x-icon" target="_blank">
+                        <img src="image/twitter.png" alt="X (Twitter)" class="x-logo">
+                    </a>
+                    <a href="https://www.instagram.com/" class="fab fa-instagram" target="_blank"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Sana'a. All rights reserved</p>
+        </div>
+    </footer>
+
+    <script src="servicejs.js"></script>
+</body>
+</html>

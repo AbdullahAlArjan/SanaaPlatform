@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana'a | منصة صنعة للخدمات</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+     <!-- In your header section -->
+    <header class="header">
+        <a href="index.html" class="logo">صنعة <span style="color: #3498db;">Sana'a</span></a>
+        <div class="auth-container" id="authContainer">
+             <!-- Default state shows auth buttons -->
+ <div class="auth-buttons" id="authButtons">
+            <button id="loginBtn" class="auth-btn">تسجيل الدخول</button>
+            <button id="registerBtn" class="auth-btn">إنشاء حساب</button>
+        </div>
+         <!-- This will show after login -->
+        <div class="user-profile" id="userProfile" style="display: none;">
+            <img src="https://ui-avatars.com/api/?name=User&background=random" 
+                 alt="User Avatar" 
+                 class="user-avatar"
+                 id="userAvatar">
+            <div class="dropdown-content" id="dropdownContent">
+                <a href="profile.html">My Profile</a>
+                <a href="#" id="logoutBtn">Logout</a>
+            </div>
+        </div>
+        </div>
+    </header>
+
+       <!-- Search Section -->
+    <section class="search-section">
+        <h1>اعثر على المحترفين لإنجاز مهامك</h1>
+        <p>المنصة الموثوقة لربط مقدمي الخدمات بالعملاء بكل سهولة وأمان</p>
+        <form id="searchForm" class="search-bar">
+            <input type="text" placeholder="مثلاً: سباك، مبرمج، تصميم شعار..." id="searchInput" name="search">
+            <button type="submit" id="searchBtn">ابحث الآن</button>
+        </form>
+        <a href="categories/cat.html" class="all-categories">تصفح كافة الفئات</a>
+    </section>
+
+     <!-- Popular Categories -->
+    <section class="popular-categories">
+        <h2>أبرز التصنيفات</h2>
+        <div class="categories-grid">
+            <a href="post2/post.html" class="category-card">
+                <i class="fas fa-paint-brush"></i>
+                <span>تصميم جرافيك</span>
+            </a>
+            <a href="post2/proPost.html" class="category-card">
+                <i class="fas fa-code"></i>
+                <span>برمجة وتطوير</span>
+            </a>
+            <a href="#" class="category-card">
+                <i class="fas fa-tools"></i>
+                <span>صيانة منزلية</span>
+            </a>
+            <a href="#" class="category-card">
+                <i class="fas fa-pen-nib"></i>
+                <span>كتابة محتوى</span>
+            </a>
+            <a href="#" class="category-card">
+                <i class="fas fa-bullhorn"></i>
+                <span>تسويق رقمي</span>
+            </a>
+            <a href="#" class="category-card">
+                <i class="fas fa-video"></i>
+                <span>مونتاج فيديو</span>
+            </a>
+        </div>
+    </section>
+
+      <!-- Top Freelancers -->
+    <section class="top-freelancers">
+        <h2>أبرز مقدمي الخدمات</h2>
+        <div class="freelancers-grid">
+            <a href="freelancer-profile.html?id=1" class="freelancer-card">
+                <div class="verified-badge"><i class="fas fa-check-circle"></i> موثق</div>
+                <img src="a1.jpeg" alt="John Doe">
+                <h3>أحمد محمد</h3>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.8</span>
+                </div>
+                <p>مصمم جرافيك محترف</p>
+            </a>
+            <a href="freelancer-profile.html?id=2" class="freelancer-card">
+                <div class="verified-badge"><i class="fas fa-check-circle"></i> موثق</div>
+                <img src="a2.jpeg" alt="Jane Smith">
+                <h3>سارة أحمد</h3>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <span>4.0</span>
+                </div>
+                <p>مطورة مواقع ويب</p>
+            </a>
+        </div>
+    </section>
+
+ <!-- Spacing -->
+    <div class="spacing"></div>
+
+ <!-- Footer -->
+   <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>تواصل معنا</h3>
+                <p> <i class="fas fa-envelope"></i> info@sanaa.com</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+            </div>
+            <div class="footer-section">
+                <h3>تابعنا</h3>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/" class="fab fa-facebook" target="_blank" rel="noopener noreferrer">  
+                    </a>
+  
+                    <a href="https://x.com" class="x-icon" target="_blank" rel="noopener noreferrer">
+                      <img src="twitter.png" alt="X (Twitter)" class="x-logo">
+                    </a>
+                    <a href="https://www.instagram.com/" class="fab fa-instagram" target="_blank" rel="noopener noreferrer">
+                      
+                    </a>
+                </div>
+              </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy;منصة صنعة, جميع الحقوق محفوظة 2026</p>
+        </div>
+    </footer>
+    <script src="scripts.js"></script>
+
+    
+
+    <!--chatbot-->
+
+    <div class="chatbot-container">
+    <div class="chat-card" id="chatCard">
+        <div class="chat-header-main">
+            <div class="bot-profile">
+                <div class="status-indicator"></div>
+                <i class="fas fa-robot"></i>
+                <div class="bot-details">
+                    <h4> صنّاع - مساعدك الذكي</h4>
+                    <span>متصل الآن</span>
+                </div>
+            </div>
+            <button class="close-btn" onclick="toggleChatWindow()">×</button>
+        </div>
+        
+        <div class="chat-content" id="chatContent">
+            <div class="msg bot-msg">
+أهلاً بك في صنعة! 👋 أنا "صنّاع"، كيف يمكنني مساعدتك اليوم؟ 
+            </div>
+        </div>
+
+        <div class="chat-suggestions">
+        <button onclick="sendSuggestion('كيف أسجل في الموقع؟')">كيف أسجل؟</button>
+        <button onclick="sendSuggestion('أبحث عن مبرمج محترف')">بحث عن مبرمج</button>
+        <button onclick="sendSuggestion('كيف أضمن حقوقي؟')">ضمان الحقوق</button>
+        <button onclick="sendSuggestion('تواصل مع الدعم الفني')">الدعم الفني</button>
+    </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="userInput" placeholder="اكتب استفسارك هنا...">
+            <button class="send-icon-btn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <div class="chat-trigger-btn" onclick="toggleChatWindow()">
+        <i class="fas fa-comment-alt"></i>
+        <span class="notification-badge">1</span>
+    </div>
+</div>
+
+<script>
+    function toggleChatWindow() {
+        const chatCard = document.getElementById('chatCard');
+        chatCard.classList.toggle('is-visible');
+
+        function sendSuggestion(text) {
+        const chatContent = document.getElementById('chatContent');
+        const userMsg = document.createElement('div');
+        userMsg.className = 'msg user-msg'; // سنضيف تنسيقها في الـ CSS
+        userMsg.innerText = text;
+        chatContent.appendChild(userMsg);
+        
+        // التمرير لأسفل تلقائياً
+        chatContent.scrollTop = chatContent.scrollHeight;
+
+        // رد آلي بسيط كمثال
+        setTimeout(() => {
+            const botMsg = document.createElement('div');
+            botMsg.className = 'msg bot-msg';
+            botMsg.innerText = "أبشر، جاري تحويلك للمختص بـ: " + text;
+            chatContent.appendChild(botMsg);
+            chatContent.scrollTop = chatContent.scrollHeight;
+        }, 1000);
+    }
+    }
+</script>
+</body>
+</html>

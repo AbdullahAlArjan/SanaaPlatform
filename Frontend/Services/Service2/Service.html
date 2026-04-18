@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Page</title>
+    <link rel="stylesheet" href="servicestyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <a href="C:/Users/abdba/Desktop/project/main page/index.html" class="logo">Sana'a</a>
+        </div>
+        <div class="auth-links">
+            <!-- Links for non-logged-in users -->
+            <a href="C:/Users/abdba/Desktop/project/main page/Login/Login.html" id="login-link">Login</a>
+            <a href="C:/Users/abdba/Desktop/project/main page/Login/Register.html" id="register-link">Register</a>
+
+            <!-- Avatar and name for logged-in users -->
+            <div id="user-profile" class="user-profile" style="display: none;">
+                <img src="image/m1.png" alt="User Avatar" class="user-avatar">
+                <span class="username">User</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Side: Service Image and Details -->
+        <div class="left-side">
+            <!-- Service Images Section -->
+            <div class="service-images">
+                <!-- الصور الرئيسية -->
+                <div class="main-images">
+                    <button class="arrow prev">❮</button>
+                    <div class="slides-container">
+                        <img src="image/logo1.png" alt="Service 1" class="active">
+                        <img src="image/logo2.png" alt="Service 2">
+                        <img src="image/logo3.png" alt="Service 3">
+                        <img src="image/logo4.png" alt="Service 4">
+                        <img src="image/logo5.png" alt="Service 5">
+                        
+                    </div>
+                    <button class="arrow next">❯</button>
+                </div>
+            
+                <!-- الصور المصغرة -->
+                <div class="thumbnails">
+                    <img src="image/logo1.png" alt="Thumb 1" class="active">
+                    <img src="image/logo2.png" alt="Thumb 2">
+                    <img src="image/logo3.png" alt="Thumb 3">
+                    <img src="image/logo4.png" alt="Thumb 4">
+                    <img src="image/logo5.png" alt="Thumb 5">
+                    
+                </div>
+            </div>
+
+            <!-- Service Title and Description -->
+            <div class="service-info">
+                <h1>Logo Design</h1>
+                <p class="description">
+                    This is a detailed description of the service. It explains what the service includes, its benefits, and any other relevant information.
+                </p>
+                <p class="availability">
+                    <strong>Availability:</strong> Active
+                </p>
+            </div>
+
+            <!-- Comment Section -->
+            <div class="comment-section">
+                <h2>Comments</h2>
+                <div class="comment-form">
+                    <textarea id="comment-input" placeholder="Write your comment here..."></textarea>
+                    <button id="submit-comment" class="btn btn-comment-submit">Submit</button>
+                </div>
+                <div class="comments-list">
+                    <!-- Example Comments -->
+                    <div class="comment">
+                        <div class="comment-author">
+                            <img src="C:/Users/abdba/Desktop/project/main page/a1.jpeg" alt="User Avatar">
+                            <span>ahmad khaled</span>
+                        </div>
+                        <p class="comment-text">Great service! The logo design was exactly what I needed.</p>
+                    </div>
+                    <div class="comment">
+                        <div class="comment-author">
+                            <img src="image/m1.jpg" alt="User Avatar">
+                            <span>heba mohammad</span>
+                        </div>
+                        <p class="comment-text">Very professional and fast delivery. Highly recommend!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Service Details -->
+        <div class="right-side">
+            <div class="service-details">
+                <div class="price">$99.99</div>
+                <div class="meta-info">
+                    <p>Delivery Time: 3 Days</p>
+                    <p>Buyers: 150+</p>
+                    <p>Tools Used: Photoshop, Illustrator</p>
+                    <p>Rating: ★★★★☆ (4.8)</p>
+
+                </div>
+
+                <!-- Rating System -->
+                <div class="rating ${isLoggedIn ? '' : 'disabled'}">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                    <span class="rating-display"></span> <!-- Add this line -->
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-order">Place Order</button>
+                    <button id="message-button" class="btn btn-message">Message</button>
+                    <button class="btn btn-report">Report</button>
+                </div>
+            </div>
+
+
+
+<!-- Credit Card Modal -->
+<div id="credit-card-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Payment Information</h2>
+        
+        <form id="payment-form">
+            <div class="form-group">
+                <label>Card Number</label>
+                <input type="text" 
+       id="card-number"
+       placeholder="0000 0000 0000 0000" 
+       required
+       inputmode="numeric">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Expiration Date</label>
+                    <input type="text" pattern="\d{2}/\d{2}" 
+                           placeholder="MM/YY" required>
+                </div>
+                <div class="form-group">
+                    <label>Security Code</label>
+                    <input type="text" 
+                        pattern="\d{3}" 
+                        placeholder="CVC" 
+                        required
+                        onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Name on Card</label>
+                <input type="text" 
+                        placeholder="Name" 
+                        pattern="[A-Za-z ]+" 
+                        required
+                        onkeypress="return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || event.charCode === 32">
+            </div>
+            
+            <div class="button-group">
+                <button type="button" class="btn btn-back">Back</button>
+                <button type="submit" class="btn btn-next">Next</button>
+            </div>
+            
+            <div class="secure-notice">
+                <i class="fas fa-lock"></i> Secure payment
+            </div>
+
+
+     
+
+        </form>
+    </div>
+</div>
+
+
+
+<!-- Report Modal -->
+<div id="report-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Report Service</h2>
+        <form id="report-form">
+            <div class="form-group">
+                <label>Issue Description (required)</label>
+                <textarea 
+    required 
+    pattern="[A-Za-z ]+" 
+    onkeypress="return (event.charCode >= 65 && event.charCode <= 90) || 
+                       (event.charCode >= 97 && event.charCode <= 122) || 
+                       event.charCode === 32 || 
+                       event.charCode === 44 || 
+                       event.charCode === 46">
+</textarea>
+            </div>
+            <div class="form-group">
+                <label>Attachment (optional)</label>
+                <input type="file">
+            </div>
+            <button type="submit" class="btn btn-report">Submit Report</button>
+
+
+
+            
+        </form>
+    </div>
+</div>
+
+            <!-- Service Owner Card -->
+            <div class="card">
+                <div class="card-header bg-white">
+                    Service Owner
+                </div>
+                <div class="card-body">
+                    <div class="owner-info">
+                        <a href="/freelancer/page freelancer/index.html" class="profile-link"> <!-- Add link here -->
+                            <div class="avatar">
+                                <img src="C:/Users/abdba/Desktop/project/main page/a2.jpeg" alt="Owner Avatar">
+                            </div>
+                            <div class="details">
+                                <h3>
+                                    Abd
+                                    <img class="verification-badge" src="https://khamsat.hsoubcdn.com/assets/images/verification-badge-f5965383075555aa8eee4d3e33aff856645f43585e7ac1fa56eed14203f46e00.svg" title="Verified Identity">
+                                </h3>
+                                <p><i class="fa fa-user"></i> Top Seller</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Login/Register Modal -->
+        <div id="login-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Login or Register</h2>
+                <p>You need to log in or register to leave a comment.</p>
+                <div class="modal-buttons">
+                    <a href="C:/Users/abdba/Desktop/project/main page/Login/Login.html" class="btn btn-login-modal">Login</a>
+                    <a href="C:/Users/abdba/Desktop/project/main page/Login/Register.html" class="btn btn-register-modal">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chat-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Chat with Freelancer</h2>
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Chat messages will be dynamically added here -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chat-input" placeholder="Type your message...">
+                    <button id="send-message" class="btn btn-send-message">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: info@sanaa.com</p>
+                <p>Phone: +1 234 567 890</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                  <a href="#"><i class="fab fa-facebook"></i></a>
+                  <a href="https://x.com" class="x-icon" target="_blank" rel="noopener noreferrer">
+                    <img src="image/twitter.png" alt="X (Twitter)" class="x-logo">
+                  </a>
+                  <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+              </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Sana'a. All rights reserved</p>
+        </div>
+    </footer>
+
+
+    
+
+    <script src="servicejs.js"></script>
+</body>
+</html>

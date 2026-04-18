@@ -1,0 +1,65 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana'a - Freelance Platform</title>
+    <link rel="stylesheet" href="post.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <nav class="nav-container">
+            <a href="../main page/index.html" class="logo">Sana'a</a>
+            <div class="auth-buttons">
+                <button class="login-btn">Login</button>
+                <button class="register-btn">Register</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sorting Controls -->
+    <div class="sort-container">
+        <select id="sortOptions">
+            <option value="rating_high">Highest Rating</option>
+            <option value="rating_low">Lowest Rating</option>
+            <option value="price_high">Highest Price</option>
+            <option value="price_low">Lowest Price</option>
+        </select>
+    </div>
+
+    <!-- Posts Grid -->
+    <main class="posts-container">
+        <!-- Post cards will be dynamically generated -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: info@sanaa.com</p>
+                <p>Phone: +1 234 567 890</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                  <a href="#"><i class="fab fa-facebook"></i></a>
+                  <a href="https://x.com" class="x-icon" target="_blank" rel="noopener noreferrer">
+                    <img src="images/twitter.png" alt="X (Twitter)" class="x-logo">
+                  </a>
+                  <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+              </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Sana'a. All rights reserved</p>
+        </div>
+    </footer>
+
+    <script src="post.js"></script>
+</body>
+</html>

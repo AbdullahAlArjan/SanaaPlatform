@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana'a - Register</title>
+    <link rel="stylesheet" href="RegiserStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="register-container">
+        <!-- Left Side -->
+        <div class="brand-section">
+            <div class="brand-content">
+                <h1 class="brand-title">SANA'A</h1>
+                <p class="brand-subtitle">Jordanian market for professions and freelance work</p>
+                <div class="login-prompt">
+                    <p>Already have an account?</p>
+                    <a href="login.html" class="login-link">Login here</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="register-section">
+            <div class="register-card">
+                <h2 class="register-title">Create Your Account</h2>
+                <form id="registerForm">
+                    <!-- First Name and Last Name -->
+                    <div class="input-group half">
+                        <div class="input-wrapper">
+                            <label for="firstname">First Name</label>
+                            <input type="text" id="firstname" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="lastname">Last Name</label>
+                            <input type="text" id="lastname" required>
+                        </div>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="input-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <!-- Birthday -->
+                    <div class="input-group">
+                        <label for="birthday">Birthday</label>
+                        <input type="date" id="birthday" required>
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div class="input-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" required pattern="\d{10}" title="Phone number must be 10 digits">
+                        <div class="error-message" id="phoneError">Phone number must be exactly 10 digits</div>
+                    </div>
+
+                    <!-- City -->
+                    <div class="input-group">
+                        <label for="city">City</label>
+                        <select id="city" required>
+                            <option value="" disabled selected>Select City</option>
+                            <option value="Amman">Amman</option>
+                            <option value="Zarqa">Zarqa</option>
+                            <option value="Irbid">Irbid</option>
+                            <option value="Aqaba">Aqaba</option>
+                            <option value="Mafraq">Mafraq</option>
+                            <option value="Salt">Salt</option>
+                            <option value="Madaba">Madaba</option>
+                            <option value="Jerash">Jerash</option>
+                            <option value="Karak">Karak</option>
+                            <option value="Tafilah">Tafilah</option>
+                            <option value="Ma'an">Ma'an</option>
+                            <option value="Ajloun">Ajloun</option>
+                            <option value="Ramtha">Ramtha</option>
+                        </select>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="input-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" required>
+                        <div class="error-message" id="passwordError">Passwords do not match</div>
+                    </div>
+
+                    <!-- Register Button -->
+                    <button type="submit" class="register-btn">Register</button>
+
+                    <!-- Social Login Buttons -->
+                    <div class="social-register">
+                        <button type="button" class="social-btn google">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button type="button" class="social-btn facebook">
+                            <i class="fab fa-facebook-f"></i> Facebook
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Success Screen -->
+        <div class="success-screen" id="successScreen">
+            <h2>Success</h2>
+            <p>Registration has been completed successfully, welcome to Sanaa.</p>
+            <p>If you wish to offer your services through our website, you must first register as a freelancer.</p>
+            <div class="buttons">
+                <button class="freelancer" onclick="registerAsFreelancer()">Register as a Freelancer</button>
+                <button class="customer" onclick="continueAsCustomer()">Continue as a Customer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="RegisterJS.Js"></script>
+</body>
+</html>

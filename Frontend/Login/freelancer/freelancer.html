@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelancer Profile - Sana'a</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <a href="../../../main page/index.html" class="website-name">Sana'a</a>
+            </div>
+            <div class="top-bar-right">
+                <div class="notification-icon" id="notificationIcon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count" id="notificationCount">3</span>
+                    <!-- Notification Dropdown -->
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notification-header">
+                            <h4>Notifications</h4>
+                            <button class="mark-all-read" id="markAllRead">
+                                <i class="fas fa-check-double"></i> Mark All as Read
+                            </button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            <div class="notification-item unread">
+                                <p>New project request from Client A</p>
+                            </div>
+                            <div class="notification-item unread">
+                                <p>Your service was featured</p>
+                            </div>
+                            <div class="notification-item unread">
+                                <p>Payment received for Logo Design</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <section class="profile-section">
+            <!-- Left Sidebar -->
+            <div class="profile-card">
+                <img src="https://placehold.co/200x200" class="profile-pic" alt="Freelancer Photo" id="profilePicture">
+                <h2 id="fullName">Abd Balasmeh</h2>
+                <div class="profile-info">
+                    <p class="profession" id="profession">Graphic Designer</p>
+                    <p><i class="fas fa-map-marker-alt"></i> <span id="address">Amman, Jordan</span></p>
+                    <p><i class="fas fa-birthday-cake"></i> <span id="age">22</span> years old</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="openModal('edit-profile-modal')">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+                <!-- Post New Service and Manage Services Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="openModal('post-service-modal')">
+                        <i class="fas fa-plus-circle"></i> Post New Service
+                    </button>
+                    <button class="btn btn-primary" onclick="openModal('manage-services-modal')">
+                        <i class="fas fa-tasks"></i> Manage Services
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-grid">
+                <!-- Communication Card -->
+                <article class="info-card communication-card">
+                    <h3><i class="fas fa-phone"></i> Communication</h3>
+                    <div class="contact-info">
+                        <p>Phone: <span id="phoneNumber">+962 7 9703 7825</span></p>
+                        <div class="whatsapp-button">
+                            <button class="btn btn-secondary" onclick="openWhatsApp()">
+                                <i class="fab fa-whatsapp"></i> WhatsApp Me
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- About Me Section -->
+                    <div class="about-section">
+                        <h3><i class="fas fa-user"></i> About Me</h3>
+                        <div class="editable-description">
+                            <p id="profile-description">.</p>
+                            <button class="btn btn-primary" onclick="openModal('edit-description-modal')">
+                                <i class="fas fa-edit"></i> Edit Description
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- My Services -->
+                <div class="info-card">
+                    <h3><i class="fas fa-briefcase"></i> My Services</h3>
+                    <div id="services-list">
+                        <!-- Example Services -->
+                        <div class="service-item">
+                            <span>Logo Design</span>
+                            <div class="service-meta">
+                                <span>$150</span>
+                                <small>85 buyers</small>
+                                <div class="availability-status active">Active</div>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <span>Web Design</span>
+                            <div class="service-meta">
+                                <span>$500</span>
+                                <small>45 buyers</small>
+                                <div class="availability-status deactive">Deactive</div>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <span>Social Media Design</span>
+                            <div class="service-meta">
+                                <span>$100</span>
+                                <small>30 buyers</small>
+                                <div class="availability-status active">Active</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="info-card stats-card">
+                    <h3><i class="fas fa-chart-line"></i> Statistics</h3>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4>4.9/5</h4>
+                                <p>Average Rating</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4>127</h4>
+                                <p>Completed Projects</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonials -->
+                <div class="testimonials">
+                    <h3><i class="fas fa-comments"></i> Client Reviews</h3>
+                    <div class="testimonial-carousel">
+                        <!-- Testimonial 1 -->
+                        <div class="testimonial-item">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <p>"Abd delivered exceptional work! The designs were modern and exactly what we needed for our rebranding."</p>
+                            <small>- John Doe, CEO at DesignCo</small>
+                        </div>
+                        <!-- Testimonial 2 -->
+                        <div class="testimonial-item">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>"Amazing designs and quick delivery! Abd is a true professional who understands the client's vision."</p>
+                            <small>- Jane Smith, Marketing Manager</small>
+                        </div>
+                        <!-- Testimonial 3 -->
+                        <div class="testimonial-item">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>"The logo Abd designed for us was beyond our expectations. Highly recommend his services!"</p>
+                            <small>- Ahmed Ali, Founder of TechStart</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Edit Profile Modal -->
+        <div id="edit-profile-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeModal('edit-profile-modal')">&times;</span>
+                <h2>Edit Profile</h2>
+                <form id="edit-profile-form">
+                    <!-- Location -->
+                    <label for="profile-location">Location:</label>
+                    <input type="text" id="profile-location" value="Amman,Jordan" required>
+                    
+                    <!-- Change Profile Picture -->
+                    <label for="profile-picture">Profile Picture:</label>
+                    <input type="file" id="profile-picture" accept="image/*" onchange="previewProfilePicture(event)">
+                    <div class="image-preview">
+                        <img id="profile-picture-preview" src="https://placehold.co/200x200" alt="Profile Picture Preview">
+                    </div>
+                    <!-- Save Changes Button -->
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Manage Services Modal -->
+        <div id="manage-services-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeModal('manage-services-modal')">&times;</span>
+                <h2>Manage Services</h2>
+                <!-- Order List -->
+                <div class="order-list">
+                    <h3><i class="fas fa-list"></i> Order List</h3>
+                    <div id="order-list-container">
+                        <!-- Example Orders -->
+                        <div class="order-item">
+                            <span>Customer: John Doe</span>
+                            <span>Service: Logo Design</span>
+                            <div class="order-actions">
+                                <button class="btn btn-accept">Accept</button>
+                                <button class="btn btn-reject">Reject</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Manage Services -->
+                <div class="manage-services">
+                    <h3><i class="fas fa-cogs"></i> Manage Services</h3>
+                    <div id="manage-services-container">
+                        <!-- Example Services -->
+                        <div class="service-item">
+                            <div class="service-dropdown">
+                                <label for="service-select">Select Service:</label>
+                                <select id="service-select">
+                                    <option value="logo-design">Logo Design</option>
+                                    <option value="web-design">Web Design</option>
+                                    <option value="social-media-design">Social Media Design</option>
+                                </select>
+                            </div>
+                            <div class="service-inputs">
+                                <label for="service-name">Service Name:</label>
+                                <input type="text" id="service-name" placeholder="Enter service name">
+                                <label for="service-price">Price ($):</label>
+                                <input type="number" id="service-price" placeholder="Enter price">
+                            </div>
+                            <div class="service-actions">
+                                <button class="btn btn-toggle">Deactivate</button>
+                                <button class="btn btn-drop">Drop</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Description Modal -->
+        <div id="edit-description-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeModal('edit-description-modal')">&times;</span>
+                <h2>Edit Description</h2>
+                <form id="edit-description-form">
+                    <!-- Description Textarea -->
+                    <label for="description-text">About Me:</label>
+                    <textarea id="description-text" rows="5" required></textarea>
+                    <!-- Save Changes Button -->
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Post New Service Modal -->
+        <div id="post-service-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeModal('post-service-modal')">&times;</span>
+                <h2>Post New Service</h2>
+                <form id="post-service-form">
+                    <!-- Service Name -->
+                    <div class="form-group">
+                        <label for="service-name">Name of the Service:</label>
+                        <input type="text" id="service-name" placeholder="Enter service name" required>
+                    </div>
+                    <!-- Service Description -->
+                    <div class="form-group">
+                        <label for="service-description">Service Description:</label>
+                        <textarea id="service-description" rows="4" placeholder="Describe your service" required></textarea>
+                    </div>
+                    <!-- Price -->
+                    <div class="form-group">
+                        <label for="service-price">Price ($):</label>
+                        <input type="number" id="service-price" placeholder="Enter price" required>
+                    </div>
+                    <!-- Estimation Time -->
+                    <div class="form-group">
+                        <label for="service-estimation-time">Estimation Time:</label>
+                        <input type="text" id="service-estimation-time" placeholder="e.g., 2 weeks" required>
+                    </div>
+                    <!-- Required Tools -->
+                    <div class="form-group">
+                        <label for="service-tools">Required Tools:</label>
+                        <input type="text" id="service-tools" placeholder="e.g., Photoshop, Illustrator" required>
+                    </div>
+                    <!-- Availability -->
+                    <div class="form-group">
+                        <label for="service-availability">Availability:</label>
+                        <select id="service-availability" required>
+                            <option value="active">Active</option>
+                            <option value="deactive">Deactive</option>
+                        </select>
+                    </div>
+                    <!-- Attachment (Picture or Document) -->
+                    <div class="form-group">
+                        <label for="service-attachment">Attachment (Picture or Document):</label>
+                        <input type="file" id="service-attachment" accept="image/*, .pdf, .doc, .docx">
+                    </div>
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Post Service</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana'a - تصفح الخدمات</title>
+    <link rel="stylesheet" href="post.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+     <!-- Navigation Bar -->
+    <header class="nav-container">
+    <a href="../index.html" class="logo">صنعة <span style="color: #3498db;">Sana'a</span></a>
+
+    <div class="auth-buttons" >
+       <button class="currency-btn" id="currencyToggle">USD → JOD</button>
+        <button class="login-btn" onclick="window.location.href='../Login/login.html'">تسجيل الدخول</button>
+        <button class="register-btn" onclick="window.location.href='../Login/register.html'">إنشاء حساب</button>
+    </div>
+</header>
+
+        
+    <!-- Sorting Controls -->
+    <div class="sort-container">
+        <label for="sortOptions">ترتيب حسب:</label>
+        <select id="sortOptions">
+            <option value="rating_high">الأعلى تقييماً</option>
+            <option value="rating_low">الأقل تقييماً</option>
+            <option value="price_high">الأعلى سعراً</option>
+            <option value="price_low">الأقل سعراً</option>
+        </select>
+    </div>
+      
+       <!-- Posts Grid -->
+    <main class="posts-container">
+         <!-- Service 1 -->
+        <a href="Services/Service1/Service.html" class="post-card" data-rating="4.8" data-price="100">
+            <div class="verified-badge"><i class="fas fa-check-circle"></i> موثق</div>
+            <img src="images/proPostservice1.jpg" alt=" تطبيقات هواتف" class="post-image">
+            <div class="post-details">
+                <h3>مطور تطبيقات هواتف</h3>
+                <div class="price-rating">
+                    <span class="price">170$</span>
+                    <div class="rating">⭐ 4.6</div>
+                </div>
+                <div class="provider-info">
+                    <img src="images/a2.jpeg" alt="محمد" class="provider-image">
+                    <span>محمد العمارات</span>
+                </div>
+            </div>
+        </a>
+         
+        <!-- Service 2 -->
+        <a href="Services/Service2/Service.html" class="post-card" data-rating="4.9" data-price="500">
+            <div class="verified-badge"><i class="fas fa-check-circle"></i> موثق</div>
+            <img src="images/proPostService2.jpg" alt="تحليل بيانات" class="post-image">
+            <div class="post-details">
+                <h3>خبير تحليل بيانات</h3>
+                <div class="price-rating">
+                    <span class="price">250$</span>
+                    <div class="rating">⭐ 4.9</div>
+                </div>
+                <div class="provider-info">
+                    <img src="images/provider2.jpg" alt="قصي" class="provider-image">
+                    <span>قصي عبدالله</span>
+                </div>
+            </div>
+        </a>
+        
+         <!-- Service 3 -->
+        <a href="Services/Service3/Service.html" class="post-card" data-rating="4.5" data-price="150">
+            <img src="images/proPostService3.jpg" alt="مبرمج" class="post-image">
+            <div class="post-details">
+                <h3>مبرمج مواقع كاملة</h3>
+                <div class="price-rating">
+                    <span class="price">350$</span>
+                    <div class="rating">⭐ 4.2</div>
+                </div>
+                <div class="provider-info">
+                    <img src="images/provider3.jpg" alt="عمر" class="provider-image">
+                    <span>عمر جهاد</span>
+                </div>
+            </div>
+        </a>
+         
+        <!-- Service 4 -->
+        <a href="Services/Service4/Service.html" class="post-card" data-rating="4.7" data-price="300">
+            <div class="verified-badge"><i class="fas fa-check-circle"></i> موثق</div>
+            <img src="images/ProPostService4.png" alt="ذكاء اصطناعي" class="post-image">
+            <div class="post-details">
+                <h3>مهندس ذكاء اصطناعي</h3>
+                <div class="price-rating">
+                    <span class="price">450$</span>
+                    <div class="rating">⭐ 4.7</div>
+                </div>
+                <div class="provider-info">
+                    <img src="images/provider4.jpg" alt="وائل" class="provider-image">
+                    <span>وائل سامي</span>
+                </div>
+            </div>
+        </a>
+    </main>
+
+   <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>تواصل معنا</h3>
+                <p> <i class="fas fa-envelope"></i> info@sanaa.com</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                  <a href="https://www.facebook.com/" class="fab fa-facebook" target="_blank" rel="noopener noreferrer">  
+                </a>
+
+                <a href="https://x.com" class="x-icon" target="_blank" rel="noopener noreferrer">
+                  <img src="../../main page/twitter.png" alt="X (Twitter)" class="x-logo">
+                </a>
+                <a href="https://www.instagram.com/" class="fab fa-instagram" target="_blank" rel="noopener noreferrer">
+                  
+                </a>
+                </div>
+              </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; منصة صنعة, جميع الحقوق محفوظة 2026</p>
+        </div>
+    </footer>
+
+    <script src="post.js"></script>
+</body>
+</html>
