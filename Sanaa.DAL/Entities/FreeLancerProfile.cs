@@ -4,6 +4,13 @@ using System.Collections.Generic;
 
 namespace Sanaa.DAL.Entities
 {
+    public enum ApprovalStatus
+    {
+        Pending = 0,    // بانتظار مراجعة الأدمن
+        Approved = 1,   // موافق عليه
+        Rejected = 2    // مرفوض
+    }
+
     public class FreelancerProfile
     {
         // بنحدد إنه هاد الحقل هو الـ Primary Key وبنفس الوقت Foreign Key بيأشر على جدول User
@@ -32,6 +39,9 @@ namespace Sanaa.DAL.Entities
 
         // JSON array of up to 5 portfolio image URLs — no separate table needed
         public string? PortfolioImagesJson { get; set; }
+
+        // حالة الموافقة من الأدمن (Pending بالافتراضي لحين المراجعة)
+        public ApprovalStatus ApprovalStatus { get; set; } = ApprovalStatus.Pending;
 
         // ⬇️ Navigation Properties (العلاقات) ⬇️
 
