@@ -173,22 +173,45 @@ namespace Sanaa.BLL.Services
             await _context.SaveChangesAsync();
             return true;
         }
-        // دالة إحصائيات النظام
+        // دالة إحصائيات النظام (محسّنة)
         public async Task<AdminDashboardStatsDto> GetSystemStatsAsync()
         {
-            var totalUsers = await _context.Users.CountAsync();
+            var totalUsers        = await _context.Users.CountAsync();
+            var totalFreelancers  = await _context.Users.CountAsync(u => u.Role == "Freelancer");
+            var activeUsers       = await _context.Users.CountAsync(u => u.IsActive);
+            var totalOrders       = await _context.Orders.CountAsync();
+            var pendingOrders     = await _context.Orders.CountAsync(o => o.Status == OrderStatus.Pending);
+            var completedOrders   = await _context.Orders.CountAsync(o => o.Status == OrderStatus.Completed);
+            var totalRevenue      = await _context.Payments
+                                        .Where(p => p.Status == PaymentStatus.Succeeded)
+                                        .SumAsync(p => (decimal?)p.Amount) ?? 0;
+            var pendingApprovals  = await _context.FreelancerProfiles
+                                        .CountAsync(f => f.ApprovalStatus == ApprovalStatus.Pending);
 
-            // بنعد كم صنايعي عندنا
-            var totalFreelancers = await _context.Users.CountAsync(u => u.Role == "Freelancer");
-
-            // بنعد الحسابات اللي الـ IsActive تبعها true
-            var activeUsers = await _context.Users.CountAsync(u => u.IsActive);
+            // أكثر 5 خدمات طلباً (بناءً على الخدمات المرتبطة بالصنايعيين في الطلبات)
+            var topServices = await _context.Orders
+                .Include(o => o.Freelancer)
+                    .ThenInclude(f => f.FreelancerServices)
+                        .ThenInclude(fs => fs.Service)
+                .Where(o => o.Freelancer != null)
+                .SelectMany(o => o.Freelancer.FreelancerServices.Select(fs => fs.Service.Title))
+                .GroupBy(title => title)
+                .Select(g => new TopServiceDto { ServiceTitle = g.Key, OrderCount = g.Count() })
+                .OrderByDescending(x => x.OrderCount)
+                .Take(5)
+                .ToListAsync();
 
             return new AdminDashboardStatsDto
             {
                 TotalUsers = totalUsers,
                 TotalFreelancers = totalFreelancers,
-                ActiveUsers = activeUsers
+                ActiveUsers = activeUsers,
+                TotalOrders = totalOrders,
+                PendingOrders = pendingOrders,
+                CompletedOrders = completedOrders,
+                TotalRevenue = totalRevenue,
+                PendingFreelancerApprovals = pendingApprovals,
+                TopServices = topServices
             };
         }
 
@@ -198,11 +221,30 @@ namespace Sanaa.BLL.Services
             var user = await _context.Users.FindAsync(userId);
             if (user == null) return false;
 
-            // السحر هون: إذا كان true بصير false، وإذا كان false بصير true
             user.IsActive = !user.IsActive;
-
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        // Soft Delete — بدل الحذف النهائي
+        public async Task<bool> SoftDeleteUserAsync(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+
+            user.IsDeleted = true;
+            user.DeletedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        // جلب المستخدمين المحذوفين (للأرشيف — يتجاوز الـ Global Filter)
+        public async Task<IEnumerable<User>> GetDeletedUsersAsync()
+        {
+            return await _context.Users
+                .IgnoreQueryFilters()
+                .Where(u => u.IsDeleted)
+                .ToListAsync();
         }
     }
 }

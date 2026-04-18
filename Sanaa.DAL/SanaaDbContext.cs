@@ -119,6 +119,9 @@ namespace Sanaa.DAL
                 .WithMany(c => c.Services)
                 .HasForeignKey(s => s.CategoryID)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            // Global Query Filter: استثناء المستخدمين المحذوفين تلقائياً من كل الاستعلامات
+            modelBuilder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }

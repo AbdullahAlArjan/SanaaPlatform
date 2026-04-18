@@ -3,6 +3,7 @@ using Sanaa.BLL.DTOs;
 using Sanaa.BLL.Interfaces;
 using Sanaa.DAL;
 using Sanaa.DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,10 +19,22 @@ namespace Sanaa.BLL.Services
             _context = context;
         }
 
-        // 1. جلب كل الأقسام (بدون الخدمات)
-        public async Task<IEnumerable<CategoryResponseDto>> GetAllCategoriesAsync()
+        // 1. جلب الأقسام مع بحث + pagination
+        public async Task<PagedResponse<CategoryResponseDto>> GetAllCategoriesAsync(
+            string? search, int page, int pageSize)
         {
-            return await _context.Categories
+            var query = _context.Categories.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(c =>
+                    c.Name.Contains(search) ||
+                    (c.Description != null && c.Description.Contains(search)));
+
+            var total = await query.CountAsync();
+            var items = await query
+                .OrderBy(c => c.Name)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .Select(c => new CategoryResponseDto
                 {
                     CategoryID = c.CategoryID,
@@ -30,6 +43,14 @@ namespace Sanaa.BLL.Services
                     ImageUrl = c.ImageUrl
                 })
                 .ToListAsync();
+
+            return new PagedResponse<CategoryResponseDto>
+            {
+                Data = items,
+                TotalCount = total,
+                PageNumber = page,
+                PageSize = pageSize
+            };
         }
 
         // 2. جلب قسم معين مع خدماته
@@ -67,8 +88,7 @@ namespace Sanaa.BLL.Services
             };
 
             _context.Categories.Add(category);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         // 4. تعديل قسم موجود
@@ -81,8 +101,7 @@ namespace Sanaa.BLL.Services
             category.Description = dto.Description;
             category.ImageUrl = dto.ImageUrl;
 
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         // 5. حذف قسم
@@ -92,8 +111,7 @@ namespace Sanaa.BLL.Services
             if (category == null) return false;
 
             _context.Categories.Remove(category);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

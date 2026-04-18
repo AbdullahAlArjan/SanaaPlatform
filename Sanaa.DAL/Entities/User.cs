@@ -35,6 +35,10 @@ namespace Sanaa.DAL.Entities
 
         public bool IsEmailVerified { get; set; } = false;
 
+        // Soft Delete — بدل الحذف النهائي نحافظ على تاريخ الطلبات والتقييمات
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
+
         public virtual FreelancerProfile? FreelancerProfile { get; set; }
         public virtual ICollection<OtpCode> OtpCodes { get; set; } = new List<OtpCode>();
         public virtual ICollection<Report> Reports { get; set; } = new List<Report>();

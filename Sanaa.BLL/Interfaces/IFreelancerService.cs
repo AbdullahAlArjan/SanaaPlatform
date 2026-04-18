@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sanaa.BLL.DTOs;
+
 namespace Sanaa.BLL.Interfaces
 {
     public interface IFreelancerService
@@ -14,5 +15,10 @@ namespace Sanaa.BLL.Interfaces
         Task<List<string>> AddPortfolioImageAsync(int freelancerId, IFormFile file);
         Task<List<string>> RemovePortfolioImageAsync(int freelancerId, string imageUrl);
         Task<List<string>> GetPortfolioImagesAsync(int freelancerId);
+
+        // إدارة الموافقة (Admin)
+        Task<bool> ApproveFreelancerAsync(int freelancerId);
+        Task<bool> RejectFreelancerAsync(int freelancerId);
+        Task<IEnumerable<FreelancerProfileResponse>> GetPendingFreelancersAsync();
     }
 }

@@ -6,7 +6,7 @@ namespace Sanaa.BLL.Interfaces
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<CategoryResponseDto>> GetAllCategoriesAsync();
+        Task<PagedResponse<CategoryResponseDto>> GetAllCategoriesAsync(string? search, int page, int pageSize);
         Task<CategoryWithServicesDto> GetCategoryWithServicesAsync(int id);
         Task<bool> CreateCategoryAsync(CreateCategoryDto dto);
         Task<bool> UpdateCategoryAsync(int id, CreateCategoryDto dto);

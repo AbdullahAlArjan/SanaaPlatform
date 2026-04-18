@@ -17,15 +17,16 @@ namespace Sanaa.API.Controllers
             _categoryService = categoryService;
         }
 
-        // ─── عمليات القراءة (متاحة للجميع) ───────────────────────────────
-
-        // GET /api/categories
+        // GET /api/categories?search=كهرباء&page=1&pageSize=10
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllCategories()
+        public async Task<IActionResult> GetAllCategories(
+            [FromQuery] string? search,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var categories = await _categoryService.GetAllCategoriesAsync();
-            return Ok(categories);
+            var result = await _categoryService.GetAllCategoriesAsync(search, page, pageSize);
+            return Ok(result);
         }
 
         // GET /api/categories/{id}
@@ -39,8 +40,6 @@ namespace Sanaa.API.Controllers
 
             return Ok(category);
         }
-
-        // ─── عمليات الكتابة (مخصصة للأدمن فقط) ──────────────────────────
 
         // POST /api/categories
         [HttpPost]

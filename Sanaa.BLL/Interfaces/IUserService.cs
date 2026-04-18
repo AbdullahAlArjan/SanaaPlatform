@@ -1,4 +1,4 @@
-﻿using Sanaa.BLL.DTOs;
+using Sanaa.BLL.DTOs;
 using Sanaa.DAL.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +7,6 @@ namespace Sanaa.BLL.Interfaces
 {
     public interface IUserService
     {
-        // مسحنا السطر القديم من هون وخلينا بس السطر الجديد اللي فيه الفلتر
         Task<IEnumerable<User>> GetAllUsersAsync(UserSearchFilterDto filter);
         Task<User> GetUserByIdAsync(int id);
         Task<bool> CreateUserAsync(User user);
@@ -17,5 +16,9 @@ namespace Sanaa.BLL.Interfaces
 
         Task<AdminDashboardStatsDto> GetSystemStatsAsync();
         Task<bool> ToggleUserStatusAsync(int userId);
+
+        // Soft Delete
+        Task<bool> SoftDeleteUserAsync(int userId);
+        Task<IEnumerable<User>> GetDeletedUsersAsync();
     }
 }
