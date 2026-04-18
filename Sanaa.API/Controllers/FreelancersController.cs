@@ -64,7 +64,7 @@ namespace Sanaa.API.Controllers
         [Authorize]
         [HttpPost("profile-image")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadProfileImage([FromForm] IFormFile file)
+        public async Task<IActionResult> UploadProfileImage( IFormFile file)
         {
             var freelancerId = GetCurrentUserId();
             if (freelancerId == null) return Unauthorized();
@@ -80,7 +80,7 @@ namespace Sanaa.API.Controllers
         [Authorize]
         [HttpPost("portfolio")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> AddPortfolioImage([FromForm] IFormFile file)
+        public async Task<IActionResult> AddPortfolioImage( IFormFile file)
         {
             var freelancerId = GetCurrentUserId();
             if (freelancerId == null) return Unauthorized();
