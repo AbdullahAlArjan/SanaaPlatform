@@ -94,27 +94,52 @@ namespace Sanaa.BLL.Services
                 : "رمز إعادة تعيين كلمة المرور - منصة صنعاء";
 
             var body = purpose == OtpPurpose.EmailVerification
-                ? $"<div dir='rtl'><h3>مرحباً بك في منصة صنعاء</h3><p>رمز التحقق الخاص بك: <strong style='font-size:24px'>{code}</strong></p><p>صالح لمدة 10 دقائق فقط.</p></div>"
-                : $"<div dir='rtl'><h3>منصة صنعاء - إعادة تعيين كلمة المرور</h3><p>رمز إعادة التعيين: <strong style='font-size:24px'>{code}</strong></p><p>صالح لمدة 10 دقائق فقط.</p></div>";
+                ? $"<div dir='rtl'><h3>مرحباً بك في منصة صنعاء</h3><p>رمز التحقق الخاص بك: <strong style='font-size:24px;letter-spacing:4px;color:#1877f2'>{code}</strong></p><p>صالح لمدة 10 دقائق فقط.</p></div>"
+                : $"<div dir='rtl'><h3>منصة صنعاء - إعادة تعيين كلمة المرور</h3><p>رمز إعادة التعيين: <strong style='font-size:24px;letter-spacing:4px;color:#e74c3c'>{code}</strong></p><p>صالح لمدة 10 دقائق فقط.</p></div>";
 
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(
-                _configuration["Smtp:SenderName"],
-                _configuration["Smtp:SenderEmail"]));
-            message.To.Add(MailboxAddress.Parse(toEmail));
-            message.Subject = subject;
-            message.Body = new TextPart("html") { Text = body };
+            // ── تشخيص الإعدادات قبل الإرسال ─────────────────────────────────
+            var host     = _configuration["Smtp:Host"];
+            var port     = _configuration["Smtp:Port"];
+            var username = _configuration["Smtp:Username"];
+            var sender   = _configuration["Smtp:SenderEmail"];
 
-            using var client = new SmtpClient();
-            await client.ConnectAsync(
-                _configuration["Smtp:Host"],
-                int.Parse(_configuration["Smtp:Port"]!),
-                SecureSocketOptions.StartTls);
-            await client.AuthenticateAsync(
-                _configuration["Smtp:Username"],
-                _configuration["Smtp:Password"]);
-            await client.SendAsync(message);
-            await client.DisconnectAsync(true);
+            Console.WriteLine($"[EmailService] إرسال OTP إلى: {toEmail}");
+            Console.WriteLine($"[EmailService] SMTP Host: {host}:{port}  |  From: {sender}  |  Username: {username}");
+
+            if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(username) ||
+                username == "your-email@gmail.com")
+            {
+                Console.WriteLine("[EmailService] ⚠️  إعدادات SMTP غير مكتملة في appsettings.json — تم تخطي الإرسال");
+                return;
+            }
+
+            try
+            {
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress(
+                    _configuration["Smtp:SenderName"],
+                    sender));
+                message.To.Add(MailboxAddress.Parse(toEmail));
+                message.Subject = subject;
+                message.Body = new TextPart("html") { Text = body };
+
+                using var client = new SmtpClient();
+                await client.ConnectAsync(host, int.Parse(port!), SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(username, _configuration["Smtp:Password"]);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
+
+                Console.WriteLine($"[EmailService] ✅ تم إرسال OTP بنجاح إلى: {toEmail}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[EmailService] ❌ خطأ SMTP عند الإرسال إلى {toEmail}:");
+                Console.WriteLine($"[EmailService]    النوع: {ex.GetType().Name}");
+                Console.WriteLine($"[EmailService]    الرسالة: {ex.Message}");
+                if (ex.InnerException != null)
+                    Console.WriteLine($"[EmailService]    Inner: {ex.InnerException.Message}");
+                throw; // نرمي الخطأ لأعلى عشان SendOtpAsync يعرف فشل الإيميل
+            }
         }
     }
 }

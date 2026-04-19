@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio — Sanaa Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/globals.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+
+<div class="dash-shell">
+  <aside class="dash-sidebar" id="dashSidebar">
+    <div class="sidebar-brand">
+      <a href="index.html" style="text-decoration:none;"><h1>San<span>aa</span></h1></a>
+    </div>
+    <div class="sidebar-user">
+      <div class="avatar-placeholder avatar-md" id="sidebarAvatar" style="font-size:0.85rem;flex-shrink:0;"></div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebarName">…</div>
+        <div class="sidebar-user-role">Freelancer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Main</div>
+      <a href="dashboard-freelancer.html" class="sidebar-link"><i class="fa-solid fa-grid-2"></i> Dashboard</a>
+      <a href="orders-manage.html" class="sidebar-link"><i class="fa-solid fa-list-check"></i> My Orders</a>
+      <a href="portfolio-manage.html" class="sidebar-link active"><i class="fa-solid fa-images"></i> Portfolio</a>
+      <div class="sidebar-section">Account</div>
+      <a href="profile-settings.html" class="sidebar-link"><i class="fa-solid fa-user-pen"></i> Profile Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+    </div>
+  </aside>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="topbar-title">My Portfolio</div>
+      <div class="topbar-actions">
+        <div class="topbar-notif" id="notifBell"><i class="fa-regular fa-bell"></i><span class="notif-count" id="notifCount">0</span></div>
+      </div>
+    </header>
+
+    <div class="dash-body">
+
+      <!-- Upload card -->
+      <div class="dash-card" style="margin-bottom:var(--sp-6);">
+        <div class="dash-card-header">
+          <div class="dash-card-title"><i class="fa-solid fa-cloud-arrow-up"></i> Upload New Image</div>
+          <span style="font-size:var(--text-xs);color:var(--text-muted);" id="imageCount">0 images</span>
+        </div>
+        <div class="dash-card-body">
+          <div class="upload-zone" id="uploadZone">
+            <i class="fa-solid fa-image"></i>
+            <p>Drag & drop an image here, or <strong>click to browse</strong></p>
+            <p style="font-size:var(--text-xs);margin-top:var(--sp-1);">JPEG, PNG, WebP · Max 5 MB</p>
+            <input type="file" id="fileInput" accept="image/*" style="display:none;" />
+          </div>
+          <div class="upload-progress" id="uploadProgress">
+            <span id="uploadProgressLabel" style="font-size:var(--text-xs);color:var(--text-medium);">Uploading…</span>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Portfolio grid -->
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <div class="dash-card-title"><i class="fa-solid fa-images"></i> Portfolio Images</div>
+        </div>
+        <div class="dash-card-body">
+          <div id="portfolioGrid" class="portfolio-grid">
+            <div class="page-loader" style="grid-column:1/-1;min-height:120px;">
+              <div class="spinner spinner-sm"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Lightbox -->
+<div class="lightbox-overlay" id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:center;justify-content:center;">
+  <button id="lightboxClose" style="position:absolute;top:20px;right:20px;color:#fff;font-size:2rem;background:none;border:none;cursor:pointer;">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+  <img id="lightboxImg" src="" alt="" style="max-width:90vw;max-height:88vh;border-radius:8px;" />
+</div>
+
+<script type="module" src="js/portfolio-manage.js"></script>
+</body>
+</html>

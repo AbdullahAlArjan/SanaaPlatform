@@ -19,12 +19,14 @@ namespace Sanaa.BLL.Services
     {
         private readonly SanaaDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IOtpService _otpService;
 
         // 1. Dependency Injection: بنطلب نسخة من الداتا بيس عشان نستخدمها
-        public UserService(SanaaDbContext context , IConfiguration configuration)
+        public UserService(SanaaDbContext context, IConfiguration configuration, IOtpService otpService)
         {
-            _context = context; 
+            _context = context;
             _configuration = configuration;
+            _otpService = otpService;
         }
         private (string token, DateTime expiry) GenerateJwtToken(User user)
         {
@@ -97,6 +99,11 @@ namespace Sanaa.BLL.Services
         // 4. إضافة مستخدم جديد (Register)
         public async Task<bool> CreateUserAsync(User user)
         {
+            // 0. التحقق من عدم تكرار البريد الإلكتروني
+            var emailTaken = await _context.Users.AnyAsync(u => u.Email == user.Email);
+            if (emailTaken)
+                throw new InvalidOperationException("هذا البريد الإلكتروني مسجل مسبقاً");
+
             // 1. تشفير كلمة المرور
             // BCrypt بيعمل Hash قوي جداً وبيضيف "Salt" تلقائياً
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
@@ -105,7 +112,22 @@ namespace Sanaa.BLL.Services
             _context.Users.Add(user);
             var result = await _context.SaveChangesAsync();
 
-            return result > 0;
+            if (result > 0)
+            {
+                // 3. إرسال OTP تلقائياً بعد نجاح التسجيل
+                try
+                {
+                    await _otpService.SendOtpAsync(user.Email, OtpPurpose.EmailVerification);
+                }
+                catch (Exception ex)
+                {
+                    // لا نفشّل التسجيل بسبب فشل الإيميل — نسجّل الخطأ فقط
+                    Console.WriteLine($"[EmailService] فشل إرسال OTP بعد التسجيل: {ex.Message}");
+                }
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<LoginResponse?> LoginAsync(string email, string password)

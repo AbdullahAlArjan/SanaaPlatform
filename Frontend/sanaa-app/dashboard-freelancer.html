@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Freelancer Dashboard — Sanaa Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/globals.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+
+<div class="dash-shell">
+  <!-- Sidebar -->
+  <aside class="dash-sidebar" id="dashSidebar">
+    <div class="sidebar-brand">
+      <a href="index.html" style="text-decoration:none;"><h1>San<span>aa</span></h1></a>
+    </div>
+    <div class="sidebar-user">
+      <div class="avatar-placeholder avatar-md" id="sidebarAvatar" style="font-size:0.85rem;flex-shrink:0;"></div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebarName">Loading…</div>
+        <div class="sidebar-user-role">Freelancer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Main</div>
+      <a href="dashboard-freelancer.html" class="sidebar-link active">
+        <i class="fa-solid fa-grid-2"></i> Dashboard
+      </a>
+      <a href="orders-manage.html" class="sidebar-link">
+        <i class="fa-solid fa-list-check"></i> My Orders
+        <span class="sidebar-badge" id="pendingBadge" style="display:none;">!</span>
+      </a>
+      <a href="portfolio-manage.html" class="sidebar-link">
+        <i class="fa-solid fa-images"></i> Portfolio
+      </a>
+      <div class="sidebar-section">Account</div>
+      <a href="profile-settings.html" class="sidebar-link">
+        <i class="fa-solid fa-user-pen"></i> Profile Settings
+      </a>
+      <a href="report.html" class="sidebar-link">
+        <i class="fa-solid fa-flag"></i> Submit Report
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logoutBtn">
+        <i class="fa-solid fa-right-from-bracket"></i> Log Out
+      </button>
+    </div>
+  </aside>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="topbar-title" id="topbarGreeting">Welcome back!</div>
+      <div class="topbar-actions">
+        <div class="topbar-notif" id="notifBell">
+          <i class="fa-regular fa-bell"></i>
+          <span class="notif-count" id="notifCount">0</span>
+        </div>
+        <a href="profile-settings.html" style="text-decoration:none;">
+          <div class="avatar-placeholder avatar-sm" id="topbarAvatar" style="font-size:0.75rem;cursor:pointer;"></div>
+        </a>
+      </div>
+    </header>
+
+    <div class="dash-body">
+
+      <!-- Pending approval banner (shown if not yet approved) -->
+      <div class="approval-banner" id="approvalBanner" style="display:none;">
+        <i class="fa-solid fa-clock"></i>
+        Your profile is pending admin approval. Some features may be limited until approved.
+      </div>
+
+      <!-- Stats row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-solid fa-list-check"></i></div>
+          <div><div class="stat-value" id="statTotal">—</div><div class="stat-label">Total Orders</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-clock"></i></div>
+          <div><div class="stat-value" id="statPending">—</div><div class="stat-label">Pending</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+          <div><div class="stat-value" id="statCompleted">—</div><div class="stat-label">Completed</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fa-solid fa-star"></i></div>
+          <div><div class="stat-value" id="statRating">—</div><div class="stat-label">Avg Rating</div></div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="dash-card" style="margin-bottom:var(--sp-6);">
+        <div class="dash-card-header">
+          <div class="dash-card-title"><i class="fa-solid fa-bolt"></i> Quick Actions</div>
+        </div>
+        <div class="dash-card-body">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:var(--sp-4);">
+            <a href="orders-manage.html" class="quick-action-card">
+              <div class="qa-icon" style="background:rgba(24,119,242,0.1);color:var(--secondary);"><i class="fa-solid fa-list-check"></i></div>
+              <span>Manage Orders</span>
+            </a>
+            <a href="portfolio-manage.html" class="quick-action-card">
+              <div class="qa-icon" style="background:var(--success-bg);color:var(--success);"><i class="fa-solid fa-images"></i></div>
+              <span>Update Portfolio</span>
+            </a>
+            <a href="profile-settings.html" class="quick-action-card">
+              <div class="qa-icon" style="background:var(--warning-bg);color:var(--warning);"><i class="fa-solid fa-user-pen"></i></div>
+              <span>Edit Profile</span>
+            </a>
+            <a id="publicProfileLink" href="#" class="quick-action-card">
+              <div class="qa-icon" style="background:rgba(142,68,173,0.1);color:#8e44ad;"><i class="fa-solid fa-eye"></i></div>
+              <span>View My Profile</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile + recent orders -->
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:var(--sp-6);">
+
+        <!-- Profile card -->
+        <div>
+          <div class="profile-widget" id="profileWidget">
+            <div class="profile-widget-avatar" id="profileAvatarLarge"></div>
+            <div class="profile-widget-name"  id="profileName">—</div>
+            <div class="profile-widget-role"  id="profileProfession">Freelancer</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-header"><div class="dash-card-title"><i class="fa-solid fa-circle-info"></i> Info</div></div>
+            <div class="dash-card-body" style="display:flex;flex-direction:column;gap:var(--sp-3);">
+              <div class="info-row"><i class="fa-regular fa-envelope" style="color:var(--secondary);width:16px;text-align:center;"></i><span id="infoEmail" style="font-size:var(--text-sm);color:var(--text-medium);">—</span></div>
+              <div class="info-row"><i class="fa-solid fa-location-dot" style="color:var(--secondary);width:16px;text-align:center;"></i><span id="infoCity" style="font-size:var(--text-sm);color:var(--text-medium);">—</span></div>
+              <div class="info-row"><i class="fa-solid fa-briefcase" style="color:var(--secondary);width:16px;text-align:center;"></i><span id="infoProfession" style="font-size:var(--text-sm);color:var(--text-medium);">—</span></div>
+              <div class="info-row"><i class="fa-solid fa-clock-rotate-left" style="color:var(--secondary);width:16px;text-align:center;"></i><span id="infoExp" style="font-size:var(--text-sm);color:var(--text-medium);">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent orders -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div class="dash-card-title"><i class="fa-solid fa-list-check"></i> Recent Orders</div>
+            <a href="orders-manage.html" class="btn btn-ghost btn-sm">View All</a>
+          </div>
+          <div class="dash-card-body" id="recentOrders">
+            <div class="page-loader" style="min-height:120px;"><div class="spinner spinner-sm"></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+<div class="toast-container" id="toastContainer"></div>
+
+<script type="module" src="js/dashboard-freelancer.js"></script>
+</body>
+</html>

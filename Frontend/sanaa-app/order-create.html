@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Place an Order — Sanaa Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/globals.css" />
+  <link rel="stylesheet" href="css/public.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="pub-nav">
+    <div class="pub-nav-inner">
+      <a href="index.html" class="nav-brand">San<span>aa</span></a>
+      <div class="nav-links">
+        <a href="freelancers.html" class="nav-link">Freelancers</a>
+      </div>
+      <div class="nav-user" id="navUser"></div>
+    </div>
+  </nav>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="order-page">
+
+    <!-- Back link -->
+    <a href="javascript:history.back()" style="display:inline-flex;align-items:center;gap:var(--sp-2);font-size:var(--text-sm);color:var(--text-medium);margin-bottom:var(--sp-5);text-decoration:none;">
+      <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+
+    <div class="order-card">
+
+      <!-- Header -->
+      <div class="order-card-header">
+        <h2><i class="fa-solid fa-paper-plane" style="margin-right:var(--sp-2);"></i>Place an Order</h2>
+        <p>Describe what you need and your location</p>
+        <div class="freelancer-chip" id="freelancerChip" style="display:none;">
+          <i class="fa-solid fa-user-tie"></i>
+          <span id="freelancerChipName"></span>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="order-card-body" id="formBody">
+        <form id="orderForm" novalidate>
+
+          <div class="form-section-title">Job Description</div>
+          <div class="form-group">
+            <label for="description">What do you need done? <span style="color:var(--danger);">*</span></label>
+            <textarea
+              id="description"
+              class="form-control"
+              rows="5"
+              placeholder="Describe the work in detail — type of job, scope, any special requirements…"
+              maxlength="1000"
+              required
+            ></textarea>
+            <div class="char-count"><span id="descCount">0</span> / 1000</div>
+          </div>
+
+          <div class="form-section-title">Location</div>
+          <div class="form-group">
+            <label for="location">Job Location <span style="color:var(--danger);">*</span></label>
+            <div class="input-wrap">
+              <input
+                type="text"
+                id="location"
+                class="form-control"
+                placeholder="e.g. Amman, Al-Rabya Street, Building 12"
+                maxlength="300"
+                required
+              />
+              <span class="input-icon"><i class="fa-solid fa-location-dot"></i></span>
+            </div>
+          </div>
+
+          <div id="formAlert" class="alert" style="display:none;margin-top:var(--sp-4);"></div>
+
+          <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" style="width:100%;margin-top:var(--sp-6);">
+            <i class="fa-solid fa-paper-plane"></i> Send Order Request
+          </button>
+
+        </form>
+      </div>
+
+      <!-- Success state -->
+      <div class="success-state" id="successState">
+        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h3>Order Sent!</h3>
+        <p>Your request has been sent to the freelancer. You'll be notified once they respond.</p>
+        <div style="display:flex; gap:var(--sp-3); justify-content:center; flex-wrap:wrap;">
+          <a href="dashboard-customer.html" class="btn btn-primary">
+            <i class="fa-solid fa-grid-2"></i> Go to Dashboard
+          </a>
+          <a href="freelancers.html" class="btn btn-ghost">
+            <i class="fa-solid fa-users"></i> Browse More Freelancers
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module" src="js/order-create.js"></script>
+</body>
+</html>

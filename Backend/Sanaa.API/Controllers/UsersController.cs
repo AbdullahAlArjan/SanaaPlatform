@@ -34,9 +34,16 @@ namespace Sanaa.API.Controllers
         [HttpPost] // طلب إضافة مستخدم
         public async Task<IActionResult> AddUser(User user)
         {
-            var result = await _userService.CreateUserAsync(user);
-            if (result) return Ok("تمت إضافة المستخدم بنجاح");
-            return BadRequest("فشلت عملية الإضافة");
+            try
+            {
+                var result = await _userService.CreateUserAsync(user);
+                if (result) return Ok("تمت إضافة المستخدم بنجاح");
+                return BadRequest("فشلت عملية الإضافة");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // "هذا البريد الإلكتروني مسجل مسبقاً"
+            }
         }
 
         [EnableRateLimiting("LoginPolicy")]

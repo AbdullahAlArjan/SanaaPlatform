@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Orders — Sanaa Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/globals.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+
+<div class="dash-shell">
+  <aside class="dash-sidebar" id="dashSidebar">
+    <div class="sidebar-brand">
+      <a href="index.html" style="text-decoration:none;"><h1>San<span>aa</span></h1></a>
+    </div>
+    <div class="sidebar-user">
+      <div class="avatar-placeholder avatar-md" id="sidebarAvatar" style="font-size:0.85rem;flex-shrink:0;"></div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebarName">…</div>
+        <div class="sidebar-user-role">Freelancer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Main</div>
+      <a href="dashboard-freelancer.html" class="sidebar-link"><i class="fa-solid fa-grid-2"></i> Dashboard</a>
+      <a href="orders-manage.html" class="sidebar-link active"><i class="fa-solid fa-list-check"></i> My Orders</a>
+      <a href="portfolio-manage.html" class="sidebar-link"><i class="fa-solid fa-images"></i> Portfolio</a>
+      <div class="sidebar-section">Account</div>
+      <a href="profile-settings.html" class="sidebar-link"><i class="fa-solid fa-user-pen"></i> Profile Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+    </div>
+  </aside>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="topbar-title">My Orders</div>
+      <div class="topbar-actions">
+        <div class="topbar-notif" id="notifBell"><i class="fa-regular fa-bell"></i><span class="notif-count" id="notifCount">0</span></div>
+      </div>
+    </header>
+
+    <div class="dash-body">
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <select id="filterStatus" class="form-control">
+          <option value="">All Statuses</option>
+          <option value="0">Pending</option>
+          <option value="1">Accepted</option>
+          <option value="2">Completed</option>
+          <option value="3">Cancelled</option>
+        </select>
+        <span id="resultCount" style="font-size:var(--text-sm);color:var(--text-muted);align-self:center;"></span>
+      </div>
+
+      <!-- Orders list -->
+      <div id="ordersList">
+        <div class="page-loader" style="min-height:200px;"><div class="spinner"></div></div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-row" id="paginationRow" style="display:none;">
+        <button class="btn btn-ghost btn-sm" id="prevBtn"><i class="fa-solid fa-chevron-left"></i> Prev</button>
+        <span id="pageInfo" style="font-size:var(--text-sm);color:var(--text-medium);"></span>
+        <button class="btn btn-ghost btn-sm" id="nextBtn">Next <i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Confirm modal -->
+<div class="modal-backdrop" id="confirmModal" style="display:none;">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title" id="confirmTitle">Confirm Action</div>
+      <button class="modal-close" id="confirmClose">&times;</button>
+    </div>
+    <div class="modal-body" id="confirmBody">Are you sure?</div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="confirmCancel">Cancel</button>
+      <button class="btn btn-primary" id="confirmOk">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/orders-manage.js"></script>
+</body>
+</html>

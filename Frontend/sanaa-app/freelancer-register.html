@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complete Freelancer Profile — Sanaa Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/globals.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <!-- Brand Panel -->
+    <div class="brand-section">
+      <h1 class="brand-logo">Sanaa</h1>
+      <p class="brand-tagline">You're almost there!<br />Complete your profile to start receiving orders.</p>
+      <p class="brand-register-prompt" style="margin-top: var(--sp-8);">
+        <i class="fa-solid fa-shield-check" style="font-size:2rem; display:block; margin-bottom:var(--sp-3);"></i>
+        Your profile will be reviewed<br />by an admin before going live.
+      </p>
+    </div>
+
+    <!-- Profile Form -->
+    <div class="auth-section">
+      <div class="auth-card">
+        <h2 class="auth-title">Freelancer Profile</h2>
+        <p class="auth-subtitle">Tell clients what you do and how to find you</p>
+
+        <div id="alertBox" class="alert alert-error" role="alert"></div>
+
+        <form id="profileForm" novalidate>
+
+          <!-- Profession -->
+          <div class="form-group">
+            <label for="profession">Your Profession <span class="required">*</span></label>
+            <select id="profession" class="form-control" required>
+              <option value="">Select your main profession</option>
+              <option>Graphic Designer</option>
+              <option>Web Developer</option>
+              <option>Mobile Developer</option>
+              <option>Content Writer</option>
+              <option>Digital Marketer</option>
+              <option>Video Editor</option>
+              <option>UI/UX Designer</option>
+              <option>Data Analyst</option>
+              <option>Photographer</option>
+              <option>Translator</option>
+              <option>SEO Specialist</option>
+              <option>Software Engineer</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <!-- City -->
+          <div class="form-group">
+            <label for="city">City <span class="required">*</span></label>
+            <select id="city" class="form-control" required>
+              <option value="">Select your city</option>
+              <option>Amman</option><option>Zarqa</option><option>Irbid</option>
+              <option>Aqaba</option><option>Salt</option><option>Madaba</option>
+              <option>Karak</option><option>Tafilah</option><option>Ma'an</option>
+              <option>Jerash</option><option>Ajloun</option><option>Mafraq</option>
+              <option>Balqa</option>
+            </select>
+          </div>
+
+          <!-- Experience Years -->
+          <div class="form-group">
+            <label>Years of Experience <span class="required">*</span></label>
+            <div id="expDisplay">0 years</div>
+            <div class="exp-slider-wrap">
+              <input type="range" id="expSlider" min="0" max="30" value="0" step="1" />
+            </div>
+            <div class="exp-labels"><span>0</span><span>10</span><span>20</span><span>30+</span></div>
+          </div>
+
+          <!-- Services -->
+          <div class="form-group">
+            <p class="section-title">Skills &amp; Services</p>
+            <label>Select all that apply <span class="required">*</span></label>
+            <div class="service-tags" id="serviceTags">
+              <div class="empty-state" style="padding:1rem;"><div class="spinner spinner-sm"></div></div>
+            </div>
+            <p class="form-hint">Select at least one service</p>
+          </div>
+
+          <!-- Availability -->
+          <div class="form-group">
+            <p class="section-title">Availability</p>
+            <div class="toggle-row">
+              <div class="toggle-label">
+                Available for new orders
+                <span>Clients can send you order requests</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="available" checked />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn btn-primary btn-full" id="submitBtn" style="margin-top:var(--sp-2);">
+            <i class="fa-solid fa-spinner fa-spin" id="btnSpinner" style="display:none"></i>
+            <span id="btnText"><i class="fa-solid fa-paper-plane"></i> Submit Profile for Review</span>
+          </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/freelancer-register.js"></script>
+</body>
+</html>
