@@ -8,7 +8,8 @@ namespace Sanaa.BLL.Interfaces
     public interface IFreelancerService
     {
         Task<bool> CreateProfileAsync(int userId, string profession, int experienceYears, string city, List<int> serviceIds);
-        Task<FreelancerProfileResponse> GetProfileByUserIdAsync(int userId);
+        Task<FreelancerProfileResponse?> GetProfileByUserIdAsync(int userId);
+        Task<FreelancerProfileResponse?> UpdateProfileAsync(int userId, UpdateFreelancerProfileDto dto);
         Task<IEnumerable<FreelancerProfileResponse>> SearchFreelancersAsync(string? profession, string? city, int? serviceId);
 
         Task<string> UploadProfileImageAsync(int freelancerId, IFormFile file);

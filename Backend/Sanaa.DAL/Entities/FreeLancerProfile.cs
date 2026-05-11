@@ -34,6 +34,9 @@ namespace Sanaa.DAL.Entities
         [Column(TypeName = "decimal(3,2)")]
         public decimal AverageRating { get; set; } = 0;
 
+        [MaxLength(1000)]
+        public string? Bio { get; set; }
+
         [MaxLength(500)]
         public string? ProfileImageUrl { get; set; }
 

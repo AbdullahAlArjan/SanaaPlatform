@@ -9,6 +9,7 @@ namespace Sanaa.BLL.DTOs
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Profession { get; set; }
+        public string? Bio { get; set; }
         public int ExperienceYears { get; set; }
         public string City { get; set; }
         public string AvailabilityStatus { get; set; }

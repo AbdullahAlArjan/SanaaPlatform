@@ -48,7 +48,7 @@ namespace Sanaa.BLL.Services
             return result > 0;
         }
 
-        public async Task<FreelancerProfileResponse> GetProfileByUserIdAsync(int userId)
+        public async Task<FreelancerProfileResponse?> GetProfileByUserIdAsync(int userId)
         {
             var profile = await _context.FreelancerProfiles
                 .Include(p => p.User)
@@ -57,6 +57,24 @@ namespace Sanaa.BLL.Services
                 .FirstOrDefaultAsync(p => p.FreelancerID == userId);
 
             if (profile == null) return null;
+            return MapToResponse(profile);
+        }
+
+        public async Task<FreelancerProfileResponse?> UpdateProfileAsync(int userId, UpdateFreelancerProfileDto dto)
+        {
+            var profile = await _context.FreelancerProfiles
+                .Include(p => p.User)
+                .Include(p => p.FreelancerServices)
+                    .ThenInclude(fs => fs.Service)
+                .FirstOrDefaultAsync(p => p.FreelancerID == userId);
+
+            if (profile == null) return null;
+
+            if (dto.Profession is not null) profile.Profession  = dto.Profession;
+            if (dto.City       is not null) profile.City        = dto.City;
+            if (dto.Bio        is not null) profile.Bio         = dto.Bio;
+
+            await _context.SaveChangesAsync();
             return MapToResponse(profile);
         }
 
@@ -203,6 +221,7 @@ namespace Sanaa.BLL.Services
                 FullName = p.User?.FullName ?? string.Empty,
                 Email = p.User?.Email ?? string.Empty,
                 Profession = p.Profession,
+                Bio = p.Bio,
                 ExperienceYears = p.ExperienceYears,
                 City = p.City,
                 AvailabilityStatus = p.AvailabilityStatus,
