@@ -114,33 +114,42 @@ namespace Sanaa.BLL.Services
 
             if (result > 0)
             {
-                // 3. Auto-create a FreelancerProfile row for "Freelancer" accounts so the
-                //    onboarding flow always has a DB record to update via PUT /api/freelancers/profile.
-                //    ApprovalStatus defaults to Pending — admin must explicitly approve.
+                // 3. Auto-create FreelancerProfile for Freelancer accounts.
+                //    ISOLATION: wrapped in its own try/catch + ChangeTracker.Clear() so that
+                //    any DB failure here cannot poison the shared DbContext and block step 4.
                 if (string.Equals(user.Role, "Freelancer", StringComparison.OrdinalIgnoreCase))
                 {
-                    _context.FreelancerProfiles.Add(new FreelancerProfile
+                    try
                     {
-                        FreelancerID      = user.UserID,
-                        Profession        = string.Empty,
-                        ExperienceYears   = 0,
-                        City              = string.Empty,
-                        AvailabilityStatus = "Available",
-                        AverageRating     = 0,
-                        ApprovalStatus    = ApprovalStatus.Pending,
-                    });
-                    await _context.SaveChangesAsync();
+                        _context.FreelancerProfiles.Add(new FreelancerProfile
+                        {
+                            FreelancerID       = user.UserID,
+                            Profession         = string.Empty,
+                            ExperienceYears    = 0,
+                            City               = string.Empty,
+                            AvailabilityStatus = "Available",
+                            AverageRating      = 0,
+                            ApprovalStatus     = ApprovalStatus.Pending,
+                        });
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Clear the failed entity from the change tracker so it does NOT
+                        // get re-attempted by the next SaveChangesAsync inside SendOtpAsync.
+                        _context.ChangeTracker.Clear();
+                        Console.WriteLine($"[Registration] Failed to create FreelancerProfile for user {user.UserID}: {ex.Message}");
+                    }
                 }
 
-                // 4. إرسال OTP تلقائياً بعد نجاح التسجيل
+                // 4. Generate OTP — always runs, regardless of step 3's outcome.
                 try
                 {
                     await _otpService.SendOtpAsync(user.Email, OtpPurpose.EmailVerification);
                 }
                 catch (Exception ex)
                 {
-                    // لا نفشّل التسجيل بسبب فشل الإيميل — نسجّل الخطأ فقط
-                    Console.WriteLine($"[EmailService] فشل إرسال OTP بعد التسجيل: {ex.Message}");
+                    Console.WriteLine($"[Registration] Failed to send OTP for {user.Email}: {ex.Message}");
                 }
                 return true;
             }
