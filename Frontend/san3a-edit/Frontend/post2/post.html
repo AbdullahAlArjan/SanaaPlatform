@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana'a - Freelance Platform</title>
+    <link rel="stylesheet" href="post.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <nav class="nav-container">
+            <a href="../index.html" class="logo">Sana'a</a>
+            <div class="auth-buttons">
+                <button class="currency-btn" id="currencyToggle">USD → JOD</button>
+                <button class="login-btn" onclick="window.location.href='../Login/login.html'">Login</button>
+                <button class="register-btn" onclick="window.location.href='../Login/register.html'">Register</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sorting Controls -->
+    <div class="sort-container">
+        <select id="sortOptions">
+            <option value="rating_high">Highest Rating</option>
+            <option value="rating_low">Lowest Rating</option>
+            <option value="price_high">Highest Price</option>
+            <option value="price_low">Lowest Price</option>
+        </select>
+    </div>
+
+    <!-- Posts Grid -->
+    <main class="posts-container">
+        <!-- Service 1 -->
+        <a href="Services/Service1/Service.html" class="post-card" data-rating="4.8" data-price="100">
+            <img src="images/logo.png" alt="Logo Design" class="post-image">
+            <div class="post-details">
+                <h3>Logo Design</h3>
+                <div class="price-rating">
+                    <span class="price">$70</span>
+                    <div class="rating">⭐ 4.8</div>
+                </div>
+                <div class="provider-info">
+                    <img src="images/a2.jpeg" alt="Abd" class="provider-image">
+                    <span>Abd</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Service 2 -->
+        <a href="Services/Service2/Service.html" class="post-card" data-rating="4.9" data-price="500">
+            <img src="images/service2.jpg" alt="WebSite Design" class="post-image">
+            <div class="post-details">
+                <h3>WebSite Design</h3>
+                <div class="price-rating">
+                    <span class="price">$50</span>
+                    <div class="rating">⭐ 4.9</div>
+                </div>
+                <div class="provider-info">
+                    <img src="images/provider2.jpg" alt="Sarah Mohammed" class="provider-image">
+                    <span>Sarah Mohammed</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Service 3 -->
+        <a href="Services/Service3/Service.html" class="post-card" data-rating="4.5" data-price="150">
+            <img src="images/service3.png" alt="3D design" class="post-image">
+            <div class="post-details">
+                <h3>3D design</h3>
+                <div class="price-rating">
+                    <span class="price">$55</span>
+                    <div class="rating">⭐ 4.5</div>
+                </div>
+                <div class="provider-info">
+                    <img src="images/provider3.jpg" alt="Omar Khaled" class="provider-image">
+                    <span>Omar Khaled</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Service 4 -->
+        <a href="Services/Service4/Service.html" class="post-card" data-rating="4.7" data-price="300">
+            <img src="images/service4.png" alt="Business Card Design" class="post-image">
+            <div class="post-details">
+                <h3>Business Card Design</h3>
+                <div class="price-rating">
+                    <span class="price">$30</span>
+                    <div class="rating">⭐ 4.7</div>
+                </div>
+                <div class="provider-info">
+                    <img src="images/provider4.jpg" alt="Lina Mahmoud" class="provider-image">
+                    <span>Lina Mahmoud</span>
+                </div>
+            </div>
+        </a>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: info@sanaa.com</p>
+                <p>Phone: +1 234 567 890</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                  <a href="https://www.facebook.com/" class="fab fa-facebook" target="_blank" rel="noopener noreferrer">  
+                </a>
+
+                <a href="https://x.com" class="x-icon" target="_blank" rel="noopener noreferrer">
+                  <img src="../../main page/twitter.png" alt="X (Twitter)" class="x-logo">
+                </a>
+                <a href="https://www.instagram.com/" class="fab fa-instagram" target="_blank" rel="noopener noreferrer">
+                  
+                </a>
+                </div>
+              </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Sana'a. All rights reserved</p>
+        </div>
+    </footer>
+
+    <script src="post.js"></script>
+ 
+
+</body>
+</html>

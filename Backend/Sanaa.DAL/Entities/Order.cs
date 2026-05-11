@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,6 +23,12 @@ namespace Sanaa.DAL.Entities
         public string Description { get; set; } // شو المشكلة أو الشغل المطلوب؟
         public string Location { get; set; } // وين المكان؟
         public DateTime OrderDate { get; set; } = DateTime.Now; // تاريخ ووقت الطلب
+
+        public int? ServiceID { get; set; }
+        [ForeignKey("ServiceID")]
+        public virtual Service? Service { get; set; }
+
+        public decimal? ServicePriceSnapshot { get; set; }
 
         // 4. حالة الطلب (الافتراضي: قيد الانتظار)
         public OrderStatus Status { get; set; } = OrderStatus.Pending;

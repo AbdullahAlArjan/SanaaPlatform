@@ -153,14 +153,22 @@ namespace Sanaa.API
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // 1. Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            // مطلوب عشان Stripe Webhook يقدر يقرأ الـ raw body للتحقق من الـ signature
+            // 2. تفعيل الـ CORS أول شيء (قبل الـ Auth والـ Redirection)
+            // هذا السطر يضمن أن المتصفح سيأخذ الإذن قبل البدء بأي عملية أخرى
+            app.UseCors(policy =>
+                policy.AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .SetIsOriginAllowed(origin => true) // يسمح لأي أصل بالوصول (أضمن للـ Localhost)
+                      .AllowCredentials()); // مهم جداً إذا كنت بتستخدم SignalR أو Cookies
+
+            // 3. مطلوب لـ Stripe
             app.Use(async (context, next) =>
             {
                 context.Request.EnableBuffering();
@@ -169,10 +177,11 @@ namespace Sanaa.API
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
-          
+            // 4. الترتيب الصحيح لباقي الـ Middlewares
             app.UseRateLimiter();
+            app.UseRouting(); // أضف هذا السطر إذا لم يكن موجوداً
+
             app.UseAuthentication();
             app.UseAuthorization();
 

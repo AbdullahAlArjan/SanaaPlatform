@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - Sana'a</title>
+    <link rel="stylesheet" href="CustomerStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+   <!-- Top Navigation Bar -->
+<div class="top-bar">
+    <div class="top-bar-left">
+        <a href="C:/Users/abdba/Desktop/project/front/main page/index.html" class="website-name">Sana'a</a> <!-- Added link -->
+    </div>
+    <div class="top-bar-right">
+        <div class="notification-icon" onclick="toggleNotifications()">
+            <i class="fas fa-bell"></i>
+            <span class="notification-count">3</span>
+        </div>
+    </div>
+</div>
+
+    <!-- Main Content -->
+    <div class="customer-dashboard">
+        <!-- Left Column - Profile Section -->
+        <div class="profile-section">
+            <div class="profile-card">
+                <div class="avatar-container">
+                    <div class="avatar">
+                        <img src="https://placehold.co/200x200" class="profile-pic" alt="Profile Photo" id="profileImage">
+                    </div>
+                    <button class="edit-profile-btn" onclick="openProfileEditor()">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+               <div class="profile-info">
+    <h1 id="fullName"></h1>
+    <div class="contact-info">
+        <p><i class="fas fa-venus-mars"></i> <span id="genderDisplay"></span></p>
+        
+        <!-- Redesigned Birthday Field -->
+        <div class="birthday-container">
+            <i class="fas fa-calendar-alt"></i> <!-- Updated icon -->
+            <span id="birthdayDisplay"></span>
+        </div>
+
+        <p><i class="fas fa-phone"></i> <span id="phoneDisplay"></span></p>
+        <p><i class="fas fa-map-marker-alt"></i> <span id="cityDisplay"></span></p>
+    </div>
+</div>
+            </div>
+        </div>
+
+        <!-- Right Column - Services Section -->
+        <div class="services-section">
+            <!-- Favorite Services -->
+            <section class="services-container">
+                <h2><i class="fas fa-heart text-danger"></i> Favorite Services</h2>
+                <div class="services-grid" id="favoriteServices">
+                    <!-- Dynamic content -->
+                </div>
+            </section>
+
+            <!-- Purchased Services -->
+            <section class="services-container">
+                <h2><i class="fas fa-shopping-bag text-success"></i> Purchased Services</h2>
+                <div class="services-grid" id="purchasedServices">
+                    <!-- Dynamic content -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Notifications Dropdown -->
+    <div class="notifications-dropdown" id="notificationsDropdown">
+        <div class="notifications-list" id="notificationsList">
+            <!-- Notifications will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+<div id="profileEditorModal" class="modal">
+    <div class="modal-content">
+        <!-- Close Button -->
+        <span class="close" onclick="closeModal('profileEditorModal')">&times;</span>
+        
+        <h3>Edit Profile</h3>
+        
+        <!-- Avatar Upload Button -->
+        <div class="form-group">
+            <label for="avatarUpload">Change Profile Picture</label>
+            <button class="upload-btn" onclick="document.getElementById('avatarUpload').click()">
+                <i class="fas fa-upload"></i> Upload Photo
+            </button>
+            <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+        </div>
+
+        <!-- Gender Selection -->
+        <div class="form-group">
+            <label for="genderInput">Gender</label>
+            <select id="genderInput">
+                <option value="" disabled selected>Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                
+            </select>
+        </div>
+
+        <!-- Birthday Input -->
+        <div class="form-group">
+            <label for="birthdayInput">Birthday</label>
+            <input type="date" id="birthdayInput">
+        </div>
+
+        <!-- Phone Number -->
+        <div class="form-group">
+            <label for="phoneInput">Phone Number</label>
+            <input
+                type="tel"
+                id="phoneInput"
+                placeholder="Enter new phone number"
+              
+            >
+            <div class="error-message" id="phoneError">Phone number must be exactly 10 digits</div>
+        </div>
+        <!-- City Selection -->
+        <div class="form-group">
+            <label for="cityInput">City</label>
+            <select id="cityInput">
+                <option value="Amman">Amman</option>
+                <option value="Zarqa">Zarqa</option>
+                <option value="Irbid">Irbid</option>
+                <option value="Aqaba">Aqaba</option>
+                <option value="Mafraq">Mafraq</option>
+                <option value="Salt">Salt</option>
+                <option value="Madaba">Madaba</option>
+                <option value="Jerash">Jerash</option>
+                <option value="Karak">Karak</option>
+                <option value="Tafilah">Tafilah</option>
+                <option value="Ma'an">Ma'an</option>
+                <option value="Ajloun">Ajloun</option>
+                <option value="Ramtha">Ramtha</option>
+            </select>
+        </div>
+
+        <!-- Save Button -->
+        <button class="save-btn" onclick="saveProfileChanges()">Save Changes</button>
+    </div>
+</div>
+    <!-- Scripts -->
+    <script src="customerJS.js"></script>
+</body>
+</html>

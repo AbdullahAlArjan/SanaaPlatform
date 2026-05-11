@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Service - Sana'a</title>
+    <link rel="stylesheet" href="servicestyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <a href="../../../../main page/index.html" class="logo">Sana'a</a>
+        </div>
+        
+    </nav>
+
+    <div class="backbtn">
+            <a href="../Service1/Service.html" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Service
+            </a>
+        </div>
+
+    <div class="rating-container">
+        <div class="rating-header">
+            <h1><i class="fas fa-star"></i> Rate This Service</h1>
+            <div class="service-preview">
+                <img src="image/logo1.png" alt="Service Preview">
+                <div class="service-info">
+                    <h2>Logo Design</h2>
+                    <p>by Abd</p>
+                </div>
+            </div>
+        </div>
+
+        <form id="rating-form">
+            <div class="rating-stars-container">
+                <div class="rating-instruction">
+                    <p>How would you rate this service?</p>
+                </div>
+                <div class="rating-stars">
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5">★</label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4">★</label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3">★</label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2">★</label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1">★</label>
+                </div>
+                <div class="rating-labels">
+                    <span>Poor</span>
+                    <span>Fair</span>
+                    <span>Good</span>
+                    <span>Very Good</span>
+                    <span>Excellent</span>
+                </div>
+            </div>
+
+            
+            <div class="btnn">
+                <button type="submit">Submit Rating</button>
+                <button type="button" onclick="window.location.href='../Service.html'">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="servicejs.js"></script>
+</body>
+</html>

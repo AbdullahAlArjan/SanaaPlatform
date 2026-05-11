@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sanaa.API.DTOs;
 using Sanaa.BLL.Interfaces;
@@ -21,12 +21,15 @@ namespace Sanaa.API.Controllers
             _freelancerService = freelancerService;
         }
 
-        [HttpPost("create-profile")]
+        [Authorize]
+        [HttpPost("profile")]
         public async Task<IActionResult> CreateProfile([FromBody] CreateProfileRequest request)
         {
-            // بنبعث الداتا اللي إجت من الـ DTO للـ Service عشان يعالجها
+            var freelancerId = GetCurrentUserId();
+            if (freelancerId == null) return Unauthorized();
+
             var result = await _freelancerService.CreateProfileAsync(
-                request.UserID,
+                freelancerId.Value,
                 request.Profession,
                 request.ExperienceYears,
                 request.City,
@@ -54,10 +57,7 @@ namespace Sanaa.API.Controllers
         public async Task<IActionResult> Search([FromQuery] string? profession, [FromQuery] string? city, [FromQuery] int? serviceId)
         {
             var results = await _freelancerService.SearchFreelancersAsync(profession, city, serviceId);
-
-            if (!results.Any())
-                return NotFound("لم يتم العثور على صنايعية تطابق عملية البحث.");
-
+            // Always return 200 with an empty list — let the frontend handle the empty state
             return Ok(results);
         }
 

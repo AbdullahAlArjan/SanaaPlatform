@@ -6,7 +6,7 @@ namespace Sanaa.BLL.Interfaces
 {
     public interface IReviewService
     {
-        Task<bool> AddReviewAsync(CreateReviewRequest request);
+        Task<bool> AddReviewAsync(int clientId, CreateReviewRequest request);
         Task<IEnumerable<ReviewResponseDto>> GetFreelancerReviewsAsync(int freelancerId);
     }
 }

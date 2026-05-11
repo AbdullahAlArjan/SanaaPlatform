@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Sanaa.BLL.DTOs;
 using Sanaa.BLL.Interfaces;
 using Sanaa.DAL.Entities;
+using Sanaa.API.DTOs;
 
 namespace Sanaa.API.Controllers
 {
@@ -18,6 +19,55 @@ namespace Sanaa.API.Controllers
         {
             _otpService = otpService;
             _userService = userService;
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        {
+            var role = request.Role?.Trim();
+            if (string.IsNullOrEmpty(role) || (role != "Client" && role != "Freelancer"))
+                role = "Client";
+
+            var user = new User
+            {
+                FullName = request.FullName,
+                Email = request.Email,
+                PasswordHash = request.Password,
+                Phone = request.Phone,
+                Role = role
+            };
+
+            try
+            {
+                var result = await _userService.CreateUserAsync(user);
+                if (result) return Ok(new { message = "تمت إضافة المستخدم بنجاح" });
+                return BadRequest(new { message = "فشلت عملية الإضافة", code = "SAVE_FAILED" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Duplicate email
+                return Conflict(new { message = ex.Message, code = "EMAIL_TAKEN" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Register] Unexpected error: {ex}");
+                return StatusCode(500, new { message = "خطأ داخلي في الخادم", code = "SERVER_ERROR" });
+            }
+        }
+
+        [EnableRateLimiting("LoginPolicy")]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var response = await _userService.LoginAsync(request.Email, request.Password);
+
+            return response?.AccessToken switch
+            {
+                "USER_NOT_FOUND"     => Unauthorized(new { message = "البريد الإلكتروني غير مسجل", code = "USER_NOT_FOUND" }),
+                "WRONG_PASSWORD"     => Unauthorized(new { message = "كلمة المرور غير صحيحة", code = "WRONG_PASSWORD" }),
+                "EMAIL_NOT_VERIFIED" => StatusCode(403, new { message = "يرجى التحقق من بريدك الإلكتروني أولاً. أرسل رمز التحقق عبر POST /api/auth/send-otp", code = "EMAIL_NOT_VERIFIED" }),
+                _                    => Ok(response)
+            };
         }
 
         [EnableRateLimiting("OtpPolicy")]

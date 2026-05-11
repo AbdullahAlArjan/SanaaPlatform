@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Freelancer Profile — Sanaa Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/globals.css" />
+  <link rel="stylesheet" href="css/public.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="pub-nav">
+    <div class="pub-nav-inner">
+      <a href="index.html" class="nav-brand">San<span>aa</span></a>
+      <div class="nav-links">
+        <a href="index.html"       class="nav-link">Home</a>
+        <a href="freelancers.html" class="nav-link">Freelancers</a>
+      </div>
+      <div class="nav-user" id="navUser"></div>
+    </div>
+  </nav>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Page loader -->
+  <div class="page-loader" id="pageLoader">
+    <div class="spinner"></div>
+    <p>Loading profile…</p>
+  </div>
+
+  <!-- Profile content (hidden until loaded) -->
+  <main class="pub-page" id="profileContent" style="display:none;">
+
+    <!-- Back link -->
+    <a href="freelancers.html" style="display:inline-flex;align-items:center;gap:var(--sp-2);font-size:var(--text-sm);color:var(--text-medium);margin-bottom:var(--sp-6);text-decoration:none;">
+      <i class="fa-solid fa-arrow-left"></i> Back to Freelancers
+    </a>
+
+    <div class="profile-layout">
+
+      <!-- ── Sidebar ─────────────────────────────────────────── -->
+      <div class="profile-sidebar">
+
+        <!-- Profile hero card -->
+        <div style="border-radius:var(--r-xl); overflow:hidden; box-shadow:var(--neu-shadow);">
+          <div class="profile-hero">
+            <div class="profile-avatar" id="sidebarAvatar"></div>
+            <div class="profile-name"       id="sidebarName"></div>
+            <div class="profile-profession" id="sidebarProfession"></div>
+            <div class="profile-rating-row" id="sidebarRating"></div>
+            <div class="profile-stat-row">
+              <div class="profile-stat">
+                <strong id="statExp">—</strong><span>Yrs Exp</span>
+              </div>
+              <div class="profile-stat">
+                <strong id="statRating">—</strong><span>Rating</span>
+              </div>
+              <div class="profile-stat">
+                <strong id="statReviews">—</strong><span>Reviews</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <div class="profile-info-row" id="infoCity"></div>
+            <div class="profile-info-row" id="infoAvail"></div>
+            <div class="profile-info-row" id="infoJoined"></div>
+          </div>
+        </div>
+
+        <!-- Services offered -->
+        <div class="card" style="margin-top:var(--sp-5);">
+          <h3 style="font-size:var(--text-base);font-weight:700;margin-bottom:var(--sp-4);">Services Offered</h3>
+          <div id="servicesList" style="display:flex;flex-wrap:wrap;gap:var(--sp-2);"></div>
+        </div>
+
+        <!-- CTA buttons -->
+        <div style="margin-top:var(--sp-5); display:flex; flex-direction:column; gap:var(--sp-3);">
+          <button class="btn btn-primary btn-lg" id="orderBtn">
+            <i class="fa-solid fa-paper-plane"></i> Place an Order
+          </button>
+          <button class="btn btn-ghost" id="reportBtn">
+            <i class="fa-solid fa-flag"></i> Report this profile
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Main content ───────────────────────────────────── -->
+      <div class="profile-main">
+
+        <!-- Portfolio -->
+        <div class="card" style="margin-bottom:var(--sp-6);">
+          <h2 style="font-size:var(--text-xl);font-weight:700;margin-bottom:var(--sp-5);">
+            <i class="fa-solid fa-images" style="color:var(--secondary);margin-right:var(--sp-2);"></i>
+            Portfolio
+          </h2>
+          <div class="portfolio-grid" id="portfolioGrid">
+            <div class="empty-state" style="grid-column:1/-1; padding:2rem;">
+              <div class="spinner spinner-sm"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="card">
+          <h2 style="font-size:var(--text-xl);font-weight:700;margin-bottom:var(--sp-5);">
+            <i class="fa-solid fa-star" style="color:#f39c12;margin-right:var(--sp-2);"></i>
+            Reviews
+          </h2>
+          <div id="reviewsList">
+            <div class="page-loader" style="min-height:120px;">
+              <div class="spinner spinner-sm"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Error state -->
+  <div class="pub-page" id="errorState" style="display:none;">
+    <div class="empty-state">
+      <i class="fa-solid fa-user-slash"></i>
+      <h3>Profile not found</h3>
+      <p>This freelancer profile doesn't exist or has been removed.</p>
+      <a href="freelancers.html" class="btn btn-primary">Browse Freelancers</a>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose"><i class="fa-solid fa-xmark"></i></button>
+    <img src="" alt="Portfolio image" id="lightboxImg" />
+  </div>
+
+  <script type="module" src="js/freelancer-profile.js"></script>
+</body>
+</html>

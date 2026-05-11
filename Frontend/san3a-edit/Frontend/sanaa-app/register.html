@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — Sanaa Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/globals.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <!-- Brand Panel -->
+    <div class="brand-section">
+      <h1 class="brand-logo">Sanaa</h1>
+      <p class="brand-tagline">Join thousands of professionals<br />and grow your career today.</p>
+      <p class="brand-register-prompt">
+        Already have an account?<br />
+        <a href="login.html" class="brand-link">Sign in here →</a>
+      </p>
+    </div>
+
+    <!-- Register Form -->
+    <div class="auth-section">
+      <div class="auth-card">
+        <h2 class="auth-title">Create Account</h2>
+        <p class="auth-subtitle" id="stepSubtitle">Choose your account type to get started</p>
+
+        <!-- Step Indicator -->
+        <div class="steps">
+          <div class="step active" id="s1"><div class="step-circle">1</div><span class="step-label">Account Type</span></div>
+          <div class="step-line" id="line1"></div>
+          <div class="step" id="s2"><div class="step-circle">2</div><span class="step-label">Personal Info</span></div>
+          <div class="step-line" id="line2"></div>
+          <div class="step" id="s3"><div class="step-circle">3</div><span class="step-label">Security</span></div>
+        </div>
+
+        <div id="alertBox" class="alert alert-error" role="alert"></div>
+
+        <form id="registerForm" novalidate>
+
+          <!-- ── Step 1: Choose Role ───────────────────────── -->
+          <div class="step-panel active" id="panel1">
+            <div class="role-cards">
+              <div class="role-card" id="roleCustomer" data-role="Customer">
+                <i class="fa-solid fa-user"></i>
+                <h4>Customer</h4>
+                <p>Hire skilled freelancers for your projects</p>
+              </div>
+              <div class="role-card" id="roleFreelancer" data-role="Freelancer">
+                <i class="fa-solid fa-briefcase"></i>
+                <h4>Freelancer</h4>
+                <p>Offer your skills and earn money</p>
+              </div>
+            </div>
+            <input type="hidden" id="role" value="" />
+            <div class="nav-btns">
+              <button type="button" class="btn btn-primary" id="toStep2" disabled>
+                Continue <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ── Step 2: Personal Info ─────────────────────── -->
+          <div class="step-panel" id="panel2">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name <span class="required">*</span></label>
+                <input type="text" id="firstName" class="form-control" placeholder="Ahmed" required />
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name <span class="required">*</span></label>
+                <input type="text" id="lastName" class="form-control" placeholder="Al-Hassan" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="gender">Gender <span class="required">*</span></label>
+                <select id="gender" class="form-control" required>
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="birthday">Date of Birth <span class="required">*</span></label>
+                <input type="date" id="birthday" class="form-control" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">Phone Number <span class="required">*</span></label>
+                <input type="tel" id="phone" class="form-control" placeholder="07X XXXX XXXX" required />
+              </div>
+              <div class="form-group">
+                <label for="city">City <span class="required">*</span></label>
+                <select id="city" class="form-control" required>
+                  <option value="">Select city</option>
+                  <option>Amman</option><option>Zarqa</option><option>Irbid</option>
+                  <option>Aqaba</option><option>Salt</option><option>Madaba</option>
+                  <option>Karak</option><option>Tafilah</option><option>Ma'an</option>
+                  <option>Jerash</option><option>Ajloun</option><option>Mafraq</option>
+                  <option>Balqa</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="nav-btns">
+              <button type="button" class="btn btn-ghost" id="backToStep1">
+                <i class="fa-solid fa-arrow-left"></i> Back
+              </button>
+              <button type="button" class="btn btn-primary" id="toStep3">
+                Continue <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ── Step 3: Email + Password ──────────────────── -->
+          <div class="step-panel" id="panel3">
+            <div class="form-group">
+              <label for="email">Email Address <span class="required">*</span></label>
+              <input type="email" id="email" class="form-control" placeholder="you@example.com" autocomplete="email" required />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password <span class="required">*</span></label>
+              <div class="input-wrap">
+                <input type="password" id="password" class="form-control" placeholder="Min. 8 characters" autocomplete="new-password" required />
+                <button type="button" class="input-icon" id="togglePwd" aria-label="Toggle password">
+                  <i class="fa-regular fa-eye" id="eyeIcon1"></i>
+                </button>
+              </div>
+              <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+              <p class="form-hint" id="strengthLabel"></p>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+              <div class="input-wrap">
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat your password" autocomplete="new-password" required />
+                <button type="button" class="input-icon" id="toggleConfirm" aria-label="Toggle password">
+                  <i class="fa-regular fa-eye" id="eyeIcon2"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="nav-btns">
+              <button type="button" class="btn btn-ghost" id="backToStep2">
+                <i class="fa-solid fa-arrow-left"></i> Back
+              </button>
+              <button type="submit" class="btn btn-primary" id="submitBtn">
+                <i class="fa-solid fa-spinner fa-spin" id="btnSpinner" style="display:none"></i>
+                <span id="btnText">Create Account</span>
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/register.js"></script>
+</body>
+</html>

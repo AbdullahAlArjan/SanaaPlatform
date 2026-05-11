@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - Sana'a</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <a href="../../../main page/index.html" class="website-name">Sana'a</a>
+            </div>
+            
+        </div>
+        
+        <div class="header-with-back-btn">
+            <div class="page-header">
+                <h1><i class="fas fa-user-edit"></i> Edit Profile</h1>
+            </div>
+            <div class="back-btn-wrapper">
+                <a href="../freelancer/freelancer.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Profile
+                </a>
+            </div>
+        </div>
+    
+        <div class="form-container">
+            <form id="edit-profile-form">
+                <!-- Profile Picture -->
+                <div class="form-group">
+                    <label for="profile-picture">Profile Picture:</label>
+                    <input type="file" id="profile-picture" accept="image/*" onchange="previewProfilePicture(event)">
+                    <div class="image-preview">
+                        <img id="profile-picture-preview" src="https://placehold.co/200x200" alt="Profile Picture Preview">
+                    </div>
+                </div>
+                
+                <!-- Location -->
+                <div class="form-group">
+                    <label for="profile-location">Location:</label>
+                    <input type="text" id="profile-location" placeholder="Enter your location" required>
+                </div>
+                
+                <!-- About Me -->
+                <div class="form-group">
+                    <label for="profile-description">About Me:</label>
+                    <textarea id="profile-description" rows="5" placeholder="Tell clients about yourself and your skills" required></textarea>
+                </div>
+                
+            
+                
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='../freelancer.html'">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using Sanaa.BLL.DTOs;
 using Sanaa.BLL.Interfaces;
@@ -25,12 +25,18 @@ namespace Sanaa.BLL.Services
         }
 
         // 1. إنشاء طلب جديد
-        public async Task<bool> CreateOrderAsync(CreateOrderRequest request)
+        public async Task<bool> CreateOrderAsync(int clientId, CreateOrderRequest request)
         {
+            // Fetch service to get its price
+            var service = await _context.Services.FindAsync(request.ServiceID);
+            if (service == null) return false;
+
             var order = new Order
             {
-                ClientID = request.ClientID,
+                ClientID = clientId,
                 FreelancerID = request.FreelancerID,
+                ServiceID = request.ServiceID,
+                ServicePriceSnapshot = service.BasePrice,
                 Description = request.Description,
                 Location = request.Location,
                 Status = OrderStatus.Pending
@@ -42,7 +48,7 @@ namespace Sanaa.BLL.Services
 
             // جلب بيانات الصنايعي لإرسال الإشعار والإيميل
             var freelancerUser = await _context.Users.FindAsync(request.FreelancerID);
-            var clientUser = await _context.Users.FindAsync(request.ClientID);
+            var clientUser = await _context.Users.FindAsync(clientId);
 
             await _notificationService.SendNotificationToUserAsync(order.FreelancerID, $"إجالك طلب جديد من {clientUser?.FullName ?? "زبون"}!");
 
@@ -82,6 +88,39 @@ namespace Sanaa.BLL.Services
                 {
                     OrderID = o.OrderID,
                     ClientName = o.Client.FullName,
+                    FreelancerName = o.Freelancer.User != null ? o.Freelancer.User.FullName : "صنايعي",
+                    Description = o.Description,
+                    Location = o.Location,
+                    OrderDate = o.OrderDate,
+                    Status = o.Status.ToString()
+                }),
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+        }
+
+        public async Task<PagedResponse<OrderResponse>> GetOrdersForClientAsync(int clientId, int pageNumber, int pageSize)
+        {
+            var query = _context.Orders
+                .Include(o => o.Freelancer)
+                    .ThenInclude(f => f.User)
+                .Where(o => o.ClientID == clientId)
+                .OrderByDescending(o => o.OrderDate);
+
+            var totalCount = await query.CountAsync();
+            var orders = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResponse<OrderResponse>
+            {
+                Data = orders.Select(o => new OrderResponse
+                {
+                    OrderID = o.OrderID,
+                    ClientName = "أنا",
+                    FreelancerName = o.Freelancer.User?.FullName ?? "صنايعي",
                     Description = o.Description,
                     Location = o.Location,
                     OrderDate = o.OrderDate,
@@ -94,11 +133,11 @@ namespace Sanaa.BLL.Services
         }
 
         // 3. تحديث حالة الطلب (مقبول، مرفوض، مكتمل)
-        public async Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus status)
+        public async Task<bool> UpdateOrderStatusAsync(int orderId, int freelancerId, OrderStatus status)
         {
             var order = await _context.Orders
                 .Include(o => o.Client)
-                .FirstOrDefaultAsync(o => o.OrderID == orderId);
+                .FirstOrDefaultAsync(o => o.OrderID == orderId && o.FreelancerID == freelancerId);
             if (order == null) return false;
 
             order.Status = status;
@@ -127,6 +166,15 @@ namespace Sanaa.BLL.Services
             }
 
             return true;
+        }
+
+        public async Task<bool> CancelOrderAsync(int orderId, int clientId)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.OrderID == orderId && o.ClientID == clientId);
+            if (order == null || order.Status != OrderStatus.Pending) return false;
+
+            order.Status = OrderStatus.Rejected; // Treating cancellation as rejected
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

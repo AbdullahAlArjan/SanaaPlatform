@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelancer Registration</title>
+    <link rel="stylesheet" href="FreelancerRegStyle.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Freelancer Registration</h1>
+        <form id="freelancerForm">
+            <!-- Profession Dropdown -->
+            <div class="input-group">
+                <label for="profession">Profession</label>
+                <select id="profession" required>
+                    <option value="" disabled selected>Select Profession</option>
+                    <option value="web-developer">Web Developer</option>
+                    <option value="graphic-designer">Graphic Designer</option>
+                    <option value="content-writer">Content Writer</option>
+                    <option value="photographer">Photographer</option>
+                    <option value="marketing-specialist">Marketing Specialist</option>
+                    <option value="video-editor">Video Editor</option>
+                    <option value="ui-ux-designer">UI/UX Designer</option>
+                    <option value="translator">Translator</option>
+                    <option value="accountant">Accountant</option>
+                    <option value="consultant">Consultant</option>
+                </select>
+            </div>
+
+            <!-- Address Input -->
+            <div class="input-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" required>
+            </div>
+
+            <!-- CV Upload (Optional) -->
+            <div class="input-group">
+                <label>Curriculum Vitae (CV) - Optional</label>
+                <div class="file-upload">
+                    <input type="file" id="cv" accept=".pdf,.doc,.docx">
+                    <label for="cv" class="file-label">
+                        <span class="file-button">Choose File</span>
+                        <span class="file-name" id="cvName">No file chosen</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Samples of Work Upload (Optional) -->
+            <div class="input-group">
+                <label>Samples of Work - Optional</label>
+                <div class="file-upload">
+                    <input type="file" id="work-samples" accept=".pdf,.doc,.docx,.jpg,.png">
+                    <label for="work-samples" class="file-label">
+                        <span class="file-button">Choose File</span>
+                        <span class="file-name" id="workSamplesName">No file chosen</span>
+                    </label>
+                </div>
+                <div id="workSamplesPreview" class="file-preview"></div>
+            </div>
+
+            <!-- Confirm Button -->
+            <button type="submit" class="submit-btn">Confirm Registration</button>
+        </form>
+    </div>
+
+    <script src="FreelancerReg.js"></script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelancer Profile - Sana'a</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <a href="../../../main page/index.html" class="website-name">Sana'a</a>
+            </div>
+            <div class="top-bar-right">
+                <div class="notification-icon" id="notificationIcon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count" id="notificationCount">3</span>
+                    <!-- Notification Dropdown -->
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notification-header">
+                            <h4>Notifications</h4>
+                            <button class="mark-all-read" id="markAllRead">
+                                <i class="fas fa-check-double"></i> Mark All as Read
+                            </button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            <div class="notification-item unread">
+                                <p>New project request from Client A</p>
+                            </div>
+                            <div class="notification-item unread">
+                                <p>Your service was featured</p>
+                            </div>
+                            <div class="notification-item unread">
+                                <p>Payment received for Logo Design</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <section class="profile-section">
+            <!-- Left Sidebar -->
+            <div class="profile-card">
+                <img src="https://placehold.co/200x200" class="profile-pic" alt="Freelancer Photo" id="profilePicture">
+                <h2 id="fullName">Abd Balasmeh</h2>
+                <div class="profile-info">
+                    <p class="profession" id="profession">Graphic Designer</p>
+                    <p><i class="fas fa-map-marker-alt"></i> <span id="address">Amman, Jordan</span></p>
+                    <p><i class="fas fa-birthday-cake"></i> <span id="age">22</span> years old</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="window.location.href='edit-profile.html'">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+                <!-- Post New Service and Manage Services Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="window.location.href='post-service.html'">
+                        <i class="fas fa-plus-circle"></i> Post New Service
+                    </button>
+                    <button class="btn btn-primary" onclick="window.location.href='manage-services.html'">
+                        <i class="fas fa-tasks"></i> Manage Services
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-grid">
+                <!-- Communication Card -->
+                <article class="info-card communication-card">
+                    <h3><i class="fas fa-phone"></i> Communication</h3>
+                    <div class="contact-info">
+                        <p>Phone: <span id="phoneNumber">+962 7 9703 7825</span></p>
+                        <div class="whatsapp-button">
+                            <button class="btn btn-secondary" onclick="openWhatsApp()">
+                                <i class="fab fa-whatsapp"></i> WhatsApp Me
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- About Me Section -->
+                    <div class="about-section">
+                        <h3><i class="fas fa-user"></i> About Me</h3>
+                        <p id="profile-description">Professional graphic designer with 5 years of experience creating stunning visual identities for businesses. Specializing in logo design, branding, and marketing materials. Passionate about delivering creative solutions that communicate brand values effectively.</p>
+                    </div>
+                </article>
+
+                <!-- My Services -->
+                <div class="info-card">
+                    <h3><i class="fas fa-briefcase"></i> My Services</h3>
+                    <div id="services-list">
+                        <!-- Example Services -->
+                        <div class="service-item">
+                            <span>Logo Design</span>
+                            <div class="service-meta">
+                                <span>$150</span>
+                                <small>85 buyers</small>
+                                <div class="availability-status active">Active</div>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <span>Web Design</span>
+                            <div class="service-meta">
+                                <span>$500</span>
+                                <small>45 buyers</small>
+                                <div class="availability-status deactive">Deactive</div>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <span>Social Media Design</span>
+                            <div class="service-meta">
+                                <span>$100</span>
+                                <small>30 buyers</small>
+                                <div class="availability-status active">Active</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="info-card stats-card">
+                    <h3><i class="fas fa-chart-line"></i> Statistics</h3>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4>4.9/5</h4>
+                                <p>Average Rating</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4>127</h4>
+                                <p>Completed Projects</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonials -->
+                <div class="testimonials">
+                    <h3><i class="fas fa-comments"></i> Client Reviews</h3>
+                    <div class="testimonial-carousel">
+                        <!-- Testimonial 1 -->
+                        <div class="testimonial-item active">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <p>"Abd delivered exceptional work! The designs were modern and exactly what we needed for our rebranding."</p>
+                            <small>- John Doe, CEO at DesignCo</small>
+                        </div>
+                        <!-- Testimonial 2 -->
+                        <div class="testimonial-item">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>"Amazing designs and quick delivery! Abd is a true professional who understands the client's vision."</p>
+                            <small>- Jane Smith, Marketing Manager</small>
+                        </div>
+                        <!-- Testimonial 3 -->
+                        <div class="testimonial-item">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>"The logo Abd designed for us was beyond our expectations. Highly recommend his services!"</p>
+                            <small>- Ahmed Ali, Founder of TechStart</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

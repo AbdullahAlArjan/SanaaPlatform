@@ -18,14 +18,14 @@ namespace Sanaa.BLL.Services
             _context = context;
         }
 
-        public async Task<bool> AddReviewAsync(CreateReviewRequest request)
+        public async Task<bool> AddReviewAsync(int clientId, CreateReviewRequest request)
         {
             if (request.Rating < 1 || request.Rating > 5) return false;
 
             var review = new Review
             {
                 OrderID = request.OrderID,
-                ClientID = request.ClientID,
+                ClientID = clientId,
                 FreelancerID = request.FreelancerID,
                 Rating = request.Rating,
                 Comment = request.Comment

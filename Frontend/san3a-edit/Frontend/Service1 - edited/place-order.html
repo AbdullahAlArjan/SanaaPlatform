@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Order - Sana'a</title>
+    <link rel="stylesheet" href="servicestyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <a href="../../../../main page/index.html" class="logo">Sana'a</a>
+        </div>
+        
+    </nav>
+
+    <div class="backbtn">
+            <a href="../Service1/Service.html" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Service
+            </a>
+        </div>
+
+    <div class="order-container">
+        <div class="order-header">
+            <h1><i class="fas fa-shopping-cart"></i> Place Your Order</h1>
+            <div class="service-preview">
+                <img src="image/logo1.png" alt="Service Preview">
+                <div class="service-info">
+                    <h2>Logo Design</h2>
+                    <p class="price">$70</p>
+                </div>
+            </div>
+        </div>
+
+        <form id="order-form">
+            
+            
+
+            <!-- Payment Information -->
+            <div class="form-section">
+                <h2><i class="fas fa-credit-card"></i> Payment Information</h2>
+                <div class="form-group">
+                    <label for="card-number">Card Number</label>
+                    <input type="text" id="card-number" placeholder="0000 0000 0000 0000" required inputmode="numeric">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expiry-date">Expiration Date</label>
+                        <input type="text" id="expiry-date" placeholder="MM/YY" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cvc">Security Code</label>
+                        <input type="text" id="cvc" placeholder="CVC" required inputmode="numeric">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="card-name">Name on Card</label>
+                    <input type="text" id="card-name" placeholder="Name" required>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+                <div class="summary-item">
+                    <span>Service Price</span>
+                    <span>$70.00</span>
+                </div>
+                <div class="summary-item">
+                    <span>Express Delivery</span>
+                    <span>$0.00</span>
+                </div>
+                <div class="summary-item total">
+                    <span>Total</span>
+                    <span>$70.00</span>
+                </div>
+            </div>
+
+            <div class="btnn">
+                <button type="submit">Confirm Order</button>
+                <button type="button"  onclick="window.location.href='../Service.html'">Cancel</button>
+            </div>
+
+            <div class="secure-notice">
+                <i class="fas fa-lock"></i> Secure payment
+            </div>
+        </form>
+    </div>
+
+    <script src="servicejs.js"></script>
+</body>
+</html>

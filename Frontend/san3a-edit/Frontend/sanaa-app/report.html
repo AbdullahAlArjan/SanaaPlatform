@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit a Report — Sanaa Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/globals.css" />
+  <link rel="stylesheet" href="css/public.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="pub-nav">
+    <div class="pub-nav-inner">
+      <a href="index.html" class="nav-brand">San<span>aa</span></a>
+      <div class="nav-links">
+        <a href="freelancers.html" class="nav-link">Freelancers</a>
+      </div>
+      <div class="nav-user" id="navUser"></div>
+    </div>
+  </nav>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="report-page">
+
+    <a href="javascript:history.back()" style="display:inline-flex;align-items:center;gap:var(--sp-2);font-size:var(--text-sm);color:var(--text-medium);margin-bottom:var(--sp-5);text-decoration:none;">
+      <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+
+    <div class="report-card">
+
+      <!-- Header -->
+      <div class="report-header">
+        <h2><i class="fa-solid fa-flag" style="margin-right:var(--sp-2);"></i>Submit a Report</h2>
+        <p>Help us keep the platform safe and trustworthy</p>
+        <div class="target-chip" id="targetChip" style="display:none;">
+          <i class="fa-solid fa-user" id="targetIcon"></i>
+          <span id="targetName"></span>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="report-body" id="formBody">
+        <form id="reportForm" novalidate>
+
+          <div style="font-size:var(--text-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:var(--sp-4);">
+            Select a Reason
+          </div>
+
+          <div class="reason-grid">
+            <div class="reason-option">
+              <input type="radio" name="reason" id="r-fraud"   value="Fraud or Scam" />
+              <label for="r-fraud"><i class="fa-solid fa-triangle-exclamation"></i> Fraud / Scam</label>
+            </div>
+            <div class="reason-option">
+              <input type="radio" name="reason" id="r-fake"    value="Fake Profile" />
+              <label for="r-fake"><i class="fa-solid fa-id-card-clip"></i> Fake Profile</label>
+            </div>
+            <div class="reason-option">
+              <input type="radio" name="reason" id="r-abuse"   value="Abusive Behavior" />
+              <label for="r-abuse"><i class="fa-solid fa-hand"></i> Abusive Behavior</label>
+            </div>
+            <div class="reason-option">
+              <input type="radio" name="reason" id="r-quality" value="Poor Work Quality" />
+              <label for="r-quality"><i class="fa-solid fa-thumbs-down"></i> Poor Quality</label>
+            </div>
+            <div class="reason-option">
+              <input type="radio" name="reason" id="r-spam"    value="Spam" />
+              <label for="r-spam"><i class="fa-solid fa-ban"></i> Spam</label>
+            </div>
+            <div class="reason-option">
+              <input type="radio" name="reason" id="r-other"   value="Other" />
+              <label for="r-other"><i class="fa-solid fa-ellipsis"></i> Other</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Additional Details <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+            <textarea
+              id="description"
+              class="form-control"
+              rows="4"
+              placeholder="Provide any additional context that might help our team investigate…"
+              maxlength="1000"
+            ></textarea>
+          </div>
+
+          <div id="formAlert" class="alert" style="display:none;margin-top:var(--sp-4);"></div>
+
+          <button type="submit" class="btn btn-lg" id="submitBtn"
+            style="width:100%;margin-top:var(--sp-5);background:#e74c3c;color:#fff;border-color:#e74c3c;">
+            <i class="fa-solid fa-flag"></i> Submit Report
+          </button>
+
+        </form>
+      </div>
+
+      <!-- Success -->
+      <div class="success-state" id="successState">
+        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h3>Report Submitted</h3>
+        <p>Thank you for helping keep the platform safe. Our team will review your report and take appropriate action.</p>
+        <a href="javascript:history.back()" class="btn btn-primary">
+          <i class="fa-solid fa-arrow-left"></i> Go Back
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module" src="js/report.js"></script>
+</body>
+</html>
