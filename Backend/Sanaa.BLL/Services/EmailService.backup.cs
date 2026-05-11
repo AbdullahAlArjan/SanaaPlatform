@@ -26,27 +26,15 @@ namespace Sanaa.BLL.Services
             message.Body = new TextPart("html") { Text = htmlBody };
 
             using var client = new SmtpClient();
-            client.Timeout = 5000;
-            try
-            {
-                await client.ConnectAsync(
-                    _configuration["Smtp:Host"],
-                    int.Parse(_configuration["Smtp:Port"]!),
-                    SecureSocketOptions.StartTls);
-                await client.AuthenticateAsync(
-                    _configuration["Smtp:Username"],
-                    _configuration["Smtp:Password"]);
-                await client.SendAsync(message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("EMAIL ERROR: " + ex.Message);
-                throw;
-            }
-            finally
-            {
-                await client.DisconnectAsync(true);
-            }
+            await client.ConnectAsync(
+                _configuration["Smtp:Host"],
+                int.Parse(_configuration["Smtp:Port"]!),
+                SecureSocketOptions.StartTls);
+            await client.AuthenticateAsync(
+                _configuration["Smtp:Username"],
+                _configuration["Smtp:Password"]);
+            await client.SendAsync(message);
+            await client.DisconnectAsync(true);
         }
     }
 }

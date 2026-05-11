@@ -163,7 +163,10 @@ namespace Sanaa.BLL.Services
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshTokenValue,
-                AccessTokenExpiry = expiry
+                AccessTokenExpiry = expiry,
+                Role = user.Role,
+                FullName = user.FullName,
+                Email = user.Email
             };
         }
 
