@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sanaa.API.DTOs;
+using Sanaa.BLL.DTOs;
 using Sanaa.BLL.Interfaces;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Sanaa.BLL.DTOs;
 
 
 namespace Sanaa.API.Controllers
@@ -51,6 +51,38 @@ namespace Sanaa.API.Controllers
                 return NotFound("لم يتم العثور على ملف لهذا المستخدم.");
 
             return Ok(profile);
+        }
+
+        // GET /api/freelancers/profile/me — returns the authenticated freelancer's own profile
+        [Authorize]
+        [HttpGet("profile/me")]
+        public async Task<IActionResult> GetMyProfile()
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null) return Unauthorized();
+
+            var profile = await _freelancerService.GetProfileByUserIdAsync(userId.Value);
+
+            if (profile == null)
+                return NotFound(new { message = "لم يتم العثور على ملف. أنشئ ملفك أولاً عبر POST /api/freelancers/profile", code = "PROFILE_NOT_FOUND" });
+
+            return Ok(profile);
+        }
+
+        // PUT /api/freelancers/profile — updates Profession, City, Bio for the authenticated freelancer
+        [Authorize]
+        [HttpPut("profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateFreelancerProfileDto dto)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null) return Unauthorized();
+
+            var updated = await _freelancerService.UpdateProfileAsync(userId.Value, dto);
+
+            if (updated == null)
+                return NotFound(new { message = "لم يتم العثور على ملف. أنشئ ملفك أولاً عبر POST /api/freelancers/profile", code = "PROFILE_NOT_FOUND" });
+
+            return Ok(updated);
         }
 
         [HttpGet("search")]
