@@ -25,28 +25,70 @@ namespace Sanaa.BLL.Services
 
         public async Task<bool> SendOtpAsync(string email, OtpPurpose purpose)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null) return false;
+            Console.WriteLine($"[OtpService] ── SendOtpAsync START | email={email} | purpose={purpose}");
 
-            // إلغاء الرموز السابقة غير المستخدمة لنفس الغرض
+            // ── 1. Resolve user ──────────────────────────────────────────────────
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                Console.WriteLine($"[OtpService] ❌ STEP 1 FAILED — user not found: {email}");
+                return false;
+            }
+            Console.WriteLine($"[OtpService] ✅ STEP 1 — user resolved: ID={user.UserID}");
+
+            // ── 2. Cancel previous unused codes for the same purpose ─────────────
             var existing = await _context.OtpCodes
                 .Where(o => o.UserId == user.UserID && o.Purpose == purpose && !o.IsUsed)
                 .ToListAsync();
             existing.ForEach(o => o.IsUsed = true);
+            Console.WriteLine($"[OtpService]    Invalidated {existing.Count} existing OTP(s)");
 
+            // ── 3. Generate and track new OTP ────────────────────────────────────
             var code = GenerateCode();
             _context.OtpCodes.Add(new OtpCode
             {
-                UserId = user.UserID,
-                Code = code,
-                Purpose = purpose,
+                UserId    = user.UserID,
+                Code      = code,
+                Purpose   = purpose,
                 ExpiresAt = DateTime.UtcNow.AddMinutes(10),
-                IsUsed = false,
-                CreatedAt = DateTime.UtcNow
+                IsUsed    = false,
+                CreatedAt = DateTime.UtcNow,
             });
-            await _context.SaveChangesAsync();
 
-            await SendEmailAsync(email, code, purpose);
+            // ── 4. SAVE TO DB — isolated try/catch; failure returns false ────────
+            try
+            {
+                await _context.SaveChangesAsync();
+                Console.WriteLine($"[OtpService] ✅ STEP 4 — OTP saved to DB | UserID={user.UserID} | Purpose={purpose} | Code={code}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[OtpService] ❌ STEP 4 FAILED — DB save threw an exception:");
+                Console.WriteLine($"[OtpService]    Type    : {ex.GetType().Name}");
+                Console.WriteLine($"[OtpService]    Message : {ex.Message}");
+                if (ex.InnerException != null)
+                    Console.WriteLine($"[OtpService]    Inner   : {ex.InnerException.Message}");
+                return false;   // OTP not in DB — nothing to email, abort cleanly
+            }
+
+            // ── 5. SEND EMAIL — isolated try/catch; failure does NOT undo the DB save ──
+            try
+            {
+                await SendEmailAsync(email, code, purpose);
+                Console.WriteLine($"[OtpService] ✅ STEP 5 — email dispatched to {email}");
+            }
+            catch (Exception ex)
+            {
+                // OTP is already committed to the DB. The user can still verify
+                // manually or request a resend. Do NOT return false here.
+                Console.WriteLine($"[OtpService] ⚠️  STEP 5 — email send failed (OTP IS in DB, code={code}):");
+                Console.WriteLine($"[OtpService]    Type    : {ex.GetType().Name}");
+                Console.WriteLine($"[OtpService]    Message : {ex.Message}");
+                if (ex.InnerException != null)
+                    Console.WriteLine($"[OtpService]    Inner   : {ex.InnerException.Message}");
+            }
+
+            Console.WriteLine($"[OtpService] ── SendOtpAsync END — returning true");
             return true;
         }
 
@@ -133,12 +175,14 @@ namespace Sanaa.BLL.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[EmailService] ❌ خطأ SMTP عند الإرسال إلى {toEmail}:");
-                Console.WriteLine($"[EmailService]    النوع: {ex.GetType().Name}");
-                Console.WriteLine($"[EmailService]    الرسالة: {ex.Message}");
+                // Log the SMTP error in detail, then let it propagate to SendOtpAsync's
+                // step-5 catch block, which handles it without undoing the DB save.
+                Console.WriteLine($"[EmailService] ❌ SMTP error sending to {toEmail}:");
+                Console.WriteLine($"[EmailService]    Type    : {ex.GetType().Name}");
+                Console.WriteLine($"[EmailService]    Message : {ex.Message}");
                 if (ex.InnerException != null)
-                    Console.WriteLine($"[EmailService]    Inner: {ex.InnerException.Message}");
-                throw; // نرمي الخطأ لأعلى عشان SendOtpAsync يعرف فشل الإيميل
+                    Console.WriteLine($"[EmailService]    Inner   : {ex.InnerException.Message}");
+                throw;
             }
         }
     }
