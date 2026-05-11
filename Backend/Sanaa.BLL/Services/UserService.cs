@@ -114,7 +114,25 @@ namespace Sanaa.BLL.Services
 
             if (result > 0)
             {
-                // 3. إرسال OTP تلقائياً بعد نجاح التسجيل
+                // 3. Auto-create a FreelancerProfile row for "Freelancer" accounts so the
+                //    onboarding flow always has a DB record to update via PUT /api/freelancers/profile.
+                //    ApprovalStatus defaults to Pending — admin must explicitly approve.
+                if (string.Equals(user.Role, "Freelancer", StringComparison.OrdinalIgnoreCase))
+                {
+                    _context.FreelancerProfiles.Add(new FreelancerProfile
+                    {
+                        FreelancerID      = user.UserID,
+                        Profession        = string.Empty,
+                        ExperienceYears   = 0,
+                        City              = string.Empty,
+                        AvailabilityStatus = "Available",
+                        AverageRating     = 0,
+                        ApprovalStatus    = ApprovalStatus.Pending,
+                    });
+                    await _context.SaveChangesAsync();
+                }
+
+                // 4. إرسال OTP تلقائياً بعد نجاح التسجيل
                 try
                 {
                     await _otpService.SendOtpAsync(user.Email, OtpPurpose.EmailVerification);
