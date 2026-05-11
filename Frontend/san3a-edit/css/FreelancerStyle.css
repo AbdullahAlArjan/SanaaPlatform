@@ -1,0 +1,1686 @@
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header */
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.website-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+/* Notification System */
+.notification-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+}
+
+.notification-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    z-index: 100;
+}
+
+.notification-dropdown.active {
+    display: block;
+}
+
+.notification-header {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    transition: background 0.3s;
+}
+
+.notification-item.unread {
+    background: #f8f9fa;
+    font-weight: 500;
+}
+
+.notification-item:hover {
+    background: #f1f1f1;
+}
+
+/* Profile Section */
+.profile-section {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Main Content Grid */
+.main-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+/* ==================== Info Card ==================== */
+.info-card {
+    background: rgba(255, 255, 255, 0.95); /* Slightly more opaque */
+    padding: 2.5rem; /* Increased padding */
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Deeper shadow for depth */
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Subtle border for definition */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+/* ==================== Statistics Card ==================== */
+.stats-card .stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem; /* Increased spacing */
+}
+
+.stats-card .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem; /* Increased spacing */
+    padding: 1.25rem; /* Increased padding */
+    background: #f8f9fa;
+    border-radius: 8px; /* Rounded corners */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Matched border size to .info-card */
+}
+
+.stats-card .stat-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Enhanced shadow on hover */
+    background: #fff; /* White background on hover */
+}
+
+.stats-card .stat-icon {
+    font-size: 1.75rem; /* Slightly larger icon */
+    color: #2c3e50;
+    background: #e0e0e0;
+    padding: 1rem; /* Increased padding */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.stats-card .stat-item:hover .stat-icon {
+    background: #3498db; /* Highlight icon on hover */
+    color: white; /* White icon on hover */
+}
+
+.stats-card .stat-content {
+    flex: 1;
+}
+
+.stats-card .stat-content h4 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #2c3e50;
+    font-weight: 600; /* Bold for emphasis */
+}
+
+.stats-card .stat-content p {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem; /* Slightly smaller for subtlety */
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .info-card {
+        padding: 1.5rem; /* Smaller padding on mobile */
+        border-radius: 15px; /* Slightly smaller radius */
+    }
+
+    .stats-card .stat-item {
+        padding: 1rem; /* Smaller padding on mobile */
+        gap: 1rem; /* Smaller gap on mobile */
+    }
+
+    .stats-card .stat-icon {
+        font-size: 1.5rem; /* Smaller icon on mobile */
+        padding: 1rem; /* Smaller padding on mobile */
+    }
+
+    .stats-card .stat-content h4 {
+        font-size: 1.25rem; /* Smaller heading on mobile */
+    }
+
+    .stats-card .stat-content p {
+        font-size: 0.9rem; /* Smaller text on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .info-card {
+        padding: 1rem; /* Minimal padding for very small screens */
+    }
+
+    .stats-card .stat-item {
+        flex-direction: column; /* Stack icon and content vertically */
+        text-align: center; /* Center-align text */
+    }
+
+    .stats-card .stat-icon {
+        margin-bottom: 0.75rem; /* Space between icon and content */
+    }
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.btn-primary {
+    background: #2c3e50;
+    color: white;
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    margin: 0 auto; /* Center the button itself horizontally */
+}
+
+/* Profile Card Buttons */
+.profile-card .action-buttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 1rem; /* Space between buttons */
+    margin-top: 1.5rem; /* Space above the buttons */
+}
+
+.profile-card .btn {
+    width: 100%; /* Make buttons full width */
+    justify-content: center; /* Center button text */
+    padding: 0.8rem 1.5rem; /* Add padding for better spacing */
+}
+.btn-secondary {
+    background: #3498db;
+    color: white;
+}
+
+/* WhatsApp Button Container */
+.whatsapp-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+/* WhatsApp Button Styling */
+.whatsapp-button .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    background-color: #25d366; /* WhatsApp brand green */
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    border-radius: 50px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.whatsapp-button .btn:hover {
+    background-color: #128c7e; /* Darker green on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.whatsapp-button .btn:active {
+    background-color: #0e6e5e; /* Even darker green on click */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    transform: translateY(0); /* Reset lift effect */
+}
+
+.whatsapp-button .btn i {
+    margin-right: 8px; /* Space between icon and text */
+    font-size: 20px;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 1000;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+/* ==================== Modal Overlay ==================== */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Darker semi-transparent background */
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px); /* Adds a blur effect to the background */
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* ==================== Modal Content ==================== */
+.modal-content {
+    background: white;
+    width: 90%; /* Responsive width */
+    max-width: 500px; /* Optimal width for readability */
+    padding: 2.5rem;
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    animation: slideIn 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    overflow: hidden; /* Ensures content stays within rounded corners */
+}
+
+/* Center the modal content */
+#edit-profile-modal .modal-content {
+    margin: 0 auto;
+}
+
+/* ==================== Close Button ==================== */
+.close-modal {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    font-size: 1.8rem;
+    color: #666; /* Neutral color */
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #333; /* Darker on hover */
+    transform: rotate(90deg); /* Rotate effect on hover */
+}
+
+/* ==================== Image Preview ==================== */
+.image-preview {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+#profile-picture-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #fff; /* Thicker border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#profile-picture-preview:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+/* ==================== File Input ==================== */
+input[type="file"] {
+    margin: 1rem 0;
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px dashed #ddd; /* Dashed border for file input */
+    border-radius: 10px;
+    background: #f9f9f9;
+    cursor: pointer;
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+input[type="file"]:hover {
+    border-color: #3498db; /* Highlight on hover */
+    background: #f0f8ff; /* Light blue background */
+}
+
+/* ==================== Animations ==================== */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%; /* Full width on smaller screens */
+        padding: 1.5rem; /* Smaller padding */
+    }
+
+    #profile-picture-preview {
+        width: 120px;
+        height: 120px; /* Smaller image on mobile */
+    }
+
+    .close-modal {
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem; /* Smaller close button */
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 1rem; /* Even smaller padding for very small screens */
+    }
+
+    input[type="file"] {
+        padding: 0.6rem; /* Smaller padding for file input */
+    }
+}
+
+/* Add these styles to your existing CSS file */
+
+/* My Services Section */
+.service-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    transition: background 0.3s;
+}
+
+.service-item:hover {
+    background: #f8f9fa;
+}
+
+.service-meta {
+    text-align: right;
+}
+
+.service-meta span {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.service-meta small {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Redesigned Mark All as Read Button */
+.mark-all-read {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.3s;
+}
+
+.mark-all-read:hover {
+    background: #2980b9;
+}
+
+.mark-all-read i {
+    font-size: 0.9rem;
+}
+
+/* Service Item */
+.service-item {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.service-item span {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.service-meta {
+    text-align: right;
+}
+
+.service-meta span {
+    font-size: 1rem;
+    color: #3498db;
+    font-weight: 600;
+}
+
+.service-meta small {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+
+
+
+/* Service Item */
+.service-item {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.service-item span {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.service-item p {
+    margin: 0.5rem 0;
+    color: #666;
+}
+
+.service-meta {
+    display: flex;
+    gap: 1rem;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.attachment-preview {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* File Input */
+input[type="file"] {
+    margin: 0.5rem 0;
+    width: 100%;
+}
+
+/* Modal Styles */
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    padding: 2rem;
+    border-radius: 10px;
+    animation: slideIn 0.3s ease-out;
+    position: relative;
+}
+
+/* ==================== Modal Heading ==================== */
+.modal-content h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem; /* Slightly larger for emphasis */
+    color: #2c3e50;
+    font-weight: 700; /* Bold for better readability */
+    text-align: center; /* Center-align the heading */
+    position: relative;
+}
+
+.modal-content h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #3498db; /* Accent line under the heading */
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+}
+
+/* ==================== Form Group ==================== */
+.form-group {
+    margin-bottom: 1.75rem; /* Increased spacing */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.75rem; /* Increased spacing */
+    font-weight: 600; /* Semi-bold for better readability */
+    color: #2c3e50;
+    font-size: 0.95rem; /* Slightly smaller for subtlety */
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.9rem 1rem; /* Slightly larger padding */
+    border: 2px solid #e0e0e0; /* Thicker border */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 1rem;
+    color: #333; /* Darker text for better readability */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background: #f9f9f9; /* Light background for inputs */
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #3498db; /* Highlight focus state */
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); /* Subtle glow effect */
+    outline: none;
+    background: #fff; /* White background on focus */
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px; /* Slightly taller for better usability */
+}
+
+/* ==================== File Input ==================== */
+input[type="file"] {
+    padding: 0.8rem;
+    background: #f8f9fa;
+    border: 2px dashed #ddd; /* Dashed border for file input */
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+input[type="file"]:hover {
+    border-color: #3498db; /* Highlight on hover */
+    background: #f0f8ff; /* Light blue background */
+}
+
+/* ==================== Submit Button ==================== */
+.btn-primary {
+    width: 100%;
+    padding: 1rem; /* Larger padding for better clickability */
+    background: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600; /* Bold text */
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* Space between icon and text */
+}
+
+.btn-primary:hover {
+    background: #1a252f; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.btn-primary:active {
+    transform: translateY(0); /* Reset on click */
+}
+
+/* ==================== Manage Services Modal ==================== */
+.modal-content {
+    background: white;
+    width: 80%;
+    max-width: 600px;
+    padding: 1.5rem;
+    border-radius: 8px;
+    animation: slideIn 0.3s ease-out;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    
+    /* Added height constraints */
+    max-height: 800px;          /* Limit maximum height */
+    overflow-y: auto;           /* Allow scrolling if content is taller */
+    
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 1.5rem; /* Smaller padding on mobile */
+    }
+
+    .modal-content h2 {
+        font-size: 1.5rem; /* Smaller heading on mobile */
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.8rem; /* Smaller padding on mobile */
+    }
+
+    .btn-primary {
+        padding: 0.9rem; /* Smaller padding on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 1rem; /* Even smaller padding for very small screens */
+    }
+
+    .modal-content h2 {
+        font-size: 1.25rem; /* Smaller heading for very small screens */
+    }
+
+    .form-group label {
+        font-size: 0.9rem; /* Smaller label text */
+    }
+}
+
+/* Order List */
+.order-list,
+.manage-services {
+    margin-bottom: 2rem;
+}
+
+.order-list h3,
+.manage-services h3 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #2c3e50;
+}
+
+.order-item,
+.service-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.order-item span,
+.service-item span {
+    font-size: 1rem;
+    color: #2c3e50;
+}
+
+.order-actions,
+.service-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.btn-accept {
+    background: #28a745;
+    color: white;
+}
+
+.btn-accept:hover {
+    background: #218838;
+}
+
+.btn-reject {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-reject:hover {
+    background: #c82333;
+}
+
+.btn-toggle {
+    background: #ffc107;
+    color: #2c3e50;
+}
+
+.btn-toggle:hover {
+    background: #e0a800;
+}
+
+.btn-drop {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-drop:hover {
+    background: #c82333;
+}
+
+/* Availability Toggle */
+.availability-toggle {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.availability-toggle.available {
+    background: #28a745;
+    color: white;
+}
+
+.availability-toggle.unavailable {
+    background: #dc3545;
+    color: white;
+
+
+}
+/* Availability Status */
+.availability-status {
+    padding: 0.3rem 0.8rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+    margin-left: 0.5rem;
+}
+
+.availability-status.active {
+    background: #28a745;
+    color: white;
+}
+
+.availability-status.deactive {
+    background: #dc3545;
+    color: white;
+}
+
+/* Toggle Buttons */
+.toggle-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.toggle-button.active {
+    background: #28a745;
+    color: white;
+}
+
+.toggle-button.deactive {
+    background: #dc3545;
+    color: white;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+/* Styled Dropdown */
+select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+    appearance: none; /* Remove default arrow */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232c3e50%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    background-size: 0.65rem auto;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+select:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+/* Custom Dropdown Arrow */
+select::-ms-expand {
+    display: none; /* Remove default arrow in IE */
+}
+
+/* Service Input Fields */
+.service-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+/* Save Changes Button */
+.btn-save {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.btn-save:hover {
+    background: #218838;
+}
+/* Manage Services Modal */
+#manage-services-modal .modal-content {
+    width: 90%; /* Responsive width */
+    max-width: 600px; /* Maximum width */
+    padding: 2rem; /* Comfortable padding */
+    max-height: 80vh; /* Slightly taller for better content visibility */
+    overflow-y: auto; /* Enable scrolling for overflow content */
+    border-radius: 16px; /* Rounded corners */
+    background: white; /* Clean white background */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); /* Deeper shadow for depth */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border for definition */
+    animation: slideIn 0.4s cubic-bezier(0.23, 1, 0.32, 1); /* Smooth animation */
+    position: relative;
+}
+
+/* ==================== Scrollbar Styling ==================== */
+#manage-services-modal .modal-content::-webkit-scrollbar {
+    width: 8px; /* Slim scrollbar */
+}
+
+#manage-services-modal .modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light track */
+    border-radius: 4px; /* Rounded corners */
+}
+
+#manage-services-modal .modal-content::-webkit-scrollbar-thumb {
+    background: #888; /* Scrollbar handle */
+    border-radius: 4px; /* Rounded corners */
+    transition: background 0.3s ease;
+}
+
+#manage-services-modal .modal-content::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Darker handle on hover */
+}
+
+
+/* Modal Header */
+#manage-services-modal h2 {
+    font-size: 1.5rem; /* Slightly larger heading */
+    margin-bottom: 1.5rem;
+    color: #2c3e50; /* Darker text for better readability */
+    text-align: center; /* Center-align the heading */
+}
+
+/* Service Item Styling */
+#manage-services-modal .service-item {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+    transition: all 0.3s ease; /* Smooth hover effect */
+}
+
+#manage-services-modal .service-item:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+}
+/* Input Fields */
+#manage-services-modal .service-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem; /* Reduce the gap between inputs */
+}
+
+#manage-services-modal label {
+    font-size: 0.9rem; /* Smaller font size for labels */
+    margin-bottom: 0.25rem; /* Reduce margin below labels */
+    color: #2c3e50; /* Darker text for better readability */
+    font-weight: 500; /* Make labels bold */
+}
+
+#manage-services-modal input {
+    width: 80%; /* Smaller width */
+    padding: 0.5rem; /* Smaller padding */
+    font-size: 0.9rem; /* Smaller font size */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background-color: #fff; /* Ensure white background */
+    color: #2c3e50; /* Darker text for better readability */
+}
+
+#manage-services-modal input:focus {
+    outline: none;
+    border-color: #1877f2; /* Highlight focus state */
+    box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1); /* Add focus shadow */
+}
+
+/* Placeholder Styling */
+#manage-services-modal input::placeholder {
+    color: #747d8c; /* Light gray placeholder text */
+    font-size: 0.85rem; /* Smaller placeholder font size */
+    opacity: 1; /* Ensure placeholder is visible */
+}
+
+/* Disabled Input Styling */
+#manage-services-modal input:disabled {
+    background-color: #f9f9f9; /* Light gray background for disabled inputs */
+    cursor: not-allowed; /* Show not-allowed cursor */
+}
+/* Service Actions (Buttons) */
+#manage-services-modal .service-actions {
+    display: flex;
+    gap: 0.5rem; /* Smaller gap between buttons */
+    margin-top: 1rem;
+}
+
+#manage-services-modal .btn-save,
+#manage-services-modal .btn-drop,
+#manage-services-modal .toggle-button {
+    padding: 0.5rem 0.75rem; /* Smaller padding */
+    font-size: 0.9rem; /* Smaller font size */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1; /* Equal width for buttons */
+}
+
+#manage-services-modal .btn-save {
+    background: #2c3e50;
+    color: white;
+}
+
+#manage-services-modal .btn-save:hover {
+    background: #1a2a3a; /* Darker shade on hover */
+}
+
+#manage-services-modal .btn-drop {
+    background: #ff4757;
+    color: white;
+}
+
+#manage-services-modal .btn-drop:hover {
+    background: #e84141; /* Darker shade on hover */
+}
+
+#manage-services-modal .toggle-button {
+    background: #4cd137;
+    color: white;
+}
+
+#manage-services-modal .toggle-button:hover {
+    background: #44bd32; /* Darker shade on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #manage-services-modal .modal-content {
+        width: 95%; /* Wider on smaller screens */
+        padding: 1.5rem; /* Smaller padding */
+        max-height: 90vh; /* Taller to utilize screen space */
+    }
+}
+
+@media (max-width: 480px) {
+    #manage-services-modal .modal-content {
+        width: 100%; /* Full width on very small screens */
+        padding: 1rem; /* Minimal padding */
+        border-radius: 12px; /* Slightly smaller radius */
+    }
+}
+
+/* ==================== Animation ==================== */
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+/* Add these new styles to your style.css */
+.portfolio-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.portfolio-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.portfolio-item:hover {
+    transform: translateY(-5px);
+}
+
+.portfolio-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.portfolio-overlay {
+    position: absolute;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    width: 100%;
+    padding: 1rem;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.portfolio-item:hover .portfolio-overlay {
+    transform: translateY(0);
+}
+
+.availability-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}
+
+.earnings-chart {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.badge-container {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.skill-badge {
+    background: #2196F3;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}
+/* ==================== Testimonials Section ==================== */
+.testimonials {
+    padding: 2.5rem; /* Increased padding */
+    background: rgba(255, 255, 255, 0.95); /* Slightly more opaque */
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Deeper shadow for depth */
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Subtle border for definition */
+    margin: 2rem 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonials:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.testimonials h3 {
+    font-size: 1.75rem; /* Slightly larger for emphasis */
+    color: #2c3e50; /* Consistent color scheme */
+    margin-bottom: 2rem; /* Increased spacing */
+    text-align: center;
+    font-weight: 600; /* Bold for better readability */
+    position: relative;
+}
+
+.testimonials h3::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #3498db; /* Accent line under the heading */
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+}
+
+/* ==================== Testimonial Carousel ==================== */
+.testimonial-carousel {
+    position: relative;
+    padding: 1rem;
+}
+
+.testimonial-item {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+    background: #f8f9fa; /* Consistent background */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Subtle border for definition */
+}
+
+.testimonial-item.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.testimonial-item:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+    background: #fff; /* White background on hover */
+}
+
+.rating {
+    color: #FFD700; /* Gold color for stars */
+    margin-bottom: 1.5rem; /* Increased spacing */
+    font-size: 1.5rem; /* Larger stars */
+}
+
+.testimonial-item p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1.5rem; /* Increased spacing */
+}
+
+.testimonial-item small {
+    font-size: 0.9rem;
+    color: #777;
+    font-style: italic;
+}
+
+/* ==================== Carousel Navigation ==================== */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 1.5rem; /* Increased padding */
+}
+
+.nav-btn {
+    background: #3498db; /* Consistent primary color */
+    color: white;
+    border: none;
+    padding: 12px 18px; /* Larger padding */
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    font-size: 1.5rem; /* Larger icons */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.nav-btn:hover {
+    background: #2980b9; /* Darker shade on hover */
+    transform: scale(1.1); /* Slight zoom effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .testimonials {
+        padding: 1.5rem; /* Smaller padding on mobile */
+        border-radius: 15px; /* Slightly smaller radius */
+    }
+
+    .testimonials h3 {
+        font-size: 1.5rem; /* Smaller heading on mobile */
+    }
+
+    .testimonial-item {
+        padding: 1.5rem; /* Smaller padding on mobile */
+    }
+
+    .rating {
+        font-size: 1.25rem; /* Smaller stars on mobile */
+    }
+
+    .nav-btn {
+        padding: 10px 15px; /* Smaller buttons on mobile */
+        font-size: 1.25rem; /* Smaller icons on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .testimonials {
+        padding: 1rem; /* Minimal padding for very small screens */
+    }
+
+    .testimonials h3 {
+        font-size: 1.25rem; /* Smaller heading for very small screens */
+    }
+
+    .testimonial-item {
+        padding: 1rem; /* Minimal padding for very small screens */
+    }
+
+    .carousel-nav {
+        padding: 0 1rem; /* Smaller padding for very small screens */
+    }
+}
+
+#profile-location {
+    width: 100%; /* Full width */
+    padding: 0.8rem 1rem; /* Comfortable padding */
+    font-size: 1rem; /* Readable font size */
+    color: #2c3e50; /* Dark text color */
+    background: #f8f9fa; /* Light background */
+    border: 2px solid #e0e0e0; /* Subtle border */
+    border-radius: 10px; /* Rounded corners */
+    outline: none; /* Remove default outline */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#profile-location:focus {
+    border-color: #3498db; /* Highlight border on focus */
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); /* Subtle glow effect */
+    background: #fff; /* White background on focus */
+}
+
+#profile-location::placeholder {
+    color: #999; /* Light placeholder text */
+    font-size: 0.9rem; /* Slightly smaller placeholder */
+}
+
+#profile-location:disabled {
+    background: #f1f1f1; /* Light gray background when disabled */
+    cursor: not-allowed; /* Show not-allowed cursor */
+    opacity: 0.7; /* Slightly transparent */
+}
+
+/* Top Navigation Bar Styles */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #2c3e50;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+/* Left Section of the Top Bar */
+.top-bar-left {
+    display: flex;
+    align-items: center;
+}
+
+.website-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.website-name:hover {
+    color: #85b7f0;
+}
+
+/* Right Section of the Top Bar */
+.top-bar-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Notification Icon Styles */
+.notification-icon {
+    position: relative;
+    cursor: pointer;
+    font-size: 20px;
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.notification-icon:hover {
+    color: #007bff;
+}
+
+.notification-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ff4d4d;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 50%;
+    min-width: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Notification Dropdown Styles */
+.notification-dropdown {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 320px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    z-index: 1000;
+    overflow: hidden;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.notification-header h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.mark-all-read {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.mark-all-read:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.notification-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 8px 0;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 14px;
+    color: #555555;
+    transition: background-color 0.3s ease;
+}
+
+.notification-item.unread {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333333;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item:hover {
+    background-color: #f1f1f1;
+}
+
+.notification-item p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Scrollbar Styles for Notification List */
+.notification-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notification-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 4px;
+}
+
+.notification-list::-webkit-scrollbar-thumb:hover {
+    background: #999999;
+}
+
+/* Container for profile info */
+.profile-info {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    text-align: center; /* Center text */
+    gap: 10px; /* Add space between items */
+    margin-top: 20px; /* Add some top margin */
+}
+
+/* Profession text */
+.profession {
+    font-size: 1.5rem; /* Larger font size */
+    font-weight: 600; /* Bold font weight */
+    color: #2c51b8; /* Dark gray color */
+    margin: 0; /* Remove default margin */
+}
+
+/* Address and age text */
+.profile-info p {
+    font-size: 1rem; /* Standard font size */
+    color: #555; /* Medium gray color */
+    margin: 0; /* Remove default margin */
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center icons and text vertically */
+    gap: 8px; /* Add space between icon and text */
+}
+
+/* Icons */
+.profile-info i {
+    color: #007bff; /* Blue color for icons */
+    font-size: 1.1rem; /* Slightly larger icons */
+}
+
+/* Add these new styles to your CSS file */
+
+/* Page Header */
+.page-header {
+    margin: 2rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #eee;
+}
+
+.page-header h1 {
+    font-size: 2rem;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Form Container */
+.form-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: flex-end;
+}
+
+/* Section Styling */
+.section {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.section h2 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Back Button */
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}

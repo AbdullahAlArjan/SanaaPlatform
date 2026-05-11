@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelancer Platform Admin</title>
+    <link rel="stylesheet" href="ad.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="admin-title">
+                <img src="image/admin.jpg" alt="Admin" class="admin-avatar">
+                <h2>SANA'A</h2>
+            </div>
+            <p>Abdullah Omar</p>
+            <p>Administrator</p>
+        </div>
+        
+        <div class="sidebar-menu">
+            <div class="menu-item active" onclick="showPage('dashboard')">
+                <i class="fas fa-chart-line"></i>
+                <span>Statistics</span>
+            </div>
+            <div class="menu-item" onclick="showPage('verify')">
+                <i class="fas fa-user-check"></i>
+                <span>Verify Accounts</span>
+            </div>
+            <div class="menu-item" onclick="showPage('reports')">
+                <i class="fas fa-flag"></i>
+                <span>Manage Reports</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard Page -->
+        <div class="page active" id="dashboard">
+            <div class="header">
+                <h1>Dashboard</h1>
+                <div class="user-info">
+                    <img src="image/admin.jpg" alt="User">
+                    <span>Abdullah Omar</span>
+                </div>
+            </div>
+
+            <!-- Analytics Cards -->
+            <div class="analytics-cards">
+                <div class="card neumorphic">
+                    <div class="card-header">
+                        <h3>Total Customers</h3>
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="card-body">
+                        <h2 id="total-customers">2647</h2>
+                        <p>All registered customers</p>
+                    </div>
+                </div>
+                <div class="card neumorphic">
+                    <div class="card-header">
+                        <h3>Active Freelancers</h3>
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="card-body">
+                        <h2 id="active-freelancers">1313</h2>
+                        <p>Currently active</p>
+                    </div>
+                </div>
+                <div class="card neumorphic">
+                    <div class="card-header">
+                        <h3>Live Visitors</h3>
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="card-body">
+                        <h2 id="live-visitors">698</h2>
+                        <p>On site right now</p>
+                    </div>
+                </div>
+                <div class="card neumorphic">
+                    <div class="card-header">
+                        <h3>Active Projects</h3>
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="card-body">
+                        <h2 id="active-projects">944</h2>
+                        <p>Currently in progress</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verify Accounts Page -->
+        <div class="page" id="verify">
+            <div class="header">
+                <h1>Verify Accounts</h1>
+                <div class="user-info">
+                    <img src="image/admin.jpg" alt="User">
+                    <span>Abdullah Omar</span>
+                </div>
+            </div>
+
+            <div class="recent-activities neumorphic">
+                <table id="verify-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Profession</th>
+                            <th>Phone Number</th>
+                            <th>Attachment</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-id="1">
+                            <td>1</td>
+                            <td>Salf Ali</td>
+                            <td>Designer</td>
+                            <td>0797979797</td>
+                            <td>
+                                <button class="btn btn-attachment">
+                                    <i class="fas fa-paperclip"></i> View
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-success" onclick="verifyAccount(1, 'Salf Ali', 'Designer')">Verify</button>
+                                <button class="btn btn-danger" onclick="rejectAccount(1, 'Salf Ali', 'Designer')">Reject</button>
+                            </td>
+                        </tr>
+                        <tr data-id="2">
+                            <td>2</td>
+                            <td>Mohammed Ahmad</td>
+                            <td>Developer</td>
+                            <td>0788888888</td>
+                            <td>
+                                <button class="btn btn-attachment">
+                                    <i class="fas fa-paperclip"></i> View
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-success" onclick="verifyAccount(2, 'Mohammed Ahmad', 'Developer')">Verify</button>
+                                <button class="btn btn-danger" onclick="rejectAccount(2, 'Mohammed Ahmad', 'Developer')">Reject</button>
+                            </td>
+                        </tr>
+                        <tr data-id="3">
+                            <td>3</td>
+                            <td>Sarah Johnson</td>
+                            <td>Writer</td>
+                            <td>0777777777</td>
+                            <td>
+                                <button class="btn btn-attachment">
+                                    <i class="fas fa-paperclip"></i> View
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-success" onclick="verifyAccount(3, 'Sarah Johnson', 'Writer')">Verify</button>
+                                <button class="btn btn-danger" onclick="rejectAccount(3, 'Sarah Johnson', 'Writer')">Reject</button>
+                            </td>
+                        </tr>
+                        <tr data-id="4">
+                            <td>4</td>
+                            <td>Alex Turner</td>
+                            <td>Graphic Designer</td>
+                            <td>0766666666</td>
+                            <td>
+                                <button class="btn btn-attachment">
+                                    <i class="fas fa-paperclip"></i> View
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-success" onclick="verifyAccount(4, 'Alex Turner', 'Graphic Designer')">Verify</button>
+                                <button class="btn btn-danger" onclick="rejectAccount(4, 'Alex Turner', 'Graphic Designer')">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Manage Reports Page -->
+        <div class="page" id="reports">
+            <div class="header">
+                <h1>Manage Reports</h1>
+                <div class="user-info">
+                    <img src="image/admin.jpg" alt="User">
+                    <span>Abdullah Omar</span>
+                </div>
+            </div>
+
+            <div class="recent-activities neumorphic">
+                <table id="reports-table">
+                    <thead>
+                        <tr>
+                            <th>Reported</th>
+                            <th>Description</th>
+                            <th>Attachment</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-id="1">
+                            <td>Emma Developer</td>
+                            <td>Code plagiarism detected in submission</td>
+                            <td>
+                                <button class="btn btn-attachment">
+                                    <i class="fas fa-paperclip"></i> View
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning" onclick="stopService(1, 'Emma Developer')">Stop Service</button>
+                            </td>
+                        </tr>
+                        <tr data-id="2">
+                            <td>Alex Turner</td>
+                            <td>Poor communication with client</td>
+                            <td>
+                                <button class="btn btn-attachment">
+                                    <i class="fas fa-paperclip"></i> View
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning" onclick="stopService(2, 'Alex Turner')">Stop Service</button>
+                            </td>
+                        </tr>
+                        <tr data-id="3">
+                            <td>Sarah Johnson</td>
+                            <td>Payment dispute resolved</td>
+                            <td>
+                                <button class="btn btn-attachment">
+                                    <i class="fas fa-paperclip"></i> View
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning" onclick="stopService(3, 'Sarah Johnson')">Stop Service</button>
+                            </td>
+                        </tr>
+                        <tr data-id="4">
+                            <td>Michael Chen</td>
+                            <td>Project completed successfully</td>
+                            <td>
+                                <button class="btn btn-attachment">
+                                    <i class="fas fa-paperclip"></i> View
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning" onclick="stopService(4, 'Michael Chen')">Stop Service</button>
+                            </td>
+                        </tr>
+                        <tr data-id="5">
+                            <td>Emma Watson</td>
+                            <td>Client reported incomplete deliverables</td>
+                            <td>
+                                <button class="btn btn-attachment">
+                                    <i class="fas fa-paperclip"></i> View
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning" onclick="stopService(5, 'Emma Watson')">Stop Service</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="ad.js"></script>
+</body>
+</html>

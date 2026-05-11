@@ -1,9 +1,9 @@
-﻿namespace Sanaa.BLL.DTOs  
+namespace Sanaa.BLL.DTOs  
 {
     public class CreateOrderRequest
     {
-        public int ClientID { get; set; }
         public int FreelancerID { get; set; }
+        public int ServiceID { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
     }
@@ -12,6 +12,7 @@
     {
         public int OrderID { get; set; }
         public string ClientName { get; set; }
+        public string FreelancerName { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
         public DateTime OrderDate { get; set; }

@@ -7,6 +7,7 @@ namespace Sanaa.BLL.DTOs
         // ── بيانات أساسية ───────────────────────────────
         public int UserID { get; set; }
         public string FullName { get; set; }
+        public string Email { get; set; }
         public string Profession { get; set; }
         public int ExperienceYears { get; set; }
         public string City { get; set; }

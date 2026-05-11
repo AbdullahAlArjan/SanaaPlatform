@@ -22,7 +22,10 @@ namespace Sanaa.API.Controllers
         [Authorize]
         public async Task<IActionResult> AddReview([FromBody] CreateReviewRequest request)
         {
-            var result = await _reviewService.AddReviewAsync(request);
+            var claim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(claim, out var clientId)) return Unauthorized();
+
+            var result = await _reviewService.AddReviewAsync(clientId, request);
 
             if (result)
                 return Ok("تم إضافة التقييم وتحديث حساب الصنايعي بنجاح");

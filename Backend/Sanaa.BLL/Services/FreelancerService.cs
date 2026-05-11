@@ -178,6 +178,17 @@ namespace Sanaa.BLL.Services
             return profiles.Select(MapToResponse);
         }
 
+        public async Task<IEnumerable<FreelancerProfileResponse>> GetAllFreelancerProfilesAsync()
+        {
+            var profiles = await _context.FreelancerProfiles
+                .Include(p => p.User)
+                .Include(p => p.FreelancerServices)
+                    .ThenInclude(fs => fs.Service)
+                .ToListAsync();
+
+            return profiles.Select(MapToResponse);
+        }
+
         // ── Helper ────────────────────────────────────────────────
 
         private FreelancerProfileResponse MapToResponse(FreelancerProfile p)
@@ -190,6 +201,7 @@ namespace Sanaa.BLL.Services
             {
                 UserID = p.FreelancerID,
                 FullName = p.User?.FullName ?? string.Empty,
+                Email = p.User?.Email ?? string.Empty,
                 Profession = p.Profession,
                 ExperienceYears = p.ExperienceYears,
                 City = p.City,

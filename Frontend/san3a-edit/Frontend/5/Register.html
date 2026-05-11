@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana'a - Register</title>
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="RegiserStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="register-container">
+        <!-- Brand Section -->
+        <div class="brand-section">
+            <div class="brand-content">
+                <h1 class="brand-title">SANA'A</h1>
+                <p class="brand-subtitle">Jordanian market for professions and freelance work</p>
+                <div class="login-prompt">
+                    <p>Already have an account?</p>
+                    <a href="login.html" class="login-link">Login here</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Form Section -->
+        <div class="register-section">
+            <div class="register-card">
+                <h2 class="register-title">Create Your Account</h2>
+                <form id="registerForm">
+                    <!-- Name Fields -->
+                    <div class="input-group half">
+                        <div class="input-wrapper">
+                            <label for="firstname">First Name</label>
+                            <input type="text" id="firstname" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="lastname">Last Name</label>
+                            <input type="text" id="lastname" required>
+                        </div>
+                    </div>
+
+                    <!-- Personal Info Fields -->
+                    <div class="input-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="birthday">Birthday</label>
+                        <input type="date" id="birthday" required>
+                    </div>
+
+                    <!-- Contact Info Fields -->
+                    <div class="input-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" required pattern="\d{10}" title="Phone number must be 10 digits">
+                        <div class="error-message" id="phoneError">Phone number must be exactly 10 digits</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="city">City</label>
+                        <select id="city" required>
+                                <option value="" disabled selected>Select City</option>
+                                <option value="Amman">Amman</option>
+                                <option value="Zarqa">Zarqa</option>
+                                <option value="Irbid">Irbid</option>
+                                <option value="Salt">Al-Salt</option>
+                                <option value="Madaba">Madaba</option>
+                                <option value="Karak">Al-Karak</option>
+                                <option value="Tafilah">Tafilah</option>
+                                <option value="Ma'an">Ma'an</option>
+                                <option value="Aqaba">Aqaba</option>
+                                <option value="Mafraq">Mafraq</option>
+                                <option value="Jerash">Jerash</option>
+                                <option value="Ajloun">Ajloun</option>
+                            </select>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <!-- Password Fields -->
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" required>
+                        <div class="error-message" id="passwordError">Passwords do not match</div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="register-btn">Register</button>
+
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="RegisterJS.Js"></script>
+</body>
+</html>

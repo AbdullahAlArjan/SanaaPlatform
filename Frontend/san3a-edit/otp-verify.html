@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify Email — Sanaa Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/otpStyle.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <div class="brand-section">
+      <h1 class="brand-logo">Sanaa</h1>
+      <p class="brand-tagline">One quick step to verify<br />your identity and keep your account secure.</p>
+      <p class="brand-register-prompt">
+        Wrong email?<br />
+        <a href="register.html" class="brand-link">← Go back to registration</a>
+      </p>
+    </div>
+
+    <div class="auth-section">
+      <div class="auth-card" id="otpCard" style="text-align:center;">
+        <div style="font-size:3.5rem; margin-bottom: var(--sp-4);">
+          <i class="fa-regular fa-envelope-open" style="color: var(--secondary);"></i>
+        </div>
+        <h2 class="auth-title">Check Your Email</h2>
+        <p class="auth-subtitle">We sent a 6-digit verification code to</p>
+
+        <div class="email-display">
+          <i class="fa-solid fa-envelope"></i>
+          <strong id="emailDisplay">your email</strong>
+        </div>
+
+        <div id="alertBox" class="alert alert-error" role="alert"></div>
+
+        <div class="otp-inputs" id="otpInputs">
+          <input class="otp-box" type="text" inputmode="numeric" maxlength="1" data-index="0" />
+          <input class="otp-box" type="text" inputmode="numeric" maxlength="1" data-index="1" />
+          <input class="otp-box" type="text" inputmode="numeric" maxlength="1" data-index="2" />
+          <input class="otp-box" type="text" inputmode="numeric" maxlength="1" data-index="3" />
+          <input class="otp-box" type="text" inputmode="numeric" maxlength="1" data-index="4" />
+          <input class="otp-box" type="text" inputmode="numeric" maxlength="1" data-index="5" />
+        </div>
+
+        <button class="btn btn-primary btn-full" id="verifyBtn" disabled>
+          <i class="fa-solid fa-spinner fa-spin" id="btnSpinner" style="display:none"></i>
+          <span id="btnText">Verify Email</span>
+        </button>
+
+        <div class="resend-row">
+          Didn't receive it?&nbsp;
+          <span id="timerText">Resend in <strong id="countdown">60</strong>s</span>
+          <button type="button" id="resendBtn">Resend Code</button>
+        </div>
+      </div>
+
+        <div class="success-screen" id="successScreen">
+
+            <h2>Success</h2>
+
+            <p>Registration has been completed successfully, welcome to Sanaa.</p>
+
+            <p>If you wish to offer your services through our website, you must first register as a freelancer.</p>
+
+            <div class="buttons">
+
+                <button class="freelancer" onclick="registerAsFreelancer()">Register as a Freelancer</button>
+
+                <button class="customer" onclick="continueAsCustomer()">Continue as a Customer</button>
+
+            </div>
+
+        </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/otpJS.JS"></script>
+</body>
+</html>

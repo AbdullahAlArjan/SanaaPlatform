@@ -20,5 +20,6 @@ namespace Sanaa.BLL.Interfaces
         Task<bool> ApproveFreelancerAsync(int freelancerId);
         Task<bool> RejectFreelancerAsync(int freelancerId);
         Task<IEnumerable<FreelancerProfileResponse>> GetPendingFreelancersAsync();
+        Task<IEnumerable<FreelancerProfileResponse>> GetAllFreelancerProfilesAsync();
     }
 }

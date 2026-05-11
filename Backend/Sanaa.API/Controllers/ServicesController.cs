@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Sanaa.BLL.Interfaces;
+using Sanaa.BLL.DTOs;
 using Sanaa.DAL.Entities;
 using System.Threading.Tasks;
 
@@ -11,13 +13,11 @@ namespace Sanaa.API.Controllers
     {
         private readonly IServiceService _serviceService;
 
-        // حقن الـ Service (Dependency Injection)
         public ServicesController(IServiceService serviceService)
         {
             _serviceService = serviceService;
         }
 
-        // 1. جلب كل الخدمات (مثلاً لعرضها بقائمة منسدلة Dropdown)
         [HttpGet]
         public async Task<IActionResult> GetAllServices()
         {
@@ -25,7 +25,6 @@ namespace Sanaa.API.Controllers
             return Ok(services);
         }
 
-        // 2. جلب خدمة معينة حسب رقمها
         [HttpGet("{id}")]
         public async Task<IActionResult> GetServiceById(int id)
         {
@@ -36,15 +35,31 @@ namespace Sanaa.API.Controllers
             return Ok(service);
         }
 
-        // 3. إضافة خدمة جديدة للمنصة
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> AddService([FromBody] Service service)
+        public async Task<IActionResult> AddService([FromBody] CreateServiceRequest request)
         {
-            var result = await _serviceService.AddServiceAsync(service);
-            if (result)
-                return Ok("تمت إضافة الخدمة بنجاح");
-
+            var result = await _serviceService.AddServiceAsync(request);
+            if (result) return Ok("تمت إضافة الخدمة بنجاح");
             return BadRequest("فشلت عملية إضافة الخدمة");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateService(int id, [FromBody] UpdateServiceRequest request)
+        {
+            var result = await _serviceService.UpdateServiceAsync(id, request);
+            if (result) return Ok("تم تحديث الخدمة بنجاح");
+            return NotFound("الخدمة غير موجودة");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteService(int id)
+        {
+            var result = await _serviceService.DeleteServiceAsync(id);
+            if (result) return Ok("تم حذف الخدمة بنجاح");
+            return NotFound("الخدمة غير موجودة");
         }
     }
 }

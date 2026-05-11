@@ -1,4 +1,4 @@
-﻿using Sanaa.BLL.DTOs;
+using Sanaa.BLL.DTOs;
 using Sanaa.DAL.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,8 +8,10 @@ namespace Sanaa.BLL.Interfaces
 {
     public interface IOrderService
     {
-        Task<bool> CreateOrderAsync(CreateOrderRequest request);
+        Task<bool> CreateOrderAsync(int clientId, CreateOrderRequest request);
         Task<PagedResponse<OrderResponse>> GetOrdersForFreelancerAsync(int freelancerId, int pageNumber, int pageSize);
-        Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus status);
+        Task<PagedResponse<OrderResponse>> GetOrdersForClientAsync(int clientId, int pageNumber, int pageSize);
+        Task<bool> UpdateOrderStatusAsync(int orderId, int freelancerId, OrderStatus status);
+        Task<bool> CancelOrderAsync(int orderId, int clientId);
     }
 }

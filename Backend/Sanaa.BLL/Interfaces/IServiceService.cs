@@ -1,4 +1,5 @@
-﻿using Sanaa.DAL.Entities; 
+using Sanaa.DAL.Entities; 
+using Sanaa.BLL.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,6 +9,8 @@ namespace Sanaa.BLL.Interfaces
     {
         Task<IEnumerable<Service>> GetAllServicesAsync();
         Task<Service> GetServiceByIdAsync(int id);
-        Task<bool> AddServiceAsync(Service service);
+        Task<bool> AddServiceAsync(CreateServiceRequest request);
+        Task<bool> UpdateServiceAsync(int id, UpdateServiceRequest request);
+        Task<bool> DeleteServiceAsync(int id);
     }
 }

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoice — Sanaa Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/globals.css" />
+  <link rel="stylesheet" href="css/public.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <nav class="pub-nav">
+    <div class="pub-nav-inner">
+      <a href="index.html" class="nav-brand">San<span>aa</span></a>
+      <div class="nav-user" id="navUser"></div>
+    </div>
+  </nav>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="invoice-page">
+    <a class="back-link" href="javascript:history.back()" style="display:inline-flex;align-items:center;gap:var(--sp-2);font-size:var(--text-sm);color:var(--text-medium);margin-bottom:var(--sp-5);text-decoration:none;">
+      <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+
+    <!-- Loader -->
+    <div class="page-loader" id="pageLoader" style="min-height:300px;">
+      <div class="spinner"></div><p>Loading invoice…</p>
+    </div>
+
+    <!-- Invoice document -->
+    <div class="invoice-doc" id="invoiceDoc" style="display:none;">
+
+      <div class="invoice-top">
+        <div class="invoice-brand">
+          <h2>San<span>aa</span></h2>
+          <p>Jordan's Freelance Marketplace</p>
+        </div>
+        <div class="invoice-meta">
+          <div class="inv-num">INVOICE #<span id="invNumber">—</span></div>
+          <div class="inv-date" id="invDate">—</div>
+          <div class="inv-status" id="invStatus">—</div>
+        </div>
+      </div>
+
+      <div class="invoice-parties">
+        <div>
+          <div class="party-label">Billed To</div>
+          <div class="party-name"   id="clientName">—</div>
+          <div class="party-detail" id="clientDetail">—</div>
+        </div>
+        <div>
+          <div class="party-label">Service Provider</div>
+          <div class="party-name"   id="freelancerName">—</div>
+          <div class="party-detail" id="freelancerDetail">—</div>
+        </div>
+      </div>
+
+      <div class="invoice-items">
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th style="width:50%;">Description</th>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="itemsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="invoice-totals">
+        <div class="totals-box">
+          <div class="total-row"><span>Subtotal</span><span id="subtotal">—</span></div>
+          <div class="total-row"><span>Platform Fee (0%)</span><span>JD 0.00</span></div>
+          <div class="total-row grand"><span>Total Due</span><span id="totalDue">—</span></div>
+        </div>
+      </div>
+
+      <div class="invoice-actions">
+        <button class="btn btn-primary" onclick="window.print()">
+          <i class="fa-solid fa-print"></i> Print / Save PDF
+        </button>
+        <a href="payment.html" id="payBtn" class="btn btn-outline" style="display:none;">
+          <i class="fa-solid fa-credit-card"></i> Pay Now
+        </a>
+        <a href="dashboard-customer.html" class="btn btn-ghost">
+          <i class="fa-solid fa-grid-2"></i> Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="empty-state" id="errorState" style="display:none;">
+      <i class="fa-solid fa-file-circle-xmark"></i>
+      <h3>Invoice not found</h3>
+      <p>This invoice doesn't exist or you don't have access to it.</p>
+      <a href="dashboard-customer.html" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <script type="module" src="js/invoice.js"></script>
+</body>
+</html>

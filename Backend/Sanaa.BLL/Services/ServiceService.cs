@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Sanaa.BLL.Interfaces;
+using Sanaa.BLL.DTOs;
 using Sanaa.DAL;
 using Sanaa.DAL.Entities;
 using System.Collections.Generic;
@@ -29,11 +30,42 @@ namespace Sanaa.BLL.Services
         }
 
         // 3. إضافة خدمة جديدة للمنصة
-        public async Task<bool> AddServiceAsync(Service service)
+        public async Task<bool> AddServiceAsync(CreateServiceRequest request)
         {
+            var service = new Service
+            {
+                CategoryID = request.CategoryID,
+                Title = request.Title,
+                Description = request.Description,
+                BasePrice = request.BasePrice,
+                IsActive = true,
+                CreatedAt = System.DateTime.Now
+            };
             _context.Services.Add(service);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> UpdateServiceAsync(int id, UpdateServiceRequest request)
+        {
+            var service = await _context.Services.FindAsync(id);
+            if (service == null) return false;
+
+            service.CategoryID = request.CategoryID;
+            service.Title = request.Title;
+            service.Description = request.Description;
+            service.BasePrice = request.BasePrice;
+            service.IsActive = request.IsActive;
+
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> DeleteServiceAsync(int id)
+        {
+            var service = await _context.Services.FindAsync(id);
+            if (service == null) return false;
+
+            _context.Services.Remove(service);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

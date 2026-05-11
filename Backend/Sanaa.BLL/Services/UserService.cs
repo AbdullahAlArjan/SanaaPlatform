@@ -134,12 +134,17 @@ namespace Sanaa.BLL.Services
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-                return null;
+            if (user == null)
+                return new LoginResponse { AccessToken = "USER_NOT_FOUND" };
 
-            // sentinel value as a special LoginResponse with empty token
-            if (!user.IsEmailVerified)
-                return new LoginResponse { AccessToken = "EMAIL_NOT_VERIFIED", RefreshToken = string.Empty };
+            if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+                return new LoginResponse { AccessToken = "WRONG_PASSWORD" };
+
+            var requireVerification = !string.Equals(
+                _configuration["Auth:RequireEmailVerification"], "false",
+                StringComparison.OrdinalIgnoreCase);
+            if (requireVerification && !user.IsEmailVerified)
+                return new LoginResponse { AccessToken = "EMAIL_NOT_VERIFIED" };
 
             return await CreateLoginResponseAsync(user);
         }
@@ -163,7 +168,10 @@ namespace Sanaa.BLL.Services
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshTokenValue,
-                AccessTokenExpiry = expiry
+                AccessTokenExpiry = expiry,
+                Role = user.Role,
+                FullName = user.FullName,
+                Email = user.Email
             };
         }
 

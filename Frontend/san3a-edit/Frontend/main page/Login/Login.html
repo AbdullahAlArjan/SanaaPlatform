@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html  lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana'a - Login</title>
+    <link rel="stylesheet" href="loginStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <!-- Left Side -->
+        <div class="brand-section">
+            <div class="brand-content">
+                <h1 class="brand-title">صنعة<span style="color: #3498db;">Sana'a</span></h1>
+                <p class="brand-subtitle">Jordanian market for professions and freelance work</p>
+                <div class="register-prompt">
+                    <p>Not registered yet?</p>
+                    <a href="register.html" class="register-link">Create your account now</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="login-section">
+            <div class="login-card">
+                <h2 class="login-title">Welcome </h2>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                        <span class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+
+                    <div class="forgot-password">
+                        <a href="#" id="forgotPasswordLink">Forgot your password?</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">Login</button>
+
+                    <!-- Error message for login -->
+                    <div id="errorMessage" style="color: red; display: none; margin-top: 10px; text-align: center;">
+                        Invalid email or password. Please try again.
+                    </div>
+
+                    <div class="social-login">
+                        <button type="button" class="social-btn google">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button type="button" class="social-btn facebook">
+                            <i class="fab fa-facebook-f"></i> Facebook
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Forgot Your Password?</h2>
+            <p>Enter your email address, and we'll send you a link to reset your password.</p>
+            <form id="forgotPasswordForm">
+                <div class="input-group">
+                    <label for="forgotEmail">Email</label>
+                    <input type="email" id="forgotEmail" required>
+                </div>
+                <button type="submit" class="reset-btn">Send Reset Link</button>
+            </form>
+            <div id="forgotPasswordMessage" style="color: green; display: none; margin-top: 10px; text-align: center;">
+                A password reset link has been sent to your email.
+            </div>
+        </div>
+    </div>
+
+    <script src="LoginJS.js"></script>
+</body>
+</html>
