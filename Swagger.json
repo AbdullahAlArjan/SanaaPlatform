@@ -1,1941 +1,1698 @@
 {
-  openapi 3.0.1,
-  info {
-    title Sanaa API,
-    version v1
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Sanaa API",
+    "version": "v1"
   },
-  paths {
-    apiAdmindashboard-stats {
-      get {
-        tags [
-          Admin
+  "paths": {
+    "/api/Admin/dashboard-stats": {
+      "get": {
+        "tags": [
+          "Admin"
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiAdmintoggle-user-status{id} {
-      put {
-        tags [
-          Admin
+    "/api/Admin/toggle-user-status/{id}": {
+      "put": {
+        "tags": [
+          "Admin"
         ],
-        parameters [
+        "parameters": [
           {
-            name id,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiAdminusers{id} {
-      delete {
-        tags [
-          Admin
+    "/api/Admin/users/{id}": {
+      "delete": {
+        "tags": [
+          "Admin"
         ],
-        parameters [
+        "parameters": [
           {
-            name id,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiAdminusersdeleted {
-      get {
-        tags [
-          Admin
+    "/api/Admin/users/deleted": {
+      "get": {
+        "tags": [
+          "Admin"
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiAdminfreelancerspending {
-      get {
-        tags [
-          Admin
+    "/api/Admin/freelancers": {
+      "get": {
+        "tags": [
+          "Admin"
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiAdminfreelancers{id}approve {
-      put {
-        tags [
-          Admin
+    "/api/Admin/freelancers/pending": {
+      "get": {
+        "tags": [
+          "Admin"
         ],
-        parameters [
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/freelancers/{id}/approve": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
           {
-            name id,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiAdminfreelancers{id}reject {
-      put {
-        tags [
-          Admin
+    "/api/Admin/freelancers/{id}/reject": {
+      "put": {
+        "tags": [
+          "Admin"
         ],
-        parameters [
+        "parameters": [
           {
-            name id,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiauthsend-otp {
-      post {
-        tags [
-          Auth
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasSendOtpRequest
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasSendOtpRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasSendOtpRequest
-              }
-            }
-          }
-        },
-        responses {
-          200 {
-            description OK
-          }
-        }
-      }
-    },
-    apiauthverify-otp {
-      post {
-        tags [
-          Auth
-        ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasVerifyOtpRequest
-              }
-            },
-            textjson {
-              schema {
-                $ref #componentsschemasVerifyOtpRequest
-              }
-            },
-            application+json {
-              schema {
-                $ref #componentsschemasVerifyOtpRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiauthforgot-password {
-      post {
-        tags [
-          Auth
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasForgotPasswordRequest
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasForgotPasswordRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasForgotPasswordRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiauthreset-password {
-      post {
-        tags [
-          Auth
+    "/api/auth/send-otp": {
+      "post": {
+        "tags": [
+          "Auth"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasResetPasswordRequest
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendOtpRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasResetPasswordRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendOtpRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasResetPasswordRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendOtpRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiauthrefresh {
-      post {
-        tags [
-          Auth
+    "/api/auth/verify-otp": {
+      "post": {
+        "tags": [
+          "Auth"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasRefreshTokenRequest
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasRefreshTokenRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasRefreshTokenRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiauthlogout {
-      post {
-        tags [
-          Auth
+    "/api/auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Auth"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasRefreshTokenRequest
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasRefreshTokenRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasRefreshTokenRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiCategories {
-      get {
-        tags [
-          Categories
+    "/api/auth/reset-password": {
+      "post": {
+        "tags": [
+          "Auth"
         ],
-        parameters [
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "parameters": [
           {
-            name search,
-            in query,
-            schema {
-              type string
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           },
           {
-            name page,
-            in query,
-            schema {
-              type integer,
-              format int32,
-              default 1
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
             }
           },
           {
-            name pageSize,
-            in query,
-            schema {
-              type integer,
-              format int32,
-              default 10
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
-      post {
-        tags [
-          Categories
+      "post": {
+        "tags": [
+          "Categories"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasCreateCategoryDto
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasCreateCategoryDto
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasCreateCategoryDto
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiCategories{id} {
-      get {
-        tags [
-          Categories
+    "/api/Categories/{id}": {
+      "get": {
+        "tags": [
+          "Categories"
         ],
-        parameters [
+        "parameters": [
           {
-            name id,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
-      put {
-        tags [
-          Categories
+      "put": {
+        "tags": [
+          "Categories"
         ],
-        parameters [
+        "parameters": [
           {
-            name id,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasCreateCategoryDto
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasCreateCategoryDto
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasCreateCategoryDto
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
-      delete {
-        tags [
-          Categories
+      "delete": {
+        "tags": [
+          "Categories"
         ],
-        parameters [
+        "parameters": [
           {
-            name id,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiChatbotmessage {
-      post {
-        tags [
-          Chatbot
+    "/api/Chatbot/message": {
+      "post": {
+        "tags": [
+          "Chatbot"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasChatbotRequest
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatbotRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasChatbotRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatbotRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasChatbotRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatbotRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiFreelancerscreate-profile {
-      post {
-        tags [
-          Freelancers
+    "/api/Freelancers/profile": {
+      "post": {
+        "tags": [
+          "Freelancers"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasCreateProfileRequest
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProfileRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasCreateProfileRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProfileRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasCreateProfileRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProfileRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiFreelancers{userId} {
-      get {
-        tags [
-          Freelancers
+    "/api/Freelancers/{userId}": {
+      "get": {
+        "tags": [
+          "Freelancers"
         ],
-        parameters [
+        "parameters": [
           {
-            name userId,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiFreelancerssearch {
-      get {
-        tags [
-          Freelancers
+    "/api/Freelancers/search": {
+      "get": {
+        "tags": [
+          "Freelancers"
         ],
-        parameters [
+        "parameters": [
           {
-            name profession,
-            in query,
-            schema {
-              type string
+            "name": "profession",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           },
           {
-            name city,
-            in query,
-            schema {
-              type string
+            "name": "city",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           },
           {
-            name serviceId,
-            in query,
-            schema {
-              type integer,
-              format int32
+            "name": "serviceId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiFreelancersprofile-image {
-      post {
-        tags [
-          Freelancers
+    "/api/Freelancers/profile-image": {
+      "post": {
+        "tags": [
+          "Freelancers"
         ],
-        requestBody {
-          content {
-            multipartform-data {
-              schema {
-                type object,
-                properties {
-                  file {
-                    type string,
-                    format binary
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 }
               },
-              encoding {
-                file {
-                  style form
+              "encoding": {
+                "file": {
+                  "style": "form"
                 }
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiFreelancersportfolio {
-      post {
-        tags [
-          Freelancers
+    "/api/Freelancers/portfolio": {
+      "post": {
+        "tags": [
+          "Freelancers"
         ],
-        requestBody {
-          content {
-            multipartform-data {
-              schema {
-                type object,
-                properties {
-                  file {
-                    type string,
-                    format binary
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 }
               },
-              encoding {
-                file {
-                  style form
+              "encoding": {
+                "file": {
+                  "style": "form"
                 }
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
-      delete {
-        tags [
-          Freelancers
+      "delete": {
+        "tags": [
+          "Freelancers"
         ],
-        parameters [
+        "parameters": [
           {
-            name imageUrl,
-            in query,
-            schema {
-              type string
+            "name": "imageUrl",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiFreelancers{userId}portfolio {
-      get {
-        tags [
-          Freelancers
+    "/api/Freelancers/{userId}/portfolio": {
+      "get": {
+        "tags": [
+          "Freelancers"
         ],
-        parameters [
+        "parameters": [
           {
-            name userId,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiInvoicesorder{orderId} {
-      get {
-        tags [
-          Invoices
+    "/api/Invoices/order/{orderId}": {
+      "get": {
+        "tags": [
+          "Invoices"
         ],
-        parameters [
+        "parameters": [
           {
-            name orderId,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiOrderscreate {
-      post {
-        tags [
-          Orders
+    "/api/Orders": {
+      "post": {
+        "tags": [
+          "Orders"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasCreateOrderRequest
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasCreateOrderRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasCreateOrderRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiOrdersfreelancer{freelancerId} {
-      get {
-        tags [
-          Orders
+    "/api/Orders/my-orders": {
+      "get": {
+        "tags": [
+          "Orders"
         ],
-        parameters [
+        "parameters": [
           {
-            name freelancerId,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
             }
           },
           {
-            name pageNumber,
-            in query,
-            schema {
-              type integer,
-              format int32,
-              default 1
-            }
-          },
-          {
-            name pageSize,
-            in query,
-            schema {
-              type integer,
-              format int32,
-              default 10
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiOrders{orderId}status {
-      put {
-        tags [
-          Orders
+    "/api/Orders/freelancer": {
+      "get": {
+        "tags": [
+          "Orders"
         ],
-        parameters [
+        "parameters": [
           {
-            name orderId,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
             }
           },
           {
-            name status,
-            in query,
-            schema {
-              $ref #componentsschemasOrderStatus
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiPaymentscreate-intent {
-      post {
-        tags [
-          Payments
+    "/api/Orders/{orderId}/status": {
+      "put": {
+        "tags": [
+          "Orders"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasCreatePaymentIntentRequest
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OrderStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Orders/{orderId}/cancel": {
+      "put": {
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Payments/create-intent": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentIntentRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasCreatePaymentIntentRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentIntentRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasCreatePaymentIntentRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentIntentRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiPaymentswebhook {
-      post {
-        tags [
-          Payments
+    "/api/Payments/webhook": {
+      "post": {
+        "tags": [
+          "Payments"
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiReports {
-      post {
-        tags [
-          Reports
+    "/api/Reports": {
+      "post": {
+        "tags": [
+          "Reports"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasSubmitReportRequest
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitReportRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasSubmitReportRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitReportRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasSubmitReportRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitReportRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
-      get {
-        tags [
-          Reports
+      "get": {
+        "tags": [
+          "Reports"
         ],
-        parameters [
+        "parameters": [
           {
-            name status,
-            in query,
-            schema {
-              type string
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           },
           {
-            name pageNumber,
-            in query,
-            schema {
-              type integer,
-              format int32,
-              default 1
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
             }
           },
           {
-            name pageSize,
-            in query,
-            schema {
-              type integer,
-              format int32,
-              default 10
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiReports{id}status {
-      put {
-        tags [
-          Reports
+    "/api/Reports/{id}/status": {
+      "put": {
+        "tags": [
+          "Reports"
         ],
-        parameters [
+        "parameters": [
           {
-            name id,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasUpdateReportStatusRequest
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReportStatusRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasUpdateReportStatusRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReportStatusRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasUpdateReportStatusRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReportStatusRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiReviewsadd {
-      post {
-        tags [
-          Reviews
+    "/api/Reviews/add": {
+      "post": {
+        "tags": [
+          "Reviews"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasCreateReviewRequest
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasCreateReviewRequest
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasCreateReviewRequest
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiReviewsfreelancer{freelancerId} {
-      get {
-        tags [
-          Reviews
+    "/api/Reviews/freelancer/{freelancerId}": {
+      "get": {
+        "tags": [
+          "Reviews"
         ],
-        parameters [
+        "parameters": [
           {
-            name freelancerId,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "freelancerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiServices {
-      get {
-        tags [
-          Services
+    "/api/Services": {
+      "get": {
+        "tags": [
+          "Services"
         ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
-      post {
-        tags [
-          Services
+      "post": {
+        "tags": [
+          "Services"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasService
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasService
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasService
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiServices{id} {
-      get {
-        tags [
-          Services
+    "/api/Services/{id}": {
+      "get": {
+        "tags": [
+          "Services"
         ],
-        parameters [
+        "parameters": [
           {
-            name id,
-            in path,
-            required true,
-            schema {
-              type integer,
-              format int32
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
-        responses {
-          200 {
-            description OK
-          }
-        }
-      }
-    },
-    apiTestNotificationssend-alert {
-      post {
-        tags [
-          TestNotifications
-        ],
-        parameters [
-          {
-            name message,
-            in query,
-            schema {
-              type string
-            }
-          }
-        ],
-        responses {
-          200 {
-            description OK
-          }
-        }
-      }
-    },
-    apiUsers {
-      get {
-        tags [
-          Users
-        ],
-        parameters [
-          {
-            name SearchTerm,
-            in query,
-            schema {
-              type string
-            }
-          },
-          {
-            name City,
-            in query,
-            schema {
-              type string
-            }
-          },
-          {
-            name Profession,
-            in query,
-            schema {
-              type string
-            }
-          }
-        ],
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
-      post {
-        tags [
-          Users
+      "put": {
+        "tags": [
+          "Services"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasUser
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateServiceRequest"
               }
             },
-            textjson {
-              schema {
-                $ref #componentsschemasUser
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateServiceRequest"
               }
             },
-            application+json {
-              schema {
-                $ref #componentsschemasUser
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateServiceRequest"
               }
             }
           }
         },
-        responses {
-          200 {
-            description OK
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Services"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    apiUserslogin {
-      post {
-        tags [
-          Users
+    "/api/TestNotifications/send-alert": {
+      "post": {
+        "tags": [
+          "TestNotifications"
         ],
-        requestBody {
-          content {
-            applicationjson {
-              schema {
-                $ref #componentsschemasLoginRequest
-              }
-            },
-            textjson {
-              schema {
-                $ref #componentsschemasLoginRequest
-              }
-            },
-            application+json {
-              schema {
-                $ref #componentsschemasLoginRequest
-              }
+        "parameters": [
+          {
+            "name": "message",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
-        },
-        responses {
-          200 {
-            description OK
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    WeatherForecast {
-      get {
-        tags [
-          WeatherForecast
+    "/api/Users": {
+      "get": {
+        "tags": [
+          "Users"
         ],
-        operationId GetWeatherForecast,
-        responses {
-          200 {
-            description OK,
-            content {
-              textplain {
-                schema {
-                  type array,
-                  items {
-                    $ref #componentsschemasWeatherForecast
-                  }
-                }
-              },
-              applicationjson {
-                schema {
-                  type array,
-                  items {
-                    $ref #componentsschemasWeatherForecast
-                  }
-                }
-              },
-              textjson {
-                schema {
-                  type array,
-                  items {
-                    $ref #componentsschemasWeatherForecast
-                  }
-                }
-              }
+        "parameters": [
+          {
+            "name": "SearchTerm",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
+          },
+          {
+            "name": "City",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Profession",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     }
   },
-  components {
-    schemas {
-      ApprovalStatus {
-        enum [
-          0,
-          1,
-          2
-        ],
-        type integer,
-        format int32
-      },
-      ChatMessageDto {
-        type object,
-        properties {
-          role {
-            type string,
-            nullable true
+  "components": {
+    "schemas": {
+      "ChatMessageDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "nullable": true
           },
-          content {
-            type string,
-            nullable true
+          "content": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      ChatbotRequest {
-        type object,
-        properties {
-          message {
-            type string,
-            nullable true
+      "ChatbotRequest": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
           },
-          conversationHistory {
-            type array,
-            items {
-              $ref #componentsschemasChatMessageDto
+          "conversationHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChatMessageDto"
             },
-            nullable true
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      CreateCategoryDto {
-        required [
-          name
+      "CreateCategoryDto": {
+        "required": [
+          "name"
         ],
-        type object,
-        properties {
-          name {
-            maxLength 100,
-            minLength 1,
-            type string
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
           },
-          description {
-            type string,
-            nullable true
+          "description": {
+            "type": "string",
+            "nullable": true
           },
-          imageUrl {
-            type string,
-            nullable true
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      CreateOrderRequest {
-        type object,
-        properties {
-          clientID {
-            type integer,
-            format int32
+      "CreateOrderRequest": {
+        "type": "object",
+        "properties": {
+          "freelancerID": {
+            "type": "integer",
+            "format": "int32"
           },
-          freelancerID {
-            type integer,
-            format int32
+          "serviceID": {
+            "type": "integer",
+            "format": "int32"
           },
-          description {
-            type string,
-            nullable true
+          "description": {
+            "type": "string",
+            "nullable": true
           },
-          location {
-            type string,
-            nullable true
+          "location": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      CreatePaymentIntentRequest {
-        type object,
-        properties {
-          orderId {
-            type integer,
-            format int32
+      "CreatePaymentIntentRequest": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "format": "int32"
           },
-          amount {
-            type number,
-            format double
+          "amount": {
+            "type": "number",
+            "format": "double"
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      CreateProfileRequest {
-        type object,
-        properties {
-          userID {
-            type integer,
-            format int32
+      "CreateProfileRequest": {
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "integer",
+            "format": "int32"
           },
-          profession {
-            type string,
-            nullable true
+          "profession": {
+            "type": "string",
+            "nullable": true
           },
-          experienceYears {
-            type integer,
-            format int32
+          "experienceYears": {
+            "type": "integer",
+            "format": "int32"
           },
-          city {
-            type string,
-            nullable true
+          "city": {
+            "type": "string",
+            "nullable": true
           },
-          serviceIds {
-            type array,
-            items {
-              type integer,
-              format int32
+          "serviceIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
             },
-            nullable true
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      CreateReviewRequest {
-        type object,
-        properties {
-          orderID {
-            type integer,
-            format int32
+      "CreateReviewRequest": {
+        "type": "object",
+        "properties": {
+          "orderID": {
+            "type": "integer",
+            "format": "int32"
           },
-          clientID {
-            type integer,
-            format int32
+          "freelancerID": {
+            "type": "integer",
+            "format": "int32"
           },
-          freelancerID {
-            type integer,
-            format int32
+          "rating": {
+            "type": "integer",
+            "format": "int32"
           },
-          rating {
-            type integer,
-            format int32
-          },
-          comment {
-            type string,
-            nullable true
+          "comment": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      ForgotPasswordRequest {
-        type object,
-        properties {
-          email {
-            type string,
-            nullable true
+      "CreateServiceRequest": {
+        "type": "object",
+        "properties": {
+          "categoryID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "basePrice": {
+            "type": "number",
+            "format": "double"
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      FreelancerProfile {
-        required [
-          profession
-        ],
-        type object,
-        properties {
-          freelancerID {
-            type integer,
-            format int32
-          },
-          profession {
-            maxLength 100,
-            minLength 1,
-            type string
-          },
-          experienceYears {
-            type integer,
-            format int32
-          },
-          city {
-            maxLength 50,
-            type string,
-            nullable true
-          },
-          availabilityStatus {
-            maxLength 20,
-            type string,
-            nullable true
-          },
-          averageRating {
-            type number,
-            format double
-          },
-          profileImageUrl {
-            maxLength 500,
-            type string,
-            nullable true
-          },
-          portfolioImagesJson {
-            type string,
-            nullable true
-          },
-          approvalStatus {
-            $ref #componentsschemasApprovalStatus
-          },
-          user {
-            $ref #componentsschemasUser
-          },
-          freelancerServices {
-            type array,
-            items {
-              $ref #componentsschemasFreelancerService
-            },
-            nullable true
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      FreelancerService {
-        type object,
-        properties {
-          freelancerID {
-            type integer,
-            format int32
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
           },
-          freelancerProfile {
-            $ref #componentsschemasFreelancerProfile
-          },
-          serviceID {
-            type integer,
-            format int32
-          },
-          service {
-            $ref #componentsschemasService
-          },
-          customPrice {
-            type number,
-            format double,
-            nullable true
-          },
-          isAvailable {
-            type boolean
+          "password": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      LoginRequest {
-        type object,
-        properties {
-          email {
-            type string,
-            nullable true
-          },
-          password {
-            type string,
-            nullable true
-          }
-        },
-        additionalProperties false
-      },
-      OrderStatus {
-        enum [
+      "OrderStatus": {
+        "enum": [
           0,
           1,
           2,
           3
         ],
-        type integer,
-        format int32
+        "type": "integer",
+        "format": "int32"
       },
-      OtpCode {
-        required [
-          code
-        ],
-        type object,
-        properties {
-          id {
-            type integer,
-            format int32
-          },
-          userId {
-            type integer,
-            format int32
-          },
-          user {
-            $ref #componentsschemasUser
-          },
-          code {
-            maxLength 10,
-            minLength 1,
-            type string
-          },
-          purpose {
-            $ref #componentsschemasOtpPurpose
-          },
-          expiresAt {
-            type string,
-            format date-time
-          },
-          isUsed {
-            type boolean
-          },
-          createdAt {
-            type string,
-            format date-time
+      "RefreshTokenRequest": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      OtpPurpose {
-        enum [
-          0,
-          1
-        ],
-        type integer,
-        format int32
-      },
-      RefreshToken {
-        required [
-          token
-        ],
-        type object,
-        properties {
-          id {
-            type integer,
-            format int32
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "nullable": true
           },
-          userId {
-            type integer,
-            format int32
+          "email": {
+            "type": "string",
+            "nullable": true
           },
-          user {
-            $ref #componentsschemasUser
+          "password": {
+            "type": "string",
+            "nullable": true
           },
-          token {
-            maxLength 128,
-            minLength 1,
-            type string
+          "phone": {
+            "type": "string",
+            "nullable": true
           },
-          expiresAt {
-            type string,
-            format date-time
-          },
-          isRevoked {
-            type boolean
-          },
-          createdAt {
-            type string,
-            format date-time
+          "role": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      RefreshTokenRequest {
-        type object,
-        properties {
-          refreshToken {
-            type string,
-            nullable true
+      "ResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPassword": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      Report {
-        required [
-          reason
-        ],
-        type object,
-        properties {
-          reportID {
-            type integer,
-            format int32
+      "SendOtpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
           },
-          reporterID {
-            type integer,
-            format int32
-          },
-          reporter {
-            $ref #componentsschemasUser
-          },
-          targetType {
-            $ref #componentsschemasReportTargetType
-          },
-          targetID {
-            type integer,
-            format int32
-          },
-          reason {
-            maxLength 200,
-            minLength 1,
-            type string
-          },
-          description {
-            maxLength 1000,
-            type string,
-            nullable true
-          },
-          status {
-            $ref #componentsschemasReportStatus
-          },
-          createdAt {
-            type string,
-            format date-time
-          },
-          reviewedAt {
-            type string,
-            format date-time,
-            nullable true
-          },
-          adminNotes {
-            maxLength 500,
-            type string,
-            nullable true
+          "purpose": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      ReportStatus {
-        enum [
-          0,
-          1,
-          2,
-          3
-        ],
-        type integer,
-        format int32
-      },
-      ReportTargetType {
-        enum [
-          0,
-          1,
-          2
-        ],
-        type integer,
-        format int32
-      },
-      ResetPasswordRequest {
-        type object,
-        properties {
-          email {
-            type string,
-            nullable true
+      "SubmitReportRequest": {
+        "type": "object",
+        "properties": {
+          "targetType": {
+            "type": "string",
+            "nullable": true
           },
-          code {
-            type string,
-            nullable true
+          "targetID": {
+            "type": "integer",
+            "format": "int32"
           },
-          newPassword {
-            type string,
-            nullable true
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      SendOtpRequest {
-        type object,
-        properties {
-          email {
-            type string,
-            nullable true
+      "UpdateReportStatusRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "nullable": true
           },
-          purpose {
-            type string,
-            nullable true
+          "adminNotes": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      Service {
-        required [
-          title
-        ],
-        type object,
-        properties {
-          serviceID {
-            type integer,
-            format int32
+      "UpdateServiceRequest": {
+        "type": "object",
+        "properties": {
+          "categoryID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
-          categoryID {
-            type integer,
-            format int32,
-            nullable true
+          "title": {
+            "type": "string",
+            "nullable": true
           },
-          title {
-            maxLength 100,
-            minLength 1,
-            type string
+          "description": {
+            "type": "string",
+            "nullable": true
           },
-          description {
-            type string,
-            nullable true
+          "basePrice": {
+            "type": "number",
+            "format": "double"
           },
-          basePrice {
-            type number,
-            format double
-          },
-          createdAt {
-            type string,
-            format date-time
-          },
-          isActive {
-            type boolean
+          "isActive": {
+            "type": "boolean"
           }
         },
-        additionalProperties false
+        "additionalProperties": false
       },
-      SubmitReportRequest {
-        type object,
-        properties {
-          targetType {
-            type string,
-            nullable true
+      "VerifyOtpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
           },
-          targetID {
-            type integer,
-            format int32
+          "code": {
+            "type": "string",
+            "nullable": true
           },
-          reason {
-            type string,
-            nullable true
-          },
-          description {
-            type string,
-            nullable true
+          "purpose": {
+            "type": "string",
+            "nullable": true
           }
         },
-        additionalProperties false
-      },
-      UpdateReportStatusRequest {
-        type object,
-        properties {
-          status {
-            type string,
-            nullable true
-          },
-          adminNotes {
-            type string,
-            nullable true
-          }
-        },
-        additionalProperties false
-      },
-      User {
-        required [
-          email,
-          fullName,
-          passwordHash,
-          role
-        ],
-        type object,
-        properties {
-          userID {
-            type integer,
-            format int32
-          },
-          fullName {
-            maxLength 100,
-            minLength 1,
-            type string
-          },
-          email {
-            maxLength 150,
-            minLength 1,
-            type string,
-            format email
-          },
-          passwordHash {
-            maxLength 255,
-            minLength 1,
-            type string
-          },
-          phone {
-            maxLength 20,
-            type string,
-            nullable true
-          },
-          role {
-            maxLength 20,
-            minLength 1,
-            type string
-          },
-          joinDate {
-            type string,
-            format date-time
-          },
-          isActive {
-            type boolean
-          },
-          isEmailVerified {
-            type boolean
-          },
-          isDeleted {
-            type boolean
-          },
-          deletedAt {
-            type string,
-            format date-time,
-            nullable true
-          },
-          freelancerProfile {
-            $ref #componentsschemasFreelancerProfile
-          },
-          otpCodes {
-            type array,
-            items {
-              $ref #componentsschemasOtpCode
-            },
-            nullable true
-          },
-          reports {
-            type array,
-            items {
-              $ref #componentsschemasReport
-            },
-            nullable true
-          },
-          refreshTokens {
-            type array,
-            items {
-              $ref #componentsschemasRefreshToken
-            },
-            nullable true
-          }
-        },
-        additionalProperties false
-      },
-      VerifyOtpRequest {
-        type object,
-        properties {
-          email {
-            type string,
-            nullable true
-          },
-          code {
-            type string,
-            nullable true
-          },
-          purpose {
-            type string,
-            nullable true
-          }
-        },
-        additionalProperties false
-      },
-      WeatherForecast {
-        type object,
-        properties {
-          date {
-            type string,
-            format date
-          },
-          temperatureC {
-            type integer,
-            format int32
-          },
-          temperatureF {
-            type integer,
-            format int32,
-            readOnly true
-          },
-          summary {
-            type string,
-            nullable true
-          }
-        },
-        additionalProperties false
+        "additionalProperties": false
       }
     },
-    securitySchemes {
-      Bearer {
-        type apiKey,
-        description الرجاء إدخال التوكن بهذا الشكل Bearer {your_token},
-        name Authorization,
-        in header
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "الرجاء إدخال التوكن بهذا الشكل: Bearer {your_token}",
+        "name": "Authorization",
+        "in": "header"
       }
     }
   },
-  security [
+  "security": [
     {
-      Bearer [ ]
+      "Bearer": [ ]
     }
   ]
 }

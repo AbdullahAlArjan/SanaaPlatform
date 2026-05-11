@@ -64,6 +64,10 @@ namespace Sanaa.DAL.Migrations
                     b.Property<decimal>("AverageRating")
                         .HasColumnType("decimal(3,2)");
 
+                    b.Property<string>("Bio")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -190,6 +194,12 @@ namespace Sanaa.DAL.Migrations
                     b.Property<int?>("PaymentStatus")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ServiceID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("ServicePriceSnapshot")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -198,6 +208,8 @@ namespace Sanaa.DAL.Migrations
                     b.HasIndex("ClientID");
 
                     b.HasIndex("FreelancerID");
+
+                    b.HasIndex("ServiceID");
 
                     b.ToTable("Orders");
                 });
@@ -543,9 +555,15 @@ namespace Sanaa.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Sanaa.DAL.Entities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceID");
+
                     b.Navigation("Client");
 
                     b.Navigation("Freelancer");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("Sanaa.DAL.Entities.OtpCode", b =>
