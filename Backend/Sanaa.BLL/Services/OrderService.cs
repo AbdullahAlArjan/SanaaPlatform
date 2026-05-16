@@ -81,7 +81,9 @@ namespace Sanaa.BLL.Services
         public async Task<PagedResponse<OrderResponse>> GetOrdersForFreelancerAsync(int freelancerId, int pageNumber, int pageSize)
         {
             var query = _context.Orders
-                .Include(o => o.Client)
+                .Include(o => o.Client)                              // ClientName + ClientPhone
+                .Include(o => o.Freelancer).ThenInclude(f => f.User) // FIX: was null → HTTP 500
+                .Include(o => o.Service)                             // ServiceTitle
                 .Where(o => o.FreelancerID == freelancerId)
                 .OrderByDescending(o => o.OrderDate);
 
@@ -95,13 +97,17 @@ namespace Sanaa.BLL.Services
             {
                 Data = orders.Select(o => new OrderResponse
                 {
-                    OrderID = o.OrderID,
-                    ClientName = o.Client.FullName,
-                    FreelancerName = o.Freelancer.User != null ? o.Freelancer.User.FullName : "صنايعي",
-                    Description = o.Description,
-                    Location = o.Location,
-                    OrderDate = o.OrderDate,
-                    Status = o.Status.ToString()
+                    OrderID              = o.OrderID,
+                    ClientName           = o.Client.FullName,
+                    ClientPhone          = o.Client.Phone ?? string.Empty,
+                    FreelancerName       = o.Freelancer?.User?.FullName ?? "صنايعي",
+                    ServiceID            = o.ServiceID,
+                    ServiceTitle         = o.Service?.Title ?? string.Empty,
+                    ServicePriceSnapshot = o.ServicePriceSnapshot ?? 0m,
+                    Description          = o.Description,
+                    Location             = o.Location,
+                    OrderDate            = o.OrderDate,
+                    Status               = o.Status.ToString()
                 }),
                 TotalCount = totalCount,
                 PageNumber = pageNumber,

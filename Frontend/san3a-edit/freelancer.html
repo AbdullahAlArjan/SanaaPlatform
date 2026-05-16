@@ -3,196 +3,447 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freelancer Profile - Sana'a</title>
+    <title>Freelancer Dashboard — Sana'a</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/FreelancerStyle.css">
+    <style>
+        /* ── Design tokens ───────────────────────────────────────────────── */
+        :root {
+            --primary:      #2c3e50;
+            --accent:       #1877f2;
+            --green:        #27ae60;
+            --green-light:  #eafaf1;
+            --danger:       #e74c3c;
+            --warning:      #f39c12;
+            --bg:           #f0f2f5;
+            --card-bg:      #ffffff;
+            --border:       #e9ecef;
+            --text-muted:   #6c757d;
+            --shadow:       0 2px 16px rgba(44,62,80,0.09);
+            --radius:       14px;
+            --font:         'Segoe UI', system-ui, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--primary);
+            min-height: 100vh;
+        }
+
+        /* ── Top bar ─────────────────────────────────────────────────────── */
+        .top-bar {
+            background: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.85rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+        }
+        .website-name {
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .website-name:hover { opacity: .85; }
+
+        .notif-wrap { position: relative; cursor: pointer; color: #fff; font-size: 1.15rem; }
+        .notif-wrap:hover { opacity: .85; }
+        .notif-badge {
+            position: absolute; top: -7px; right: -8px;
+            background: var(--danger); color: #fff;
+            font-size: .65rem; font-weight: 700;
+            min-width: 18px; height: 18px; border-radius: 9px;
+            display: flex; align-items: center; justify-content: center; padding: 0 3px;
+        }
+        .notif-dropdown {
+            display: none; position: absolute; top: 2.4rem; right: 0;
+            background: #fff; border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            width: 290px; max-height: 340px; overflow-y: auto; z-index: 200;
+        }
+        .notif-dropdown.active { display: block; }
+        .notif-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: .75rem 1rem; border-bottom: 1px solid var(--border);
+            font-size: .85rem; font-weight: 600;
+        }
+        .mark-all-btn {
+            background: none; border: none; color: var(--accent);
+            font-size: .78rem; cursor: pointer;
+        }
+        .notif-item {
+            padding: .65rem 1rem; font-size: .84rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .notif-item.unread { background: #f0f7ff; }
+
+        /* ── Dashboard grid ──────────────────────────────────────────────── */
+        .dashboard-wrap {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 1.5rem;
+            max-width: 1280px;
+            margin: 1.5rem auto 3rem;
+            padding: 0 1.5rem;
+        }
+
+        /* ── Sidebar ─────────────────────────────────────────────────────── */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .profile-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.75rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            text-align: center;
+        }
+        .avatar-wrap { position: relative; width: 110px; height: 110px; }
+        .profile-pic {
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+            display: block;
+        }
+        .profile-card h2 {
+            font-size: 1.15rem; font-weight: 700;
+            color: var(--primary); margin-top: .3rem;
+        }
+        .profession-tag {
+            background: #e8f4fd; color: var(--accent);
+            border-radius: 20px; padding: .2rem .75rem;
+            font-size: .78rem; font-weight: 600;
+        }
+        .profile-meta { font-size: .85rem; color: var(--text-muted); }
+        .profile-meta p { display: flex; align-items: center; justify-content: center; gap: .4rem; margin: .25rem 0; }
+        .profile-meta i { color: var(--accent); width: 14px; text-align: center; }
+
+        .sidebar-btns { display: flex; flex-direction: column; gap: .55rem; width: 100%; margin-top: .5rem; }
+        .btn-sidebar {
+            display: flex; align-items: center; justify-content: center; gap: .45rem;
+            padding: .6rem 1rem; border-radius: 9px; border: none;
+            font-family: var(--font); font-size: .85rem; font-weight: 600;
+            cursor: pointer; text-decoration: none; transition: opacity .2s, transform .15s;
+        }
+        .btn-sidebar:hover { opacity: .88; transform: translateY(-1px); }
+        .btn-primary-solid { background: var(--accent); color: #fff; }
+        .btn-outline { background: transparent; border: 1.5px solid var(--accent); color: var(--accent); }
+        .btn-green { background: var(--green); color: #fff; }
+        .btn-whatsapp { background: #25d366; color: #fff; }
+
+        /* Contact card in sidebar */
+        .contact-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.1rem 1.25rem;
+            font-size: .87rem;
+        }
+        .contact-card h4 {
+            font-size: .78rem; text-transform: uppercase; letter-spacing: .06em;
+            color: var(--text-muted); margin-bottom: .65rem; font-weight: 700;
+        }
+        .contact-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .4rem; }
+        .contact-row i { color: var(--accent); width: 16px; }
+        #phoneNumber { font-weight: 600; }
+
+        /* ── Main content ────────────────────────────────────────────────── */
+        .main-content { display: flex; flex-direction: column; gap: 1.25rem; }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .section-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-header h3 {
+            font-size: 1rem; font-weight: 700;
+            display: flex; align-items: center; gap: .5rem;
+        }
+        .section-header h3 i { color: var(--accent); }
+        .section-body { padding: 1rem 1.25rem; }
+
+        .section-action {
+            font-size: .82rem; color: var(--accent); text-decoration: none;
+            font-weight: 600; transition: opacity .2s;
+        }
+        .section-action:hover { opacity: .75; }
+
+        /* ── Order cards ─────────────────────────────────────────────────── */
+        #orders-container { padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: .9rem; }
+
+        .order-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.1rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: .75rem;
+            transition: box-shadow .2s;
+        }
+        .order-card:hover { box-shadow: 0 4px 18px rgba(44,62,80,0.11); }
+
+        .order-card .order-title {
+            font-size: .97rem; font-weight: 700; color: var(--primary);
+            margin-bottom: .3rem;
+        }
+        .order-card .order-price {
+            font-size: .9rem; color: var(--accent); font-weight: 700; margin-bottom: .4rem;
+        }
+        .order-meta { font-size: .82rem; color: var(--text-muted); display: flex; flex-direction: column; gap: .2rem; }
+        .order-meta span { display: flex; align-items: center; gap: .35rem; }
+        .order-meta i { color: var(--accent); width: 14px; }
+
+        .order-right { display: flex; flex-direction: column; align-items: flex-end; gap: .6rem; }
+
+        .status-pill {
+            display: inline-block; padding: .22rem .7rem;
+            border-radius: 999px; font-size: .75rem; font-weight: 700;
+        }
+        .status-pending   { background: #fff3cd; color: #856404; }
+        .status-accepted  { background: #cce5ff; color: #004085; }
+        .status-completed { background: #d4edda; color: #155724; }
+        .status-rejected  { background: #f8d7da; color: #721c24; }
+
+        .order-actions { display: flex; gap: .45rem; flex-wrap: wrap; justify-content: flex-end; }
+        .btn-xs {
+            padding: .3rem .75rem; border-radius: 7px; border: none;
+            font-size: .78rem; font-weight: 600; cursor: pointer;
+            font-family: var(--font); transition: opacity .2s;
+        }
+        .btn-xs:hover { opacity: .85; }
+        .btn-accept  { background: var(--green);  color: #fff; }
+        .btn-decline { background: var(--danger);  color: #fff; }
+        .btn-whatsapp-sm { background: #25d366; color: #fff; text-decoration: none; }
+        .btn-complete { background: var(--accent); color: #fff; }
+
+        /* ── Stats row ───────────────────────────────────────────────────── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+        }
+        .stat-chip {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+        .stat-icon-wrap {
+            width: 42px; height: 42px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; flex-shrink: 0;
+        }
+        .icon-rating   { background: rgba(243,156,18,.18); color: var(--warning); }
+        .icon-complete { background: rgba(39,174,96,.18);  color: var(--green); }
+        .icon-earn     { background: rgba(24,119,242,.18); color: var(--accent); }
+        .stat-num { font-size: 1.3rem; font-weight: 700; color: var(--primary); display: block; }
+        .stat-lbl { font-size: .74rem; color: var(--text-muted); }
+
+        /* ── Services list ───────────────────────────────────────────────── */
+        #services-list { padding: .25rem 0; }
+        .service-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: .65rem 1.25rem; border-bottom: 1px solid var(--border);
+            font-size: .88rem;
+        }
+        .service-row:last-child { border-bottom: none; }
+        .service-row-name { font-weight: 600; }
+        .service-row-name.inactive { opacity: .45; text-decoration: line-through; }
+        .service-row-right { display: flex; align-items: center; gap: .75rem; }
+        .service-price { font-weight: 700; color: var(--accent); }
+        .service-badge {
+            font-size: .72rem; font-weight: 700; padding: .18rem .55rem;
+            border-radius: 999px;
+        }
+        .badge-active   { background: #d4edda; color: #155724; }
+        .badge-inactive { background: #f8d7da; color: #721c24; }
+
+        /* ── Utility ─────────────────────────────────────────────────────── */
+        .loading-hint, .empty-hint {
+            text-align: center; padding: 2rem; color: var(--text-muted); font-size: .9rem;
+        }
+        .loading-hint i { margin-right: .4rem; }
+        .err-hint { color: var(--danger); text-align: center; padding: 1.5rem; font-size: .88rem; }
+
+        /* ── Responsive ──────────────────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .dashboard-wrap { grid-template-columns: 1fr; }
+            .sidebar { flex-direction: row; flex-wrap: wrap; }
+            .profile-card, .contact-card { flex: 1; min-width: 240px; }
+        }
+        @media (max-width: 580px) {
+            .stats-row { grid-template-columns: 1fr 1fr; }
+            .order-card { grid-template-columns: 1fr; }
+            .order-right { flex-direction: row; flex-wrap: wrap; align-items: center; }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Top Navigation Bar -->
-        <div class="top-bar">
-            <div class="top-bar-left">
-                <a href="index.html" class="website-name">Sana'a</a>
+
+<!-- ── Top Navigation Bar ─────────────────────────────────────────── -->
+<header class="top-bar">
+    <a href="index.html" class="website-name">Sana'a</a>
+    <div class="notif-wrap" id="notificationIcon">
+        <i class="fas fa-bell"></i>
+        <span class="notif-badge" id="notificationCount">3</span>
+        <div class="notif-dropdown" id="notificationDropdown">
+            <div class="notif-header">
+                <span>Notifications</span>
+                <button class="mark-all-btn" id="markAllRead">
+                    <i class="fas fa-check-double"></i> Mark all read
+                </button>
             </div>
-            <div class="top-bar-right">
-                <div class="notification-icon" id="notificationIcon">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-count" id="notificationCount">3</span>
-                    <!-- Notification Dropdown -->
-                    <div class="notification-dropdown" id="notificationDropdown">
-                        <div class="notification-header">
-                            <h4>Notifications</h4>
-                            <button class="mark-all-read" id="markAllRead">
-                                <i class="fas fa-check-double"></i> Mark All as Read
-                            </button>
-                        </div>
-                        <div class="notification-list" id="notificationList">
-                            <div class="notification-item unread">
-                                <p>New project request from Client A</p>
-                            </div>
-                            <div class="notification-item unread">
-                                <p>Your service was featured</p>
-                            </div>
-                            <div class="notification-item unread">
-                                <p>Payment received for Logo Design</p>
-                            </div>
-                        </div>
+            <div id="notificationList">
+                <div class="notif-item unread"><p>New project request from a client</p></div>
+                <div class="notif-item unread"><p>Your service was featured</p></div>
+                <div class="notif-item unread"><p>Payment received</p></div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ── Dashboard Grid ─────────────────────────────────────────────── -->
+<div class="dashboard-wrap">
+
+    <!-- ══ LEFT SIDEBAR ══ -->
+    <aside class="sidebar">
+
+        <!-- Profile card -->
+        <div class="profile-card">
+            <div class="avatar-wrap">
+                <img id="profilePicture"
+                     src="https://placehold.co/200x200"
+                     class="profile-pic"
+                     alt="Profile Photo">
+            </div>
+            <h2 id="fullName">—</h2>
+            <span class="profession-tag" id="profession">—</span>
+            <div class="profile-meta">
+                <p><i class="fas fa-map-marker-alt"></i><span id="address">—</span></p>
+                <p><i class="fas fa-briefcase"></i><span id="experienceYears">—</span> yrs experience</p>
+            </div>
+            <div class="sidebar-btns">
+                <a href="FL-edit-profile.html" class="btn-sidebar btn-primary-solid">
+                    <i class="fas fa-pen"></i> Edit Profile
+                </a>
+                <a href="FL-post-service.html" class="btn-sidebar btn-green">
+                    <i class="fas fa-plus-circle"></i> Post New Service
+                </a>
+                <a href="FL-manage-services.html" class="btn-sidebar btn-outline">
+                    <i class="fas fa-tasks"></i> Manage Services
+                </a>
+            </div>
+        </div>
+
+        <!-- Contact card -->
+        <div class="contact-card">
+            <h4><i class="fas fa-address-card"></i> Contact</h4>
+            <div class="contact-row"><i class="fas fa-phone"></i><span id="phoneNumber">—</span></div>
+            <div class="contact-row"><i class="fas fa-envelope"></i><span id="emailDisplay">—</span></div>
+            <button class="btn-sidebar btn-whatsapp" style="margin-top:.75rem;"
+                    onclick="openWhatsApp()">
+                <i class="fab fa-whatsapp"></i> WhatsApp Me
+            </button>
+            <div style="margin-top:1rem;padding-top:.85rem;border-top:1px solid var(--border);">
+                <h4 style="margin-bottom:.5rem;"><i class="fas fa-user"></i> About</h4>
+                <p id="profile-description" style="font-size:.83rem;color:var(--text-muted);line-height:1.6;">—</p>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- ══ MAIN CONTENT ══ -->
+    <main class="main-content">
+
+        <!-- ── Section 1: Active Orders ──────────────────────────── -->
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-clipboard-list"></i> Active Orders</h3>
+                <a href="FL-manage-services.html" class="section-action">View all →</a>
+            </div>
+            <div id="orders-container">
+                <p class="loading-hint">
+                    <i class="fas fa-spinner fa-spin"></i> Loading orders…
+                </p>
+            </div>
+        </div>
+
+        <!-- ── Section 2: Statistics ──────────────────────────────── -->
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-chart-line"></i> Statistics</h3>
+            </div>
+            <div class="stats-row">
+                <div class="stat-chip">
+                    <div class="stat-icon-wrap icon-rating">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div>
+                        <span class="stat-num" id="avg-rating">—</span>
+                        <span class="stat-lbl">Avg Rating</span>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <div class="stat-icon-wrap icon-complete">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div>
+                        <span class="stat-num" id="completed-count">—</span>
+                        <span class="stat-lbl">Completed</span>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <div class="stat-icon-wrap icon-earn">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div>
+                        <span class="stat-num" id="total-earnings">—</span>
+                        <span class="stat-lbl">Earned</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Profile Section -->
-        <section class="profile-section">
-            <!-- Left Sidebar -->
-            <div class="profile-card">
-                <img src="https://placehold.co/200x200" class="profile-pic" alt="Freelancer Photo" id="profilePicture">
-                <h2 id="fullName">Abd Balasmeh</h2>
-                <div class="profile-info">
-                    <p class="profession" id="profession">Graphic Designer</p>
-                    <p><i class="fas fa-map-marker-alt"></i> <span id="address">Amman, Jordan</span></p>
-                    <p><i class="fas fa-birthday-cake"></i> <span id="age">22</span> years old</p>
-                </div>
-                <div class="action-buttons">
-                    <button class="btn btn-primary" onclick="window.location.href='FL-edit-profile.html'">
-                        <i class="fas fa-edit"></i> Edit Profile
-                    </button>
-                </div>
-                <!-- Post New Service and Manage Services Buttons -->
-                <div class="action-buttons">
-                    <button class="btn btn-primary" onclick="window.location.href='FL-post-service.html'">
-                        <i class="fas fa-plus-circle"></i> Post New Service
-                    </button>
-                    <button class="btn btn-primary" onclick="window.location.href='FL-manage-services.html'">
-                        <i class="fas fa-tasks"></i> Manage Services
-                    </button>
-                </div>
+        <!-- ── Section 3: My Services ─────────────────────────────── -->
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-briefcase"></i> My Services</h3>
+                <a href="FL-post-service.html" class="section-action">+ New</a>
             </div>
-
-            <!-- Main Content -->
-            <div class="main-grid">
-                <!-- Communication Card -->
-                <article class="info-card communication-card">
-                    <h3><i class="fas fa-phone"></i> Communication</h3>
-                    <div class="contact-info">
-                        <p>Phone: <span id="phoneNumber">+962 7 9783 2469</span></p>
-                        <div class="whatsapp-button">
-                            <button class="btn btn-secondary" onclick="openWhatsApp()">
-                                <i class="fab fa-whatsapp"></i> WhatsApp Me
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- About Me Section -->
-                    <div class="about-section">
-                        <h3><i class="fas fa-user"></i> About Me</h3>
-                        <p id="profile-description">Professional graphic designer with 5 years of experience creating stunning visual identities for businesses. Specializing in logo design, branding, and marketing materials. Passionate about delivering creative solutions that communicate brand values effectively.</p>
-                    </div>
-                </article>
-
-                <!-- My Services -->
-                <div class="info-card">
-                    <h3><i class="fas fa-briefcase"></i> My Services</h3>
-                    <div id="services-list">
-                        <!-- Example Services -->
-                        <div class="service-item">
-                            <span>Logo Design</span>
-                            <div class="service-meta">
-                                <span>$150</span>
-                                <small>85 buyers</small>
-                                <div class="availability-status active">Active</div>
-                            </div>
-                        </div>
-                        <div class="service-item">
-                            <span>Web Design</span>
-                            <div class="service-meta">
-                                <span>$500</span>
-                                <small>45 buyers</small>
-                                <div class="availability-status deactive">Deactive</div>
-                            </div>
-                        </div>
-                        <div class="service-item">
-                            <span>Social Media Design</span>
-                            <div class="service-meta">
-                                <span>$100</span>
-                                <small>30 buyers</small>
-                                <div class="availability-status active">Active</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Statistics -->
-                <div class="info-card stats-card">
-                    <h3><i class="fas fa-chart-line"></i> Statistics</h3>
-                    <div class="stats">
-                        <div class="stat-item">
-                            <div class="stat-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="stat-content">
-                                <h4>4.9/5</h4>
-                                <p>Average Rating</p>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-icon">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div class="stat-content">
-                                <h4>127</h4>
-                                <p>Completed Projects</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonials -->
-                <div class="testimonials">
-                    <h3><i class="fas fa-comments"></i> Client Reviews</h3>
-                    <div class="testimonial-carousel">
-                        <!-- Testimonial 1 -->
-                        <div class="testimonial-item active">
-                            <div class="rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <p>"Abd delivered exceptional work! The designs were modern and exactly what we needed for our rebranding."</p>
-                            <small>- John Doe, CEO at DesignCo</small>
-                        </div>
-                        <!-- Testimonial 2 -->
-                        <div class="testimonial-item">
-                            <div class="rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p>"Amazing designs and quick delivery! Abd is a true professional who understands the client's vision."</p>
-                            <small>- Jane Smith, Marketing Manager</small>
-                        </div>
-                        <!-- Testimonial 3 -->
-                        <div class="testimonial-item">
-                            <div class="rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p>"The logo Abd designed for us was beyond our expectations. Highly recommend his services!"</p>
-                            <small>- Ahmed Ali, Founder of TechStart</small>
-                        </div>
-                    </div>
-                </div>
+            <div id="services-list">
+                <p class="loading-hint">
+                    <i class="fas fa-spinner fa-spin"></i> Loading services…
+                </p>
             </div>
-        </section>
-    </div>
+        </div>
 
-    <script type="module" src="js/FreelancerJS.js"></script>
+    </main>
+</div>
+
+<script type="module" src="js/FreelancerJS.js"></script>
 </body>
 </html>

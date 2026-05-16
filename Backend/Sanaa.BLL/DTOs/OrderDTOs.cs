@@ -12,9 +12,12 @@ namespace Sanaa.BLL.DTOs
     {
         public int OrderID { get; set; }
         public string ClientName { get; set; }
-        public int FreelancerID { get; set; }       // FreelancerProfile.FreelancerID — needed for report link
+        public string ClientPhone { get; set; }      // User.Phone — used for WhatsApp contact button
+        public int FreelancerID { get; set; }
         public string FreelancerName { get; set; }
-        public int? ServiceID { get; set; }          // Order.ServiceID — needed for report link
+        public int? ServiceID { get; set; }
+        public string ServiceTitle { get; set; }     // Service.Title
+        public decimal ServicePriceSnapshot { get; set; } // Order.ServicePriceSnapshot
         public string Description { get; set; }
         public string Location { get; set; }
         public DateTime OrderDate { get; set; }
