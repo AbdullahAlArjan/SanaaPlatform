@@ -1,0 +1,150 @@
+
+القسم الأول: المجلدات المكررة للحذف
+هذه 17 مجلداً غير ضرورية (كلها نسخ مكررة من نفس الكود):
+
+Frontend/5/
+Frontend/Admin/
+Frontend/Admin Login/
+Frontend/Customer/
+Frontend/Login/
+Frontend/Service1 - edited/
+Frontend/Services/
+Frontend/Services-2/
+Frontend/freelancer/
+Frontend/freelancer-edited/
+Frontend/front/
+Frontend/logout/
+Frontend/main page/
+Frontend/post2/
+Frontend/project path correct/
+Frontend/project2/
+Frontend/project/          ← نحتفظ به مؤقتاً لاستخراج الـ Assets ثم نحذفه
+يُبقى فقط: Frontend/sanaa-app/ ← مشروعنا الجديد
+
+القسم الثاني: شجرة المجلدات الكاملة (Final Architecture)
+Frontend/sanaa-app/
+│
+├── index.html                    (الصفحة الرئيسية)
+├── login.html                    ✅ مكتمل
+├── register.html
+├── freelancer-register.html
+├── otp-verify.html
+├── forgot-password.html
+├── reset-password.html
+├── freelancers.html              (تصفح وبحث الصنايعيين)
+├── freelancer-profile.html       (الملف الشخصي العام)
+├── service-detail.html           (تفاصيل الخدمة)
+├── dashboard-customer.html
+├── order-create.html
+├── order-track.html
+├── payment.html                  (Stripe)
+├── invoice.html
+├── review.html
+├── profile-settings.html
+├── report.html                   (تقديم بلاغ)
+├── dashboard-freelancer.html
+├── orders-manage.html
+├── portfolio-manage.html
+│
+├── admin/
+│   ├── index.html                (لوحة الإحصائيات)
+│   ├── users.html
+│   ├── freelancers.html          (طلبات الموافقة)
+│   ├── reports.html
+│   ├── categories.html           (CRUD كامل)
+│   └── services.html             (CRUD كامل)
+│
+├── css/
+│   ├── globals.css               (متغيرات + Reset مشترك)
+│   ├── auth.css                  ✅ مكتمل
+│   ├── public.css                (home, search, profile)
+│   ├── dashboard.css             (customer + freelancer)
+│   └── admin.css
+│
+└── js/
+    ├── api.js                    ✅ مكتمل
+    ├── auth.js                   ✅ مكتمل
+    ├── notifications.js          (SignalR — مشترك بين جميع الصفحات)
+    ├── login.js                  ✅ مكتمل
+    ├── register.js
+    ├── freelancer-register.js
+    ├── otp-verify.js
+    ├── forgot-password.js
+    ├── reset-password.js
+    ├── home.js
+    ├── freelancers.js
+    ├── freelancer-profile.js
+    ├── service-detail.js
+    ├── dashboard-customer.js
+    ├── order-create.js
+    ├── order-track.js
+    ├── payment.js
+    ├── invoice.js
+    ├── review.js
+    ├── profile-settings.js
+    ├── report.js
+    ├── dashboard-freelancer.js
+    ├── orders-manage.js
+    ├── portfolio-manage.js
+    ├── admin-dashboard.js
+    ├── admin-users.js
+    ├── admin-freelancers.js
+    ├── admin-reports.js
+    ├── admin-categories.js
+    └── admin-services.js
+القسم الثالث: الصفحات الناقصة المكتشفة من Swagger
+🔐 Auth Flow (5 صفحات)
+الملف	Endpoints المستخدمة	الوصف
+register.html	POST /api/Users	تسجيل مستخدم جديد
+otp-verify.html	POST /api/auth/send-otp + POST /api/auth/verify-otp	التحقق من البريد الإلكتروني
+freelancer-register.html	POST /api/Freelancers/create-profile	إكمال ملف الصانع
+forgot-password.html	POST /api/auth/forgot-password	طلب إعادة تعيين كلمة المرور
+reset-password.html	POST /api/auth/reset-password	تعيين كلمة مرور جديدة
+🌐 Public Pages (4 صفحات)
+الملف	Endpoints	الوصف
+index.html	GET /api/Categories + GET /api/Freelancers/search	الصفحة الرئيسية
+freelancers.html	GET /api/Freelancers/search?profession&city&serviceId	بحث وتصفية الصنايعيين
+freelancer-profile.html	GET /api/Freelancers/{userId} + /portfolio + Reviews	الملف العام للصانع
+service-detail.html	GET /api/Services/{id} + GET /api/Reviews/freelancer/{id}	تفاصيل خدمة
+👤 Customer Dashboard (8 صفحات)
+الملف	Endpoints	الوصف
+dashboard-customer.html	بيانات من localStorage + Orders	لوحة تحكم العميل
+order-create.html	POST /api/Orders/create	إنشاء طلب جديد
+order-track.html	عرض حالة الطلب	متابعة الطلب
+payment.html	POST /api/Payments/create-intent + Stripe.js	صفحة الدفع
+invoice.html	GET /api/Invoices/order/{orderId}	عرض الفاتورة
+review.html	POST /api/Reviews/add	تقييم بعد اكتمال الطلب
+profile-settings.html	POST /api/Freelancers/profile-image	إعدادات الحساب
+report.html	POST /api/Reports	تقديم بلاغ على مستخدم/خدمة
+🛠️ Freelancer Dashboard (3 صفحات)
+الملف	Endpoints	الوصف
+dashboard-freelancer.html	GET /api/Freelancers/{userId} + Orders	لوحة تحكم الصانع
+orders-manage.html	GET /api/Orders/freelancer/{id} + PUT /api/Orders/{orderId}/status	إدارة الطلبات
+portfolio-manage.html	GET+POST+DELETE /api/Freelancers/portfolio	إدارة الأعمال السابقة
+👑 Admin Panel (6 صفحات)
+الملف	Endpoints	الوصف
+admin/index.html	GET /api/Admin/dashboard-stats	إحصائيات حقيقية
+admin/users.html	GET /api/Users + toggle + delete + deleted list	إدارة المستخدمين
+admin/freelancers.html	GET /api/Admin/freelancers/pending + approve/reject	موافقات الصنايعيين
+admin/reports.html	GET /api/Reports + PUT /api/Reports/{id}/status	مراجعة البلاغات
+admin/categories.html	CRUD كامل /api/Categories	إدارة الفئات
+admin/services.html	GET/POST /api/Services	إدارة الخدمات
+🔔 Shared Module (1 ملف)
+الملف	الوصف
+js/notifications.js	SignalR connection للإشعارات الفورية عبر /NotificationHub
+ملخص الأرقام
+العدد
+ملفات مكتملة ✅	5 ملفات
+HTML جديدة	21 صفحة
+JS جديدة	26 ملف
+CSS جديدة	4 ملفات
+المجموع الكلي	~56 ملفاً جديداً
+ترتيب التنفيذ المقترح:
+
+css/globals.css ← الأساس الذي تعتمد عليه جميع الصفحات
+js/notifications.js ← SignalR module مشترك
+Auth flow كامل (register → otp → freelancer-register → forgot → reset)
+Public pages (home → freelancers → profile → service-detail)
+Customer dashboard كامل
+Freelancer dashboard كامل
+Admin panel كامل

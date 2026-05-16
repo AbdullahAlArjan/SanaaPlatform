@@ -37,6 +37,9 @@ namespace Sanaa.DAL.Entities
         [MaxLength(1000)]
         public string? Bio { get; set; }
 
+        [MaxLength(20)]
+        public string? Phone { get; set; }
+
         [MaxLength(500)]
         public string? ProfileImageUrl { get; set; }
 

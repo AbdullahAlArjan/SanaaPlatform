@@ -28,6 +28,13 @@ namespace Sanaa.DAL.Entities
 
         public bool IsActive { get; set; } = true;
 
+        /// <summary>
+        /// JSON-serialised List&lt;string&gt; of uploaded image URLs.
+        /// Pattern mirrors FreelancerProfile.PortfolioImagesJson.
+        /// Null means no images have been uploaded yet.
+        /// </summary>
+        public string? ImageUrlsJson { get; set; }
+
         // ⬇️ Navigation Properties ⬇️
 
         // علاقة Many-to-One مع القسم

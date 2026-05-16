@@ -48,6 +48,24 @@ namespace Sanaa.DAL.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Sanaa.DAL.Entities.FavoriteService", b =>
+                {
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SavedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserID", "ServiceID");
+
+                    b.HasIndex("ServiceID");
+
+                    b.ToTable("FavoriteServices");
+                });
+
             modelBuilder.Entity("Sanaa.DAL.Entities.FreelancerProfile", b =>
                 {
                     b.Property<int>("FreelancerID")
@@ -75,6 +93,10 @@ namespace Sanaa.DAL.Migrations
 
                     b.Property<int>("ExperienceYears")
                         .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("PortfolioImagesJson")
                         .HasColumnType("nvarchar(max)");
@@ -424,6 +446,9 @@ namespace Sanaa.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageUrlsJson")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -490,6 +515,25 @@ namespace Sanaa.DAL.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Sanaa.DAL.Entities.FavoriteService", b =>
+                {
+                    b.HasOne("Sanaa.DAL.Entities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sanaa.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Sanaa.DAL.Entities.FreelancerProfile", b =>

@@ -16,6 +16,12 @@ namespace Sanaa.BLL.Interfaces
 
         Task<AdminDashboardStatsDto> GetSystemStatsAsync();
         Task<bool> ToggleUserStatusAsync(int userId);
+        /// <summary>
+        /// Issues a fresh JWT + refresh-token pair for an existing user,
+        /// reflecting the user's current role in the database.
+        /// Used by the Freelancer onboard endpoint after role promotion.
+        /// </summary>
+        Task<LoginResponse?> GenerateTokensForUserAsync(int userId);
 
         // Soft Delete
         Task<bool> SoftDeleteUserAsync(int userId);

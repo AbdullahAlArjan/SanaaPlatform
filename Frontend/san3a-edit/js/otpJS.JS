@@ -1,5 +1,4 @@
-// 1. تعريف رابط السيرفر (سيقوم الباك إيند بتعديله حسب إعداداتهم)
-const API_BASE_URL = 'https://localhost:7101'; 
+import { API_BASE_URL } from './api.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 2. جلب البيانات من الرابط (Email & Purpose)
@@ -44,16 +43,21 @@ document.addEventListener('DOMContentLoaded', () => {
         setLoading(true);
 
         try {
+            // تحويل الكلمة للكلمة اللي بيفهمها الباك إند (C# Enum)
+            const apiPurpose = purpose === 'Registration' ? 'EmailVerification' : purpose;
+
             const res = await fetch(`${API_BASE_URL}/api/auth/verify-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, code, purpose }),
+                // ابعث apiPurpose بدل purpose العادية
+                body: JSON.stringify({ email, code, purpose: apiPurpose }), 
             });
 
             if (res.ok) {
-                // في حالة النجاح: التبديل بين واجهة الـ OTP وشاشة النجاح
+                // باقي الكود تبعك زي ما هو بالضبط
                 if (purpose === 'Registration') {
                     if (otpCard) otpCard.style.display = 'none';
+// ... إلى آخر الدالة
                     if (successScreen) {
                         successScreen.style.display = 'flex';
                         successScreen.style.flexDirection = 'column';
@@ -92,7 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 6. تعريف دوال أزرار شاشة النجاح عالمياً (لتعمل مع onclick في الـ HTML)
 window.registerAsFreelancer = function() {
-    window.location.href = 'FreelancerReg.html';
+    // Must log in first so apiFetch has a Bearer token for the onboard call.
+    // login.js reads ?next=freelancer and triggers POST /api/Freelancers/onboard.
+    window.location.href = 'Login.html?next=freelancer';
 };
 
 window.continueAsCustomer = function() {

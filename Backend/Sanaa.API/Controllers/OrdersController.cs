@@ -31,9 +31,11 @@ namespace Sanaa.API.Controllers
             var clientId = GetCurrentUserId();
             if (clientId == null) return Unauthorized();
 
-            var result = await _orderService.CreateOrderAsync(clientId.Value, request);
-            if (result) return Ok("تم إرسال الطلب للصنايعي بنجاح! 🚀");
-            return BadRequest("حدث خطأ أثناء إرسال الطلب.");
+            var orderId = await _orderService.CreateOrderAsync(clientId.Value, request);
+            if (orderId == null) return BadRequest(new { message = "حدث خطأ أثناء إرسال الطلب." });
+
+            // Return the new orderID so the frontend can immediately create a PaymentIntent
+            return Ok(new { orderID = orderId.Value, message = "تم إرسال الطلب للصنايعي بنجاح! 🚀" });
         }
 
         [Authorize]

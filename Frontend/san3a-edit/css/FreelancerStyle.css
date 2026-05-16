@@ -1,3 +1,91 @@
+/* ── Toggle Switch (used on FL-manage-services.html and page-freelancer.html) ── */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #ccc;
+    border-radius: 26px;
+    transition: background 0.25s;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.25s;
+}
+
+.toggle-switch input:checked + .toggle-slider          { background: #27ae60; }
+.toggle-switch input:checked + .toggle-slider::before  { transform: translateX(22px); }
+.toggle-switch input:disabled + .toggle-slider         { opacity: 0.6; cursor: not-allowed; }
+
+/* Service management card layout */
+.service-manage-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    gap: 1rem;
+}
+
+.service-manage-card .service-info { flex: 1; }
+.service-manage-card .service-info h4 { margin-bottom: 0.25rem; }
+.service-manage-card .service-info p  { color: #666; font-size: 0.875rem; margin-bottom: 0.35rem; }
+.service-manage-card .service-info .price { font-weight: 700; color: #2c3e50; }
+
+.service-toggle-area {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    white-space: nowrap;
+}
+
+.toggle-label { font-size: 0.8rem; color: #555; }
+
+/* Order cards */
+.order-item {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #f0f0f0;
+    color: #555;
+    margin-top: 0.35rem;
+}
+
 /* Base Styles */
 * {
     box-sizing: border-box;

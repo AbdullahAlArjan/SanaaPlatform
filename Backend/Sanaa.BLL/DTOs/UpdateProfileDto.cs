@@ -23,5 +23,8 @@ namespace Sanaa.BLL.DTOs
 
         [MaxLength(1000)]
         public string? Bio { get; set; }
+
+        [MaxLength(20)]
+        public string? Phone { get; set; }
     }
 }

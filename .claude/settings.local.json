@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git tag *)",
+      "Bash(git push *)",
+      "Bash(grep -n \"Service {$\\\\|Service{$\\\\|serviceID\\\\|categoryID\\\\|title\" \"C:/MyProjects/SanaaPlatform/swagger.json\")",
+      "Bash(gh release create v1.1.0-full-frontend --title 'v1.1.0 — Full Frontend + Backend Hardening' --body ' *)",
+      "Bash(gh auth *)"
+    ]
+  }
+}

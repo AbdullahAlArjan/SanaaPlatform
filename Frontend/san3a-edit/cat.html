@@ -10,10 +10,24 @@
 </head>
 <body>
     <header class="header">
-        <a href="/index.html" class="logo">صنعة <span style="color: #3498db;">Sana'a</span></a>
-        <div class="auth-buttons">
-            <button class="auth-btn" onclick="window.location.href='../Login/Login.html'">Login</button>
-            <button class="auth-btn" onclick="window.location.href='../Login/Register.html'">Register</button>
+        <a href="index.html" class="logo">صنعة <span style="color: #3498db;">Sana'a</span></a>
+
+        <!-- Guest: shown when NOT logged in -->
+        <div class="auth-buttons" id="authButtons">
+            <button class="auth-btn" id="loginBtn">Login</button>
+            <button class="auth-btn" id="registerBtn">Register</button>
+        </div>
+
+        <!-- User: shown when logged in (navbar.js controls visibility) -->
+        <div class="user-profile" id="userProfile" style="display: none;">
+            <img id="userAvatar"
+                 src="https://ui-avatars.com/api/?name=User&background=3498db&color=fff"
+                 alt="User Avatar"
+                 class="user-avatar">
+            <div class="dropdown-content">
+                <a href="#" id="navProfileLink">لوحة التحكم</a>
+                <a href="#" id="logoutBtn">تسجيل خروج</a>
+            </div>
         </div>
     </header>
 
@@ -185,5 +199,6 @@
     </footer>
 
     <script src="js/cat.js"></script>
+    <script src="js/navbar.js"></script>
 </body>
 </html>

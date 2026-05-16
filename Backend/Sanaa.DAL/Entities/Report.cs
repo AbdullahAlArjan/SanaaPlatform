@@ -6,8 +6,9 @@ namespace Sanaa.DAL.Entities
     public enum ReportTargetType
     {
         Freelancer = 0,
-        Order = 1,
-        User = 2
+        Order      = 1,
+        User       = 2,
+        Service    = 3     // report a specific service listing (requires Completed order for that service)
     }
 
     public enum ReportStatus

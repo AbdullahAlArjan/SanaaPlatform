@@ -1,0 +1,215 @@
+COMPREHENSIVE SANAA PLATFORM API ANALYSIS
+1. API ENDPOINTS GROUPED BY TAG/RESOURCE
+Admin (5 endpoints)
+GET /api/Admin/dashboard-stats - Dashboard statistics
+PUT /api/Admin/toggle-user-status/{id} - Toggle user active/inactive status
+DELETE /api/Admin/users/{id} - Delete user by ID
+GET /api/Admin/users/deleted - List deleted users
+GET /api/Admin/freelancers/pending - Get pending freelancer approvals
+PUT /api/Admin/freelancers/{id}/approve - Approve freelancer profile
+PUT /api/Admin/freelancers/{id}/reject - Reject freelancer profile
+Auth (6 endpoints)
+POST /api/auth/send-otp - Send OTP to email (SendOtpRequest)
+POST /api/auth/verify-otp - Verify OTP code (VerifyOtpRequest)
+POST /api/auth/forgot-password - Initiate password reset (ForgotPasswordRequest)
+POST /api/auth/reset-password - Complete password reset (ResetPasswordRequest)
+POST /api/auth/refresh - Refresh JWT token (RefreshTokenRequest)
+POST /api/auth/logout - Logout and revoke refresh token (RefreshTokenRequest)
+Categories (5 endpoints)
+GET /api/Categories - List categories with pagination (query: search, page=1, pageSize=10)
+POST /api/Categories - Create new category (CreateCategoryDto)
+GET /api/Categories/{id} - Get category by ID
+PUT /api/Categories/{id} - Update category (CreateCategoryDto)
+DELETE /api/Categories/{id} - Delete category
+Chatbot (1 endpoint)
+POST /api/Chatbot/message - Send message to AI chatbot (ChatbotRequest with message + conversationHistory)
+Freelancers (7 endpoints)
+POST /api/Freelancers/create-profile - Create freelancer profile (CreateProfileRequest)
+GET /api/Freelancers/{userId} - Get freelancer profile by user ID
+GET /api/Freelancers/search - Search freelancers (query: profession, city, serviceId)
+POST /api/Freelancers/profile-image - Upload profile image (multipart/form-data file upload)
+POST /api/Freelancers/portfolio - Upload portfolio image (multipart/form-data file upload)
+DELETE /api/Freelancers/portfolio - Delete portfolio image (query: imageUrl)
+GET /api/Freelancers/{userId}/portfolio - Get freelancer portfolio images
+Invoices (1 endpoint)
+GET /api/Invoices/order/{orderId} - Get invoice for order
+Orders (4 endpoints)
+POST /api/Orders/create - Create new order (CreateOrderRequest)
+GET /api/Orders/freelancer/{freelancerId} - List orders for freelancer with pagination (pageNumber=1, pageSize=10)
+PUT /api/Orders/{orderId}/status - Update order status (query: status enum - OrderStatus)
+Payments (2 endpoints)
+POST /api/Payments/create-intent - Create Stripe payment intent (CreatePaymentIntentRequest: orderId, amount)
+POST /api/Payments/webhook - Stripe webhook handler (no body)
+Reports (3 endpoints)
+POST /api/Reports - Submit user report (SubmitReportRequest)
+GET /api/Reports - List reports with pagination & filtering (query: status, pageNumber=1, pageSize=10)
+PUT /api/Reports/{id}/status - Update report status (UpdateReportStatusRequest)
+Reviews (2 endpoints)
+POST /api/Reviews/add - Create review for completed order (CreateReviewRequest)
+GET /api/Reviews/freelancer/{freelancerId} - Get all reviews for freelancer
+Services (3 endpoints)
+GET /api/Services - List all services
+POST /api/Services - Create new service (Service)
+GET /api/Services/{id} - Get service by ID
+Users (3 endpoints)
+GET /api/Users - List users with search filters (query: SearchTerm, City, Profession)
+POST /api/Users - Create new user (User)
+POST /api/Users/login - User login (LoginRequest)
+TestNotifications (1 endpoint)
+POST /api/TestNotifications/send-alert - Send test notification (query: message)
+WeatherForecast (1 endpoint - likely placeholder/demo)
+GET /WeatherForecast - Get weather forecast
+2. DETAILED ENDPOINT SPECIFICATIONS
+Endpoint	Method	Path	Request Body	Response
+Auth: Send OTP	POST	/api/auth/send-otp	SendOtpRequest (email, purpose)	200 OK
+Auth: Verify OTP	POST	/api/auth/verify-otp	VerifyOtpRequest (email, code, purpose)	200 OK
+Auth: Forgot Password	POST	/api/auth/forgot-password	ForgotPasswordRequest (email)	200 OK
+Auth: Reset Password	POST	/api/auth/reset-password	ResetPasswordRequest (email, code, newPassword)	200 OK
+Auth: Refresh Token	POST	/api/auth/refresh	RefreshTokenRequest (refreshToken)	200 OK
+Auth: Logout	POST	/api/auth/logout	RefreshTokenRequest (refreshToken)	200 OK
+Categories: List	GET	/api/Categories	Query: search?, page=1, pageSize=10	200 OK
+Categories: Create	POST	/api/Categories	CreateCategoryDto (name*, description?, imageUrl?)	200 OK
+Categories: Get	GET	/api/Categories/{id}	Path: id (int)	200 OK
+Categories: Update	PUT	/api/Categories/{id}	CreateCategoryDto (name*, description?, imageUrl?)	200 OK
+Categories: Delete	DELETE	/api/Categories/{id}	Path: id (int)	200 OK
+Chatbot: Send Message	POST	/api/Chatbot/message	ChatbotRequest (message?, conversationHistory?)	200 OK
+Freelancers: Create Profile	POST	/api/Freelancers/create-profile	CreateProfileRequest (userID, profession?, experienceYears, city?, serviceIds[])	200 OK
+Freelancers: Get Profile	GET	/api/Freelancers/{userId}	Path: userId (int)	200 OK
+Freelancers: Search	GET	/api/Freelancers/search	Query: profession?, city?, serviceId?	200 OK
+Freelancers: Upload Profile Image	POST	/api/Freelancers/profile-image	Multipart: file (binary)	200 OK
+Freelancers: Upload Portfolio	POST	/api/Freelancers/portfolio	Multipart: file (binary)	200 OK
+Freelancers: Delete Portfolio Item	DELETE	/api/Freelancers/portfolio	Query: imageUrl	200 OK
+Freelancers: Get Portfolio	GET	/api/Freelancers/{userId}/portfolio	Path: userId (int)	200 OK
+Invoices: Get Order Invoice	GET	/api/Invoices/order/{orderId}	Path: orderId (int)	200 OK
+Orders: Create	POST	/api/Orders/create	CreateOrderRequest (clientID, freelancerID, description?, location?)	200 OK
+Orders: List by Freelancer	GET	/api/Orders/freelancer/{freelancerId}	Path: freelancerId (int); Query: pageNumber=1, pageSize=10	200 OK
+Orders: Update Status	PUT	/api/Orders/{orderId}/status	Query: orderId (int), status (OrderStatus enum)	200 OK
+Payments: Create Intent	POST	/api/Payments/create-intent	CreatePaymentIntentRequest (orderId, amount)	200 OK
+Payments: Webhook	POST	/api/Payments/webhook	(Stripe webhook payload)	200 OK
+Reports: Submit	POST	/api/Reports	SubmitReportRequest (targetType?, targetID, reason?, description?)	200 OK
+Reports: List	GET	/api/Reports	Query: status?, pageNumber=1, pageSize=10	200 OK
+Reports: Update Status	PUT	/api/Reports/{id}/status	UpdateReportStatusRequest (status?, adminNotes?)	200 OK
+Reviews: Add	POST	/api/Reviews/add	CreateReviewRequest (orderID, clientID, freelancerID, rating, comment?)	200 OK
+Reviews: Get by Freelancer	GET	/api/Reviews/freelancer/{freelancerId}	Path: freelancerId (int)	200 OK
+Services: List	GET	/api/Services	(none)	200 OK
+Services: Create	POST	/api/Services	Service (serviceID?, categoryID?, title*, description?, basePrice, createdAt, isActive)	200 OK
+Services: Get	GET	/api/Services/{id}	Path: id (int)	200 OK
+Admin: Dashboard Stats	GET	/api/Admin/dashboard-stats	(none)	200 OK
+Admin: Toggle User Status	PUT	/api/Admin/toggle-user-status/{id}	Path: id (int)	200 OK
+Admin: Delete User	DELETE	/api/Admin/users/{id}	Path: id (int)	200 OK
+Admin: List Deleted Users	GET	/api/Admin/users/deleted	(none)	200 OK
+Admin: List Pending Freelancers	GET	/api/Admin/freelancers/pending	(none)	200 OK
+Admin: Approve Freelancer	PUT	/api/Admin/freelancers/{id}/approve	Path: id (int)	200 OK
+Admin: Reject Freelancer	PUT	/api/Admin/freelancers/{id}/reject	Path: id (int)	200 OK
+3. DATA TRANSFER OBJECTS (DTOs) & MODELS
+DTO Name	Fields	Notes
+User	userID (int), fullName* (100 chars), email* (150 chars, email format), passwordHash* (255 chars), phone? (20 chars), role* (20 chars), joinDate, isActive, isEmailVerified, isDeleted, deletedAt?, freelancerProfile, otpCodes[], reports[], refreshTokens[]	Core user entity; required fields marked with *
+FreelancerProfile	freelancerID (int), profession* (100 chars), experienceYears (int), city? (50 chars), availabilityStatus? (20 chars), averageRating (double), profileImageUrl? (500 chars), portfolioImagesJson (JSON string), approvalStatus (enum), user (User), freelancerServices[]	Stores freelancer-specific data
+FreelancerService	freelancerID (int), freelancerProfile (FK), serviceID (int), service (FK), customPrice? (double), isAvailable (bool)	Junction table: links freelancers to services with custom pricing
+Service	serviceID (int), categoryID? (int), title* (100 chars), description?, basePrice (double), createdAt, isActive (bool)	Service/skill offerings
+CreateCategoryDto	name* (100 chars), description?, imageUrl?	For creating/updating categories
+CreateProfileRequest	userID (int), profession?, experienceYears (int), city?, serviceIds[] (int array)	Freelancer profile creation
+CreateOrderRequest	clientID (int), freelancerID (int), description?, location?	Order creation
+CreatePaymentIntentRequest	orderId (int), amount (double)	Stripe payment intent
+CreateReviewRequest	orderID (int), clientID (int), freelancerID (int), rating (int), comment?	Order review/feedback
+CreateReviewRequest	orderID (int), clientID (int), freelancerID (int), rating (int), comment?	Order review/feedback
+SubmitReportRequest	targetType?, targetID (int), reason?, description?	Report against user/content
+UpdateReportStatusRequest	status?, adminNotes?	Admin report moderation
+Report	reportID (int), reporterID (int), reporter (User), targetType (enum), targetID (int), reason* (200 chars), description? (1000 chars), status (enum), createdAt, reviewedAt?, adminNotes? (500 chars)	Full report entity
+SendOtpRequest	email?, purpose?	OTP request for auth/verification
+VerifyOtpRequest	email?, code?, purpose?	OTP verification
+ForgotPasswordRequest	email?	Password reset initiation
+ResetPasswordRequest	email?, code?, newPassword?	Password reset completion
+RefreshTokenRequest	refreshToken?	Token refresh/logout
+LoginRequest	email?, password?	User login
+ChatbotRequest	message?, conversationHistory[] (ChatMessageDto)	AI chatbot interaction
+ChatMessageDto	role (string), content (string)	Chatbot conversation message
+OtpCode	id (int), userId (int), user (User), code* (10 chars), purpose (enum), expiresAt, isUsed (bool), createdAt	OTP storage entity
+RefreshToken	id (int), userId (int), user (User), token* (128 chars), expiresAt, isRevoked (bool), createdAt	Token storage entity
+WeatherForecast	date, temperatureC (int), temperatureF (int, readonly), summary?	Demo endpoint
+4. ENUMS & CONSTANTS
+Enum	Values	Purpose
+OrderStatus	0, 1, 2, 3	Likely: Pending, In Progress, Completed, Cancelled
+ApprovalStatus	0, 1, 2	Likely: Pending, Approved, Rejected
+OtpPurpose	0, 1	Likely: Registration, PasswordReset
+ReportTargetType	0, 1, 2	Likely: User, Freelancer, Order/Service
+ReportStatus	0, 1, 2, 3	Likely: Pending, Under Review, Resolved, Dismissed
+5. COMPLEX FEATURES IDENTIFIED
+Admin Dashboard (Complex)
+Dashboard stats endpoint suggests analytics/reporting UI needed
+Freelancer approval workflow (pending → approve/reject)
+User management (toggle status, delete, view deleted)
+Report moderation system
+Payments Integration (Complex)
+Stripe payment intent creation
+Webhook handling for payment events
+Invoice generation per order
+Freelancer Profile Management (Complex)
+Multi-step profile creation
+Portfolio management (multiple image uploads)
+Profile image upload
+Service/skill association with custom pricing
+Approval workflow by admins
+Reporting System (Complex)
+Report submission with categorization (target type)
+Report status tracking (pending, under review, resolved, dismissed)
+Admin notes and moderation
+Order & Review Management (Complex)
+Order creation and status tracking
+Review submission after order completion
+Rating and comment system
+Reviewer chain (client → freelancer)
+Search & Filtering (Moderate)
+Freelancer search by profession, city, service
+User search by term, city, profession
+Category search
+Report filtering by status
+Authentication (Moderate)
+OTP-based auth flow
+Password reset via email
+Token refresh mechanism
+Logout with token revocation
+Chatbot (Moderate)
+Conversational AI with conversation history
+Message-based interaction
+6. AUTHENTICATION MECHANISM
+Bearer Token (JWT)
+
+Security scheme: Bearer type API Key
+Header: Authorization: Bearer {your_token}
+Arabic instruction in schema: "الرجاء إدخال التوكن بهذا الشكل Bearer {your_token}"
+Applied globally to all endpoints (security: [{Bearer: []}])
+Token refresh endpoint: POST /api/auth/refresh
+Token revocation on logout: POST /api/auth/logout
+7. FILE UPLOAD ENDPOINTS
+Endpoint	Upload Type	Max Files	Purpose
+POST /api/Freelancers/profile-image	Multipart/form-data	Single	Profile picture upload
+POST /api/Freelancers/portfolio	Multipart/form-data	Single per request	Portfolio/work samples (multiple calls for multiple images)
+Both use multipart/form-data with file parameter (binary format).
+
+8. PAGINATION PATTERNS
+Pattern	Endpoints	Parameters
+Pattern 1: pageNumber + pageSize	Orders (freelancer list), Reports	pageNumber (default: 1), pageSize (default: 10)
+Pattern 2: page + pageSize	Categories	page (default: 1), pageSize (default: 10)
+Both use integer page numbers with configurable page size (default 10 items per page).
+
+SUMMARY FOR FRONTEND PLANNING
+Critical Pages to Build:
+
+Authentication Suite: Login, OTP verification, Forgot Password, Reset Password
+Freelancer Onboarding: Profile creation, portfolio upload, service selection, admin approval dashboard
+Admin Dashboard: Stats, freelancer management, user management, report moderation
+Order Management: Create order, order status tracking, invoice viewing
+Payment Flow: Stripe integration for payment intent + confirmation
+Review System: Post-order review submission and ratings display
+Search/Discovery: Freelancer search and filtering
+Reporting System: User reports with moderation workflow
+Chatbot: Conversational UI with message history
+User Management: Profile management, category/service management
+Data Validation Concerns:
+
+Email format validation required
+Password complexity for reset
+OTP code length (1-10 chars)
+String length constraints on names, descriptions, etc.
+File upload validation for images (profile + portfolio)

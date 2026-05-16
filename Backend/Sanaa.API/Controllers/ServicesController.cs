@@ -19,20 +19,23 @@ namespace Sanaa.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllServices()
+        public async Task<IActionResult> GetAllServices([FromQuery] int? categoryId)
         {
-            var services = await _serviceService.GetAllServicesAsync();
+            var services = await _serviceService.GetAllServicesAsync(categoryId);
             return Ok(services);
         }
 
-        [HttpGet("{id}")]
+        /// <summary>
+        /// Returns a rich ServiceDetailDto: title, description, basePrice, category name,
+        /// and the owning freelancer's name / avatar / rating — all in one request.
+        /// </summary>
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetServiceById(int id)
         {
-            var service = await _serviceService.GetServiceByIdAsync(id);
-            if (service == null)
-                return NotFound("الخدمة غير موجودة");
-
-            return Ok(service);
+            var detail = await _serviceService.GetServiceDetailAsync(id);
+            return detail is null
+                ? NotFound(new { message = "الخدمة غير موجودة", code = "NOT_FOUND" })
+                : Ok(detail);
         }
 
         [Authorize(Roles = "Admin")]

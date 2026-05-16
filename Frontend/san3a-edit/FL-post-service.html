@@ -86,10 +86,14 @@
                     </select>
                 </div>
                 
-                <!-- Attachment (Picture or Document) -->
+                <!-- Service Images (carousel multi-upload) -->
                 <div class="form-group">
-                    <label for="service-attachment">Attachment (Picture or Document):</label>
-                    <input type="file" id="service-attachment" accept="image/*, .pdf, .doc, .docx">
+                    <label for="service-images">
+                        Service Images
+                        <small style="color:#888;font-weight:normal"> — up to 5 photos shown in the carousel</small>
+                    </label>
+                    <input type="file" id="service-images" accept="image/*" multiple>
+                    <small id="service-images-count" style="color:#555;display:block;margin-top:4px"></small>
                 </div>
                 
                 <!-- Submit Button -->
@@ -101,6 +105,6 @@
         </div>
     </div>
 
-    <script src="js/FreelancerJS.js"></script>
+    <script type="module" src="js/page-newJS.js"></script>
 </body>
 </html>

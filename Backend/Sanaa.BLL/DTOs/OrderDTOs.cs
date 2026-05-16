@@ -12,7 +12,9 @@ namespace Sanaa.BLL.DTOs
     {
         public int OrderID { get; set; }
         public string ClientName { get; set; }
+        public int FreelancerID { get; set; }       // FreelancerProfile.FreelancerID — needed for report link
         public string FreelancerName { get; set; }
+        public int? ServiceID { get; set; }          // Order.ServiceID — needed for report link
         public string Description { get; set; }
         public string Location { get; set; }
         public DateTime OrderDate { get; set; }

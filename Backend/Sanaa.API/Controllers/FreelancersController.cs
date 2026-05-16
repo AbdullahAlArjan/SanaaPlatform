@@ -14,11 +14,52 @@ namespace Sanaa.API.Controllers
     public class FreelancersController : ControllerBase
     {
         private readonly IFreelancerService _freelancerService;
+        private readonly IUserService       _userService;
 
-        // حقن الـ Service عشان نقدر نستخدمه
-        public FreelancersController(IFreelancerService freelancerService)
+        public FreelancersController(IFreelancerService freelancerService, IUserService userService)
         {
             _freelancerService = freelancerService;
+            _userService       = userService;
+        }
+
+        // ── Onboarding (/api/Freelancers/onboard) ────────────────────────────────
+        /// <summary>
+        /// Called when a Client taps "Continue as Freelancer".
+        /// 1. Promotes User.Role → "Freelancer" in the DB.
+        /// 2. Creates a skeleton FreelancerProfile if none exists.
+        /// 3. Issues FRESH tokens reflecting the new role — no re-login required.
+        /// Idempotent: safe to call multiple times.
+        /// </summary>
+        [Authorize]   // any authenticated user (Client or Freelancer)
+        [HttpPost("onboard")]
+        public async Task<IActionResult> Onboard()
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null) return Unauthorized();
+
+            try
+            {
+                // Step A: promote role + upsert skeleton profile
+                await _freelancerService.EnsureProfileExistsAsync(userId.Value);
+
+                // Step B: re-issue tokens so the JWT now carries Role = "Freelancer"
+                var tokens = await _userService.GenerateTokensForUserAsync(userId.Value);
+                if (tokens is null)
+                    return StatusCode(500, new { message = "Token generation failed." });
+
+                return Ok(new
+                {
+                    message      = "Onboarding complete. Complete your profile to unlock service posting.",
+                    code         = "ONBOARDING_OK",
+                    accessToken  = tokens.AccessToken,
+                    refreshToken = tokens.RefreshToken,
+                    role         = tokens.Role   // "Freelancer"
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
         }
 
         [Authorize]
@@ -106,7 +147,7 @@ namespace Sanaa.API.Controllers
                 var url = await _freelancerService.UploadProfileImageAsync(freelancerId.Value, file);
                 return Ok(new { ImageUrl = url });
             }
-            catch (ArgumentException ex) { return BadRequest(ex.Message); }
+            catch (Exception ex) { return BadRequest(new { message = ex.Message }); }
         }
 
         [Authorize]
@@ -122,8 +163,7 @@ namespace Sanaa.API.Controllers
                 var images = await _freelancerService.AddPortfolioImageAsync(freelancerId.Value, file);
                 return Ok(images);
             }
-            catch (ArgumentException ex) { return BadRequest(ex.Message); }
-            catch (InvalidOperationException ex) { return BadRequest(ex.Message); }
+            catch (Exception ex) { return BadRequest(new { message = ex.Message }); }
         }
 
         [Authorize]
@@ -141,11 +181,106 @@ namespace Sanaa.API.Controllers
             catch (ArgumentException ex) { return BadRequest(ex.Message); }
         }
 
+        // GET /api/Freelancers/{userId}/services — public, no auth
+        [HttpGet("{userId:int}/services")]
+        public async Task<IActionResult> GetUserServices(int userId)
+        {
+            var services = await _freelancerService.GetUserServicesAsync(userId);
+            return Ok(services);
+        }
+
         [HttpGet("{userId}/portfolio")]
         public async Task<IActionResult> GetPortfolio(int userId)
         {
             var images = await _freelancerService.GetPortfolioImagesAsync(userId);
             return Ok(images);
+        }
+
+        // ── خدمات الصنايعي الخاصة (/api/Freelancers/my-services) ─────────────
+
+        /// <summary>
+        /// Upload one or more images for an existing service.
+        /// Appends to any existing images. Max 5 MB per file (enforced by FileUploadService).
+        /// </summary>
+        [Authorize]
+        [HttpPost("my-services/{serviceId:int}/images")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> AddServiceImages(int serviceId)
+        {
+            var freelancerId = GetCurrentUserId();
+            if (freelancerId == null) return Unauthorized();
+
+            var files = Request.Form.Files;
+            if (files.Count == 0)
+                return BadRequest(new { message = "No files provided.", code = "NO_FILES" });
+
+            try
+            {
+                var urls = await _freelancerService.AddServiceImagesAsync(
+                    freelancerId.Value, serviceId, files);
+
+                if (urls is null)
+                    return NotFound(new { message = "Service not found or not owned by you." });
+
+                return Ok(new { imageUrls = urls });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpGet("my-services")]
+        public async Task<IActionResult> GetMyServices()
+        {
+            var freelancerId = GetCurrentUserId();
+            if (freelancerId == null) return Unauthorized();
+            var services = await _freelancerService.GetMyServicesAsync(freelancerId.Value);
+            return Ok(services);
+        }
+
+        [Authorize]
+        [HttpPost("my-services")]
+        public async Task<IActionResult> AddMyService([FromBody] CreateServiceRequest request)
+        {
+            var freelancerId = GetCurrentUserId();
+            if (freelancerId == null) return Unauthorized();
+
+            try
+            {
+                var service = await _freelancerService.AddMyServiceAsync(freelancerId.Value, request);
+                if (service is null)
+                    return BadRequest(new
+                    {
+                        message = "Create your freelancer profile first via POST /api/Freelancers/onboard",
+                        code    = "NO_PROFILE"
+                    });
+
+                return Ok(service);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "PROFILE_INCOMPLETE")
+            {
+                return BadRequest(new
+                {
+                    message = "Please complete your profile (Bio, Profession, Phone) before posting services.",
+                    code    = "PROFILE_INCOMPLETE"
+                });
+            }
+        }
+
+        [Authorize]
+        [HttpPut("my-services/{serviceId:int}")]
+        public async Task<IActionResult> UpdateMyService(int serviceId, [FromBody] UpdateServiceRequest request)
+        {
+            var freelancerId = GetCurrentUserId();
+            if (freelancerId == null) return Unauthorized();
+
+            var result = await _freelancerService.UpdateMyServiceAsync(freelancerId.Value, serviceId, request);
+            if (!result)
+                return NotFound(new { message = "الخدمة غير موجودة أو لا تملك صلاحية تعديلها." });
+
+            return Ok(new { message = "تم تحديث الخدمة بنجاح." });
         }
 
         private int? GetCurrentUserId()

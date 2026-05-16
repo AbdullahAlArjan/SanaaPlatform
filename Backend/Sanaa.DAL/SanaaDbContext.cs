@@ -24,6 +24,7 @@ namespace Sanaa.DAL
         public DbSet<Report> Reports { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<FavoriteService> FavoriteServices { get; set; }
 
         // هاي الميثود بنستخدمها عشان نكتب إعدادات متقدمة للداتا بيس (Fluent API)
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -119,6 +120,22 @@ namespace Sanaa.DAL
                 .WithMany(c => c.Services)
                 .HasForeignKey(s => s.CategoryID)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            // FavoriteService: Composite Key
+            modelBuilder.Entity<FavoriteService>()
+                .HasKey(fs => new { fs.UserID, fs.ServiceID });
+
+            modelBuilder.Entity<FavoriteService>()
+                .HasOne(fs => fs.User)
+                .WithMany()
+                .HasForeignKey(fs => fs.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FavoriteService>()
+                .HasOne(fs => fs.Service)
+                .WithMany()
+                .HasForeignKey(fs => fs.ServiceID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Global Query Filter: استثناء المستخدمين المحذوفين تلقائياً من كل الاستعلامات
             modelBuilder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);

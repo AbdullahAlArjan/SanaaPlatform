@@ -16,32 +16,54 @@ namespace Sanaa.API.Controllers
             _paymentService = paymentService;
         }
 
+        /// <summary>
+        /// Step 1 of checkout: create a Stripe PaymentIntent and a pending Payments row.
+        /// Amount is read from the DB — the client only provides the OrderId.
+        /// </summary>
         [Authorize]
         [HttpPost("create-intent")]
         public async Task<IActionResult> CreatePaymentIntent([FromBody] CreatePaymentIntentRequest request)
         {
             try
             {
-                var result = await _paymentService.CreatePaymentIntentAsync(request.OrderId, request.Amount);
+                var result = await _paymentService.CreatePaymentIntentAsync(request.OrderId);
                 return Ok(result);
             }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            catch (ArgumentException ex)      { return NotFound(new { message = ex.Message }); }
+            catch (InvalidOperationException ex) { return BadRequest(new { message = ex.Message }); }
         }
 
-        // Stripe يستدعي هاد الـ endpoint مباشرة — لازم يكون public بدون Auth
+        /// <summary>
+        /// Step 2 of checkout: called by the frontend after stripe.confirmPayment() succeeds.
+        /// Re-verifies the PaymentIntent status directly with Stripe before updating the DB.
+        /// </summary>
+        [Authorize]
+        [HttpPost("confirm")]
+        public async Task<IActionResult> ConfirmPayment([FromBody] ConfirmPaymentRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.PaymentIntentId))
+                return BadRequest(new { message = "PaymentIntentId is required." });
+
+            var succeeded = await _paymentService.ConfirmPaymentAsync(request.PaymentIntentId);
+
+            return succeeded
+                ? Ok(new { message = "Payment confirmed. Order is now complete." })
+                : BadRequest(new { message = "Payment not yet succeeded or intent not found." });
+        }
+
+        /// <summary>
+        /// Stripe webhook receiver — must be public (no auth) so Stripe can call it.
+        /// Raw body is required for signature verification.
+        /// </summary>
         [AllowAnonymous]
         [HttpPost("webhook")]
         public async Task<IActionResult> WebhookReceiver()
         {
-            // لازم نقرأ الـ raw body عشان Stripe يتحقق من الـ signature
-            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+            var json      = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
             var signature = Request.Headers["Stripe-Signature"].ToString();
 
             var result = await _paymentService.HandleWebhookAsync(json, signature);
-            if (!result) return BadRequest("Webhook signature verification failed");
+            if (!result) return BadRequest("Webhook signature verification failed.");
 
             return Ok();
         }

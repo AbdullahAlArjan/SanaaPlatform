@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/servicestyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body data-service-id="4" data-freelancer-id="0">
     <!-- Navigation Bar -->
     <nav>
         <div class="logo">
@@ -120,6 +120,11 @@
                 <div class="button-group">
                     <button class="btn btn-order">Place Order</button>
                     <button id="message-button" class="btn btn-message">Message</button>
+                    <button id="favorite-btn" class="btn btn-favorite"
+                            data-service-id="4"
+                            onclick="toggleFavorite(this)">
+                        <i class="far fa-heart"></i> Favorite
+                    </button>
                     <button class="btn btn-report">Report</button>
                 </div>
             </div>

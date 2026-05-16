@@ -15,32 +15,58 @@ namespace Sanaa.BLL.Services
             _context = context;
         }
 
-        public async Task<bool> SubmitReportAsync(int reporterUserId, SubmitReportRequest request)
+        public async Task<string?> SubmitReportAsync(int reporterUserId, SubmitReportRequest request)
         {
             if (!Enum.TryParse<ReportTargetType>(request.TargetType, out var targetType))
-                return false;
+                return "INVALID_TARGET";
 
-            // منع بلاغين من نفس المستخدم على نفس الـ target
+            // ── Paid-order gate ───────────────────────────────────────────────────────
+            // OrderStatus has no "Paid" value; Completed is the post-payment state.
+            // Gate is applied per target type:
+            //   Freelancer → any Completed order with that freelancer (by profile ID)
+            //   Service    → any Completed order for that specific service (by ServiceID)
+            if (targetType == ReportTargetType.Freelancer)
+            {
+                var hasCompletedOrder = await _context.Orders.AnyAsync(o =>
+                    o.ClientID     == reporterUserId &&
+                    o.FreelancerID == request.TargetID &&
+                    o.Status       == OrderStatus.Completed);
+
+                if (!hasCompletedOrder)
+                    return "NO_PAID_ORDER";
+            }
+            else if (targetType == ReportTargetType.Service)
+            {
+                var hasCompletedOrder = await _context.Orders.AnyAsync(o =>
+                    o.ClientID  == reporterUserId &&
+                    o.ServiceID == request.TargetID &&
+                    o.Status    == OrderStatus.Completed);
+
+                if (!hasCompletedOrder)
+                    return "NO_PAID_ORDER";
+            }
+
+            // ── Duplicate guard: one report per reporter per target ──────────────────
             var duplicate = await _context.Reports.AnyAsync(r =>
                 r.ReporterID == reporterUserId &&
                 r.TargetType == targetType &&
-                r.TargetID == request.TargetID);
+                r.TargetID   == request.TargetID);
 
-            if (duplicate) return false;
+            if (duplicate) return "DUPLICATE";
 
             _context.Reports.Add(new Report
             {
-                ReporterID = reporterUserId,
-                TargetType = targetType,
-                TargetID = request.TargetID,
-                Reason = request.Reason,
+                ReporterID  = reporterUserId,
+                TargetType  = targetType,
+                TargetID    = request.TargetID,
+                Reason      = request.Reason,
                 Description = request.Description,
-                Status = ReportStatus.Pending,
-                CreatedAt = DateTime.UtcNow
+                Status      = ReportStatus.Pending,
+                CreatedAt   = DateTime.UtcNow
             });
 
             await _context.SaveChangesAsync();
-            return true;
+            return null;   // null = success
         }
 
         public async Task<PagedResponse<ReportResponse>> GetAllReportsAsync(string? statusFilter, int pageNumber, int pageSize)

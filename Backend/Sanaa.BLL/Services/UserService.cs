@@ -272,6 +272,13 @@ namespace Sanaa.BLL.Services
             };
         }
 
+        /// <summary>Issues fresh tokens for an existing user, reflecting their current DB role.</summary>
+        public async Task<LoginResponse?> GenerateTokensForUserAsync(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            return user is null ? null : await CreateLoginResponseAsync(user);
+        }
+
         // دالة حظر / فك حظر المستخدم (Toggle)
         public async Task<bool> ToggleUserStatusAsync(int userId)
         {

@@ -1,3 +1,5 @@
+const API_BASE_URL = 'https://localhost:7101'; // single source for base URL in this file
+
 // JavaScript to toggle password visibility
 const togglePassword = document.getElementById('togglePassword');
 const password = document.getElementById('password');
@@ -10,7 +12,7 @@ if (togglePassword && password) {
     });
 }
 
-// Password and Confirm Password Validation
+// Password and Confirm Password Validation & Form Submission
 const registerForm = document.getElementById('registerForm');
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirm-password');
@@ -19,7 +21,8 @@ const phoneInput = document.getElementById('phone');
 const phoneError = document.getElementById('phoneError');
 
 if (registerForm) {
-    registerForm.addEventListener('submit', function (e) {
+    // ⚠️ مهم: أضفنا كلمة async هنا لانتظار رد السيرفر
+    registerForm.addEventListener('submit', async function (e) {
         e.preventDefault(); 
 
         let isValid = true;
@@ -41,29 +44,71 @@ if (registerForm) {
         } 
 
         if (isValid) {
-            // Get form values
+            // 1. جلب القيم من الفورم
             const firstName = document.getElementById('firstname').value.trim();
             const lastName = document.getElementById('lastname').value.trim();
             const email = document.getElementById('email').value.trim(); 
-            const phone = document.getElementById('phone').value.trim();
+            const phone = phoneInput.value.trim();
+            const password = passwordInput.value;
             const birthday = document.getElementById('birthday').value;
             const age = calculateAge(birthday);
 
-            // Save data to localStorage
+            // 2. تخزين بعض البيانات في المتصفح (مفيدة لواجهة المستخدم لاحقاً)
             localStorage.setItem('fullName', `${firstName} ${lastName}`);
             localStorage.setItem('phoneNumber', phone);
             localStorage.setItem('age', age);
             localStorage.setItem('birthday', birthday);
 
-            // التعديل: التوجيه لصفحة الـ OTP مع تمرير الإيميل عبر الرابط
-            const otpUrl = `otp-verify.html?email=${encodeURIComponent(email)}&purpose=Registration`;
-            window.location.href = otpUrl;
+            // 3. تجهيز الـ Payload للباك إند (دمجنا الاسم الأول والأخير لأنه الباك إند غالباً بطلب FullName)
+            const requestData = {
+    fullName: `${firstName} ${lastName}`,
+    email: email,
+    password: password,
+    phone: phone, // ✅ تم التعديل لتطابق السواغر
+    role: "Client" 
+};
+
+            const submitBtn = registerForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerText;
+            
+            // حالة التحميل (عشان اليوزر ما يكبس مرتين)
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Registering...";
+
+            try {
+                // 4. إرسال الطلب الفعلي للسيرفر
+              const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (response.ok) {
+                    // 5. في حال نجاح التسجيل، التوجيه لصفحة الـ OTP مع الإيميل
+                    const otpUrl = `otp-verify.html?email=${encodeURIComponent(email)}&purpose=Registration`;
+                    window.location.href = otpUrl;
+                } else {
+                    // في حال الرفض (إيميل مكرر أو خطأ بالبيانات)
+                    const errorData = await response.json().catch(() => ({}));
+                    alert('Registration Failed: ' + (errorData.message || 'Email may already be in use or data is invalid.'));
+                }
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                alert("Could not connect to the server. Is the backend running?");
+            } finally {
+                // إرجاع الزر لحالته الطبيعية
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalBtnText;
+            }
         }
     });
 }
 
 // Calculate age from birthday
 function calculateAge(birthday) {
+    if (!birthday) return 0;
     const birthDate = new Date(birthday);
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();

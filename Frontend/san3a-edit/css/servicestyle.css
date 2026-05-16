@@ -361,6 +361,19 @@ nav {
     color: white;
 }
 
+.btn-favorite {
+    background: transparent;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-favorite:hover,
+.btn-favorite.is-favorited {
+    background: #e74c3c;
+    color: white;
+}
+
 .btn-login-modal {
     background: var(--secondary);
     color: white;

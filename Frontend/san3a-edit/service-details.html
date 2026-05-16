@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Details — Sana'a</title>
+    <link rel="stylesheet" href="css/servicestyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ── Page scaffold ─────────────────────────────────────────── */
+        /* servicestyle.css sets body{display:flex;flex-direction:column}
+           which collapses children into a narrow strip — reset it here. */
+        body {
+            display: block !important;
+            background: #f0f2f5;
+        }
+
+        /* ── Master two-column grid container ──────────────────────── */
+        .details-container {
+            max-width: 1300px;
+            width: 90%;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+        @media (max-width: 900px) {
+            .details-container { grid-template-columns: 1fr; width: 95%; }
+        }
+
+        /* ── Left column: stack cards vertically ───────────────────── */
+        .details-container > aside {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        /* Remove card bottom-margin since gap handles spacing */
+        .details-container > aside .sd-card { margin-bottom: 0; }
+
+        /* ── Card base ─────────────────────────────────────────────── */
+        .sd-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 1.25rem;
+        }
+
+        /* ── Price card ────────────────────────────────────────────── */
+        #service-price {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1877f2;
+            margin: 0 0 1rem;
+        }
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #555;
+            padding: 0.45rem 0;
+            border-bottom: 1px solid #f0f2f5;
+        }
+        .meta-row:last-of-type { border-bottom: none; margin-bottom: 0.75rem; }
+        .meta-row strong { color: #2c3e50; }
+
+        /* Star display */
+        .stars-display { color: #f39c12; font-size: 1rem; letter-spacing: 2px; }
+        .star-count    { color: #555; font-size: 0.8rem; margin-left: 4px; }
+
+        /* Action buttons row */
+        .action-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+        .btn-action {
+            padding: 0.65rem 0;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn-action:hover  { opacity: 0.88; transform: translateY(-1px); }
+        .btn-action:active { transform: scale(0.97); }
+
+        #report-btn  { background: #e74c3c; color: #fff; }
+        #fav-btn     { background: #fff; color: #e74c3c; border: 1.5px solid #e74c3c; }
+        #msg-btn     { background: #fff; color: #1877f2; border: 1.5px solid #1877f2; }
+        #order-btn   { background: #1877f2; color: #fff; grid-column: span 2; }
+        #order-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+        /* ── Owner card ─────────────────────────────────────────────── */
+        .owner-card-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #f0f2f5;
+            padding-bottom: 0.6rem;
+        }
+        .owner-row {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+        #freelancer-avatar {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e8f4fd;
+            flex-shrink: 0;
+        }
+        .owner-info { flex: 1; }
+        #freelancer-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0 0 0.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .verified-dot { color: #27ae60; font-size: 0.9rem; }
+        .seller-badge {
+            font-size: 0.75rem;
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        #freelancer-rating-mini { font-size: 0.8rem; color: #f39c12; margin-top: 0.25rem; }
+
+        /* ── Carousel ───────────────────────────────────────────────── */
+        .carousel-wrapper {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #e8eaed;
+            margin-bottom: 1.5rem;
+        }
+        .carousel-track {
+            position: relative;
+            width: 100%;
+            max-height: 500px;
+            height: 500px;
+            overflow: hidden;
+        }
+        .carousel-slide {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .carousel-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.88);
+            border: none;
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            transition: background 0.2s, transform 0.15s;
+        }
+        .carousel-btn:hover  { background: #fff; transform: translateY(-50%) scale(1.08); }
+        .prev-btn { left: 12px; }
+        .next-btn { right: 12px; }
+
+        .carousel-thumbs {
+            display: flex;
+            gap: 6px;
+            padding: 8px 10px;
+            background: #f8f9fb;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+        .thumb {
+            width: 64px; height: 48px;
+            object-fit: cover;
+            border-radius: 7px;
+            cursor: pointer;
+            border: 2.5px solid transparent;
+            transition: border-color 0.2s, opacity 0.2s;
+            opacity: 0.55;
+            flex-shrink: 0;
+        }
+        .thumb.active { border-color: #1877f2; opacity: 1; }
+
+        /* ── Service info card (below carousel) ─────────────────────── */
+        .category-badge {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #1877f2;
+            border-radius: 20px;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-bottom: 0.85rem;
+        }
+        #service-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.85rem;
+        }
+        #service-description {
+            font-size: 0.92rem;
+            line-height: 1.85;
+            color: #555;
+        }
+
+        /* ── Error banner ───────────────────────────────────────────── */
+        #error-banner {
+            display: none;
+            background: #fff3f3;
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 2rem auto;
+            max-width: 550px;
+        }
+
+        /* ── Skeleton ───────────────────────────────────────────────── */
+        .skeleton {
+            background: linear-gradient(90deg, #e8eaed 25%, #dfe1e5 50%, #e8eaed 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 6px; color: transparent;
+        }
+        @keyframes shimmer { to { background-position: -200% 0; } }
+
+        /* ── Checkout modal: overlay upgrade ────────────────────────────────── */
+        /* servicestyle.css sets .modal { display:none; position:fixed; z-index:1000 }
+           We keep display:flex always and use opacity+pointer-events to show/hide.  */
+        #checkout-modal.modal {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background: rgba(15, 23, 42, 0.55);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            padding: 1rem;
+        }
+        #checkout-modal.modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* ── Glass card ─────────────────────────────────────────────────────── */
+        .checkout-box {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.18);
+            padding: 2rem 2.25rem 1.75rem;
+            width: 100%;
+            max-width: 520px;
+            max-height: 92vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.25s ease;
+            scrollbar-width: thin;
+        }
+        #checkout-modal.modal.open .checkout-box { transform: translateY(0); }
+
+        /* ── Header ─────────────────────────────────────────────────────────── */
+        .checkout-close {
+            position: absolute; top: 1rem; right: 1.1rem;
+            background: none; border: none; font-size: 1.6rem; cursor: pointer;
+            color: #aaa; line-height: 1; transition: color 0.15s;
+        }
+        .checkout-close:hover { color: #333; }
+        .checkout-title {
+            font-size: 1.25rem; font-weight: 700; color: #2c3e50;
+            margin: 0 0 1rem; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .checkout-title .fa-lock { color: #1877f2; font-size: 1rem; }
+
+        /* ── Order summary strip ────────────────────────────────────────────── */
+        .checkout-summary {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #f0f6ff; border-radius: 10px; padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem; font-size: 0.9rem; color: #2c3e50;
+        }
+        .checkout-summary strong { color: #1877f2; font-size: 1.1rem; font-weight: 700; }
+
+        /* ── Section labels ─────────────────────────────────────────────────── */
+        .checkout-section-label {
+            font-size: 0.72rem; font-weight: 700; color: #999;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            margin: 0 0 0.75rem; padding-bottom: 0.4rem;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        /* ── Scoped input overrides (premium feel) ──────────────────────────── */
+        .checkout-box .form-group { margin-bottom: 1rem; }
+        .checkout-box .form-group input,
+        .checkout-box .form-group textarea {
+            border: 1.5px solid #e2e8f0; border-radius: 10px;
+            padding: 0.75rem 0.9rem; font-size: 0.9rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: 100%; box-sizing: border-box; outline: none; background: #fafbfc;
+            display: block;
+        }
+        .checkout-box .form-group input:focus,
+        .checkout-box .form-group textarea:focus {
+            border-color: #1877f2; box-shadow: 0 0 0 3px rgba(24,119,242,0.12); background: #fff;
+        }
+        .checkout-box .form-group input.input-error {
+            border-color: #e74c3c; box-shadow: 0 0 0 3px rgba(231,76,60,0.1);
+        }
+        .checkout-box .form-group label {
+            display: block; font-size: 0.82rem; font-weight: 600;
+            color: #2c3e50; margin-bottom: 0.4rem;
+        }
+        .checkout-box .form-row {
+            display: flex; gap: 1rem; margin-bottom: 0;
+        }
+        .checkout-box .form-row .form-group { flex: 1; }
+
+        /* ── Stripe Payment Element container ──────────────────────────────── */
+        /* Stripe injects an iframe here; we just need a styled wrapper.        */
+        #payment-element {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 0.75rem 0.9rem;
+            background: #fafbfc;
+            min-height: 44px;   /* collapses before Stripe mounts */
+        }
+        /* Step sections — JS toggles display */
+        #co-step2 { display: none; }
+        .co-step-back {
+            font-size: 0.82rem; color: #1877f2; background: none; border: none;
+            cursor: pointer; padding: 0; margin-bottom: 0.75rem;
+            display: flex; align-items: center; gap: 0.3rem;
+        }
+        .co-step-back:hover { text-decoration: underline; }
+
+        /* ── Action buttons ─────────────────────────────────────────────────── */
+        .checkout-actions {
+            display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem; margin-top: 1.25rem;
+        }
+        .co-btn-cancel {
+            padding: 0.78rem; border-radius: 10px; border: 1.5px solid #e2e8f0;
+            background: #f8f9fa; color: #555; font-weight: 600; cursor: pointer;
+            font-size: 0.88rem; transition: background 0.15s;
+        }
+        .co-btn-cancel:hover { background: #eee; }
+        .co-btn-pay {
+            padding: 0.78rem; border-radius: 10px; border: none;
+            background: linear-gradient(135deg, #1877f2, #0d5bbf);
+            color: #fff; font-weight: 700; cursor: pointer; font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: center; gap: 0.45rem;
+            transition: opacity 0.2s, transform 0.1s;
+            box-shadow: 0 4px 14px rgba(24,119,242,0.35);
+        }
+        .co-btn-pay:hover  { opacity: 0.92; transform: translateY(-1px); }
+        .co-btn-pay:active { transform: scale(0.98); }
+        .co-btn-pay:disabled { background: #aaa; box-shadow: none; cursor: not-allowed; transform: none; }
+
+        /* ── Toast ──────────────────────────────────────────────────────────── */
+        .sd-toast {
+            position: fixed; bottom: 1.5rem; left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #2c3e50; color: #fff; padding: 0.85rem 1.5rem;
+            border-radius: 12px; font-size: 0.9rem; font-weight: 600;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 9999;
+            opacity: 0; transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none; white-space: nowrap;
+        }
+        .sd-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .sd-toast.toast-success { background: #27ae60; }
+        .sd-toast.toast-error   { background: #e74c3c; }
+    </style>
+</head>
+<body>
+
+<!-- ── Navigation ───────────────────────────────────────────────────── -->
+<nav>
+    <div class="logo">
+        <a href="index.html" class="logo">صنعة <span style="color:#3498db;">Sana'a</span></a>
+    </div>
+    <div class="auth-links">
+        <div id="authButtons">
+            <a href="Login.html"    id="login-link">Login</a>
+            <a href="Register.html" id="register-link">Register</a>
+        </div>
+        <div id="userProfile" class="user-profile" style="display:none;">
+            <img id="userAvatar"
+                 src="https://ui-avatars.com/api/?name=User&background=3498db&color=fff"
+                 alt="User" class="user-avatar">
+            <div class="dropdown-content">
+                <a href="#" id="navProfileLink">Dashboard</a>
+                <a href="#" id="logoutBtn">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ── Error banner ──────────────────────────────────────────────────── -->
+<div id="error-banner">
+    <i class="fas fa-exclamation-triangle" style="font-size:2rem;margin-bottom:.75rem;display:block"></i>
+    <p id="error-msg" style="font-size:1rem;margin-bottom:.75rem">Service not found.</p>
+    <a href="index.html" style="color:#1877f2;font-weight:600">← Back to Home</a>
+</div>
+
+<!-- ── Main wrapper ──────────────────────────────────────────────────── -->
+<div class="details-container" id="detail-grid">
+
+    <!-- ════════════ LEFT SIDEBAR ════════════ -->
+    <aside>
+
+            <!-- Price & Meta Card -->
+            <div class="sd-card">
+                <h2 id="service-price" class="skeleton">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+
+                <div class="meta-row">
+                    <span>Delivery Time</span>
+                    <strong id="service-delivery">—</strong>
+                </div>
+                <div class="meta-row">
+                    <span>+Buyers</span>
+                    <strong id="service-buyers">—</strong>
+                </div>
+                <div class="meta-row">
+                    <span>Tools Used</span>
+                    <strong id="service-tools-display">—</strong>
+                </div>
+                <div class="meta-row" style="border-bottom:none;padding-bottom:0.75rem">
+                    <span>Rating</span>
+                    <span>
+                        <span class="stars-display" id="service-stars">★★★★☆</span>
+                        <span class="star-count" id="service-rating-val">(—)</span>
+                    </span>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="action-row">
+                    <button class="btn-action" id="report-btn" title="Report this service">
+                        <i class="fas fa-flag"></i> Report
+                    </button>
+                    <button class="btn-action" id="fav-btn" title="Add to Favourites">
+                        <i class="far fa-heart"></i> Favourite
+                    </button>
+                    <button class="btn-action" id="msg-btn" title="Contact via WhatsApp">
+                        <i class="fab fa-whatsapp"></i> Message
+                    </button>
+                    <button class="btn-action" id="order-btn" disabled>
+                        <i class="fas fa-handshake"></i> Place Order
+                    </button>
+                </div>
+            </div>
+
+            <!-- Service Owner Card -->
+            <div class="sd-card">
+                <p class="owner-card-title">Service Owner</p>
+                <div class="owner-row">
+                    <img id="freelancer-avatar"
+                         src="https://ui-avatars.com/api/?name=FL&background=3498db&color=fff"
+                         alt="Owner Avatar">
+                    <div class="owner-info">
+                        <h4 id="freelancer-name" class="skeleton" style="min-width:100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                        <div class="seller-badge">
+                            <i class="fas fa-user"></i>
+                            <span id="freelancer-city"></span>
+                        </div>
+                        <div id="freelancer-rating-mini"></div>
+                    </div>
+                </div>
+                <p id="freelancer-bio" style="font-size:0.8rem;color:#666;margin-top:0.85rem;line-height:1.6;border-top:1px solid #f0f2f5;padding-top:0.75rem"></p>
+            </div>
+
+        </aside>
+
+        <!-- ════════════ RIGHT: CAROUSEL + CONTENT ════════════ -->
+        <main>
+
+            <!-- Image Carousel -->
+            <div class="carousel-wrapper" id="carousel-wrapper">
+                <button class="carousel-btn prev-btn" onclick="carouselPrev()" aria-label="Previous">&#10094;</button>
+
+                <div class="carousel-track" id="carousel-track">
+                    <!-- slides injected by service-details.js -->
+                    <img class="carousel-slide active"
+                         src="Images/logo.png"
+                         alt="Loading…"
+                         style="object-fit:contain;background:#e8eaed">
+                </div>
+
+                <button class="carousel-btn next-btn" onclick="carouselNext()" aria-label="Next">&#10095;</button>
+
+                <!-- Thumbnails -->
+                <div class="carousel-thumbs" id="carousel-thumbs"></div>
+            </div>
+
+            <!-- Service title + description -->
+            <div class="sd-card">
+                <span class="category-badge" id="service-category">Loading…</span>
+                <h2 id="service-title" class="skeleton" style="min-height:1.8rem">&nbsp;</h2>
+                <p  id="service-description" class="skeleton" style="min-height:4rem">&nbsp;</p>
+            </div>
+
+        </main>
+</div>
+
+<!-- ── Checkout / Payment Modal ──────────────────────────────────────── -->
+<div id="checkout-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+  <div class="checkout-box">
+    <button class="checkout-close" id="checkout-close-btn" aria-label="Close">&times;</button>
+    <h2 class="checkout-title" id="checkout-title">
+      <i class="fas fa-lock"></i> Secure Checkout
+    </h2>
+
+    <!-- Order Summary strip (always visible) -->
+    <div class="checkout-summary">
+      <span id="co-service-title">Service</span>
+      <strong id="co-service-price">$0.00</strong>
+    </div>
+
+    <!-- ── STEP 1: Order details ─────────────────────────────────────── -->
+    <div id="co-step1">
+      <form id="checkout-form" novalidate>
+        <p class="checkout-section-label">Order Details</p>
+
+        <div class="form-group">
+          <label for="co-location">Delivery Location <span style="color:#e74c3c">*</span></label>
+          <input id="co-location" type="text" placeholder="Your city / full address" required>
+        </div>
+
+        <div class="form-group">
+          <label for="co-description">Order Instructions
+            <span style="color:#888;font-weight:400;font-size:0.8rem">(optional)</span>
+          </label>
+          <textarea id="co-description" rows="2" placeholder="Any special notes for the freelancer…"></textarea>
+        </div>
+
+        <div class="checkout-actions">
+          <button type="button" class="co-btn-cancel" id="checkout-cancel-btn">Cancel</button>
+          <button type="submit" class="co-btn-pay" id="checkout-next-btn">
+            Continue to Payment <i class="fas fa-arrow-right" style="font-size:0.85rem"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ── STEP 2: Real Stripe Payment Element ──────────────────────── -->
+    <div id="co-step2">
+      <button class="co-step-back" id="co-back-btn">
+        <i class="fas fa-arrow-left"></i> Back to order details
+      </button>
+
+      <p class="checkout-section-label">Payment Information</p>
+
+      <!-- Stripe Payment Element mounts here -->
+      <div id="payment-element"></div>
+
+      <div id="payment-errors" style="color:#e74c3c;font-size:0.85rem;margin-top:0.5rem;min-height:1.2rem"></div>
+
+      <div class="checkout-actions" style="margin-top:1.25rem">
+        <button type="button" class="co-btn-cancel" id="co-cancel-step2-btn">Cancel</button>
+        <button type="button" class="co-btn-pay" id="checkout-pay-btn" disabled>
+          <i class="fas fa-lock"></i> Pay Now
+        </button>
+      </div>
+
+      <p class="secure-notice" style="margin-top:1rem">
+        <i class="fas fa-shield-alt"></i> 256-bit SSL Encrypted · Powered by Stripe
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Toast notification ─────────────────────────────────────────────── -->
+<div id="sd-toast" class="sd-toast" role="alert" aria-live="polite"></div>
+
+<!-- Stripe.js — must load before our module so window.Stripe is available -->
+<script src="https://js.stripe.com/v3/"></script>
+<!-- navbar.js — auth-aware nav state -->
+<script src="js/navbar.js"></script>
+<!-- service-details.js — data fetch, carousel, buttons -->
+<script type="module" src="js/service-details.js"></script>
+
+</body>
+</html>

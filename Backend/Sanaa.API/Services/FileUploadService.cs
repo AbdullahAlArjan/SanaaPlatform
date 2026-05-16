@@ -27,7 +27,9 @@ namespace Sanaa.API.Services
             if (!AllowedExtensions.Contains(ext))
                 throw new ArgumentException("نوع الملف غير مدعوم. المسموح: jpg, jpeg, png, webp");
 
-            var uploadsPath = Path.Combine(_env.WebRootPath, "uploads", folder);
+            // WebRootPath is null when wwwroot doesn't exist; fall back to ContentRootPath/wwwroot
+            var webRoot     = _env.WebRootPath ?? Path.Combine(_env.ContentRootPath, "wwwroot");
+            var uploadsPath = Path.Combine(webRoot, "uploads", folder);
             Directory.CreateDirectory(uploadsPath);
 
             var fileName = $"{Guid.NewGuid()}{ext}";
@@ -44,7 +46,8 @@ namespace Sanaa.API.Services
             if (string.IsNullOrWhiteSpace(imageUrl)) return;
 
             var relativePath = imageUrl.TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
-            var fullPath = Path.Combine(_env.WebRootPath, relativePath);
+            var webRoot      = _env.WebRootPath ?? Path.Combine(_env.ContentRootPath, "wwwroot");
+            var fullPath     = Path.Combine(webRoot, relativePath);
 
             if (File.Exists(fullPath))
                 File.Delete(fullPath);

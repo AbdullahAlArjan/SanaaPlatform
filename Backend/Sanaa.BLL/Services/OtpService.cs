@@ -71,22 +71,27 @@ namespace Sanaa.BLL.Services
                 return false;   // OTP not in DB — nothing to email, abort cleanly
             }
 
-            // ── 5. SEND EMAIL — isolated try/catch; failure does NOT undo the DB save ──
-            try
+            // ── 5. SEND EMAIL — fire-and-forget so the HTTP request returns instantly ──
+            // The OTP is already in the DB; email delivery happens on a background thread.
+            var emailSnapshot = email;
+            var codeSnapshot  = code;
+            var purposeSnap   = purpose;
+            _ = Task.Run(async () =>
             {
-                await SendEmailAsync(email, code, purpose);
-                Console.WriteLine($"[OtpService] ✅ STEP 5 — email dispatched to {email}");
-            }
-            catch (Exception ex)
-            {
-                // OTP is already committed to the DB. The user can still verify
-                // manually or request a resend. Do NOT return false here.
-                Console.WriteLine($"[OtpService] ⚠️  STEP 5 — email send failed (OTP IS in DB, code={code}):");
-                Console.WriteLine($"[OtpService]    Type    : {ex.GetType().Name}");
-                Console.WriteLine($"[OtpService]    Message : {ex.Message}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"[OtpService]    Inner   : {ex.InnerException.Message}");
-            }
+                try
+                {
+                    await SendEmailAsync(emailSnapshot, codeSnapshot, purposeSnap);
+                    Console.WriteLine($"[OtpService] ✅ STEP 5 — background email delivered to {emailSnapshot}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[OtpService] ⚠️  STEP 5 — background email failed (OTP IS in DB, code={codeSnapshot}):");
+                    Console.WriteLine($"[OtpService]    Type    : {ex.GetType().Name}");
+                    Console.WriteLine($"[OtpService]    Message : {ex.Message}");
+                    if (ex.InnerException != null)
+                        Console.WriteLine($"[OtpService]    Inner   : {ex.InnerException.Message}");
+                }
+            });
 
             Console.WriteLine($"[OtpService] ── SendOtpAsync END — returning true");
             return true;

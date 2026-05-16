@@ -152,3 +152,21 @@ export async function apiUpload(endpoint, formData) {
     isMultipart: true,
   });
 }
+
+/**
+ * resolveMediaUrl — converts a server-relative upload path to a full URL.
+ *
+ * Examples:
+ *   resolveMediaUrl('/uploads/services/abc.png')
+ *     → 'https://localhost:7101/uploads/services/abc.png'
+ *   resolveMediaUrl('https://cdn.example.com/img.jpg')
+ *     → 'https://cdn.example.com/img.jpg'   (already absolute — returned as-is)
+ *   resolveMediaUrl(null) → ''
+ */
+export function resolveMediaUrl(path) {
+  if (!path) return '';
+  // Already an absolute URL (http/https/data/blob) — return untouched
+  if (/^(https?:|data:|blob:)/i.test(path)) return path;
+  // Relative path — prepend the API base so the backend's static-file middleware serves it
+  return `${API_BASE_URL}${path.startsWith('/') ? '' : '/'}${path}`;
+}

@@ -1,207 +1,264 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Retrieve data from localStorage
-    const fullName = localStorage.getItem('fullName');
-    const gender = localStorage.getItem('gender');
-    const birthday = localStorage.getItem('birthday');
-    const phone = localStorage.getItem('phone');
-    const city = localStorage.getItem('city');
-    const profileImage = localStorage.getItem('profileImage');
+import { requireAuth } from './auth.js';
+import { apiJSON, apiFetch } from './api.js';
 
-    // Debugging: Log retrieved data
-    console.log('Retrieved Data:', { fullName, gender, birthday, phone, city });
+document.addEventListener('DOMContentLoaded', async () => {
+    // Guard: must be a logged-in client
+    const user = requireAuth(['client']);
+    if (!user) return;
 
-    // Display data if all required fields are present
-    if (fullName && gender && birthday && phone && city) {
-        document.getElementById('fullName').textContent = fullName;
-        document.getElementById('genderDisplay').textContent = gender;
-        document.getElementById('birthdayDisplay').textContent = birthday;
-        document.getElementById('phoneDisplay').textContent = phone;
-        document.getElementById('cityDisplay').textContent = city;
-    } else {
-        console.error('Missing data in localStorage. Redirecting to registration page.');
-        window.location.href = 'Register.html';
-    }
+    // ── 1. Name from stored JWT data ──────────────────────────────────────────
+    const nameEl = document.getElementById('fullName');
+    if (nameEl) nameEl.textContent = user.fullName ?? '';
 
-    // Load profile image if available
-    if (profileImage) {
-        document.getElementById('profileImage').src = profileImage;
-        document.getElementById('profileImage').style.display = 'block';
-    }
+    // ── 2. Profile fields from localStorage ───────────────────────────────────
+    // TODO: replace with GET /api/Users/me once that endpoint is added to UsersController
+    _setDisplay('phoneDisplay',    localStorage.getItem('phoneNumber') || '');
+    _setDisplay('birthdayDisplay', localStorage.getItem('birthday')    || '');
+    _setDisplay('genderDisplay',   localStorage.getItem('gender')      || '');
+    _setDisplay('cityDisplay',     localStorage.getItem('city')        || '');
 
-    // Load notifications and services
-    loadNotifications();
-    loadFavoriteServices();
-    loadPurchasedServices();
+    // ── 3. Restore saved avatar ───────────────────────────────────────────────
+    const savedAvatar = localStorage.getItem('profileImage');
+    const profileImg  = document.getElementById('profileImage');
+    if (savedAvatar && profileImg) profileImg.src = savedAvatar;
 
-    // Add event listener for avatar upload if the element exists
+    // ── 4. Avatar upload ──────────────────────────────────────────────────────
     const avatarUpload = document.getElementById('avatarUpload');
     if (avatarUpload) {
         avatarUpload.addEventListener('change', function (e) {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    // Update profile image and save to localStorage
-                    document.getElementById('profileImage').src = e.target.result;
-                    document.getElementById('profileImage').style.display = 'block';
-                    localStorage.setItem('profileImage', e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                if (profileImg) profileImg.src = ev.target.result;
+                localStorage.setItem('profileImage', ev.target.result);
+            };
+            reader.readAsDataURL(file);
         });
     }
+
+    // ── 5. Load live data in parallel ────────────────────────────────────────
+    loadNotifications();
+    await Promise.all([loadFavoriteServices(), loadPurchasedServices()]);
 });
 
-// Open Profile Editor Modal
-function openProfileEditor() {
-    const modal = document.getElementById('profileEditorModal');
-    if (modal) {
-        modal.style.display = 'flex';
+// ── Shared helpers ────────────────────────────────────────────────────────────
 
-        // Load current values into the modal inputs
-        document.getElementById('genderInput').value = localStorage.getItem('gender') || '';
-        document.getElementById('phoneInput').value = localStorage.getItem('phone') || '';
-        document.getElementById('cityInput').value = localStorage.getItem('city') || '';
-        document.getElementById('birthdayInput').value = localStorage.getItem('birthday') || '';
-    }
+function _setDisplay(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
 }
 
-// Save Profile Changes
-function saveProfileChanges() {
+function _setVal(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+}
+
+// ── Profile Editor Modal ──────────────────────────────────────────────────────
+// Exposed on window so HTML onclick="" attributes can reach them from a module
+
+window.openProfileEditor = function () {
+    const modal = document.getElementById('profileEditorModal');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    _setVal('genderInput',   localStorage.getItem('gender')      || '');
+    _setVal('phoneInput',    localStorage.getItem('phoneNumber') || '');
+    _setVal('cityInput',     localStorage.getItem('city')        || '');
+    _setVal('birthdayInput', localStorage.getItem('birthday')    || '');
+};
+
+window.saveProfileChanges = async function () {
     const phoneInput = document.getElementById('phoneInput');
     const phoneError = document.getElementById('phoneError');
 
-    // Validate phone number
     if (!/^\d{10}$/.test(phoneInput.value)) {
-        phoneError.style.display = 'block'; // Show error message
-        phoneInput.focus(); // Focus on the input field
-        return; // Stop further execution
-    } else {
-        phoneError.style.display = 'none'; // Hide error message
+        phoneError.style.display = 'block';
+        phoneInput.focus();
+        return;
     }
+    phoneError.style.display = 'none';
 
-    // Update Birthday
-    const newBirthday = document.getElementById('birthdayInput').value;
-    if (newBirthday) {
-        document.getElementById('birthdayDisplay').textContent = newBirthday;
-        localStorage.setItem('birthday', newBirthday);
-    }
+    const birthday = document.getElementById('birthdayInput').value;
+    const gender   = document.getElementById('genderInput').value;
+    const phone    = phoneInput.value;
+    const city     = document.getElementById('cityInput').value;
 
-    // Update Gender
-    const newGender = document.getElementById('genderInput').value;
-    if (newGender) {
-        document.getElementById('genderDisplay').textContent = newGender;
-        localStorage.setItem('gender', newGender);
-    }
+    // Persist to localStorage
+    if (birthday) localStorage.setItem('birthday',    birthday);
+    if (gender)   localStorage.setItem('gender',      gender);
+    if (phone)    localStorage.setItem('phoneNumber', phone);
+    if (city)     localStorage.setItem('city',        city);
 
-    // Update Phone Number
-    const newPhone = phoneInput.value;
-    if (newPhone) {
-        document.getElementById('phoneDisplay').textContent = newPhone;
-        localStorage.setItem('phone', newPhone);
-    }
+    // Reflect immediately in the display
+    if (birthday) _setDisplay('birthdayDisplay', birthday);
+    if (gender)   _setDisplay('genderDisplay',   gender);
+    if (phone)    _setDisplay('phoneDisplay',    phone);
+    if (city)     _setDisplay('cityDisplay',     city);
 
-    // Update City
-    const newCity = document.getElementById('cityInput').value;
-    if (newCity) {
-        document.getElementById('cityDisplay').textContent = newCity;
-        localStorage.setItem('city', newCity);
-    }
+    // TODO: uncomment once PATCH /api/Users/me is added to UsersController
+    // try {
+    //   await apiJSON('/api/Users/me', {
+    //     method: 'PATCH',
+    //     body: JSON.stringify({ phone, city, gender, birthday }),
+    //   });
+    // } catch (err) { console.error('Profile save failed:', err); }
 
-    // Show success message
-    alert('Profile changes saved successfully!');
+    alert('Profile changes saved!');
+    window.closeModal('profileEditorModal');
+};
 
-    // Close the modal
-    closeModal('profileEditorModal');
-}
-
-// Close Modal
-function closeModal(modalId) {
+window.closeModal = function (modalId) {
     const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none'; // Hide the modal
-    }
-}
+    if (modal) modal.style.display = 'none';
+};
 
-// Toggle Notifications Dropdown
-function toggleNotifications() {
+// ── Notifications ─────────────────────────────────────────────────────────────
+
+window.toggleNotifications = function () {
     const dropdown = document.getElementById('notificationsDropdown');
-    if (dropdown) {
-        dropdown.classList.toggle('active');
-    }
-}
+    if (dropdown) dropdown.classList.toggle('active');
+};
 
-// Notifications Data
-const notifications = [
-    { icon: "fa-envelope", message: "You have a new message" },
-    { icon: "fa-check-circle", message: "Your service request was approved" },
-    { icon: "fa-bell", message: "New service available: Graphic Design" }
-];
-
-// Load Notifications
 function loadNotifications() {
-    const notificationsList = document.getElementById('notificationsList');
-    if (notificationsList) {
-        notificationsList.innerHTML = notifications.map(notification => `
-            <div class="notification">
-                <i class="fas ${notification.icon}"></i>
-                <span>${notification.message}</span>
-            </div>
-        `).join('');
+    // Static placeholder — replace with GET /api/Notifications when that endpoint exists
+    const list = document.getElementById('notificationsList');
+    if (!list) return;
+    const items = [
+        { icon: 'fa-envelope',     message: 'You have a new message' },
+        { icon: 'fa-check-circle', message: 'Your service request was approved' },
+        { icon: 'fa-bell',         message: 'New service available: Graphic Design' },
+    ];
+    list.innerHTML = items.map(n => `
+        <div class="notification">
+            <i class="fas ${n.icon}"></i>
+            <span>${n.message}</span>
+        </div>`).join('');
+}
+
+// ── Favorite Services — GET /api/Favorites ────────────────────────────────────
+// DTO (FavoriteServiceResponse): ServiceID, Title, Description, BasePrice, SavedAt
+
+async function loadFavoriteServices() {
+    const container = document.getElementById('favoriteServicesContainer');
+    if (!container) return;
+
+    container.innerHTML = '<p class="loading-text">جاري التحميل...</p>';
+    try {
+        const data = await apiJSON('/api/Favorites');
+
+        // API returns camelCase: title, description, basePrice, serviceID
+        if (!Array.isArray(data) || data.length === 0) {
+            container.innerHTML = '<p class="empty-msg">You have no favorite services yet. Start exploring!</p>';
+            return;
+        }
+
+        container.innerHTML = data.map(fav => `
+            <div class="service-card">
+                <div class="service-content">
+                    <h3>${fav.title || 'Untitled Service'}</h3>
+                    <p class="service-provider">${fav.description || ''}</p>
+                    <div class="service-footer">
+                        ${fav.basePrice != null
+                            ? `<span class="price">$${Number(fav.basePrice).toFixed(2)}</span>`
+                            : ''}
+                        <button class="action-btn remove-fav-btn"
+                                onclick="removeFavorite(${fav.serviceID})">
+                            <i class="fas fa-heart-broken"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            </div>`).join('');
+    } catch (err) {
+        console.error('Favorites load error:', err);
+        container.innerHTML = '<p class="error-msg">Failed to load favorites.</p>';
     }
 }
 
-// Example Data for Services
-const favoriteServices = [
-    { image: "Images/gd.jpeg", title: "Graphic Design", provider: "Creative Studio", price: "$150" },
-    { image: "Images/ld.webp", title: "Logo Design", provider: "Design Masters", price: "$100" },
-    { image: "Images/sm.png", title: "Social Media Management", provider: "Market Pro", price: "$200" }
-];
+window.removeFavorite = async function (serviceId) {
+    if (!confirm('Remove this service from favorites?')) return;
+    try {
+        const res = await apiFetch(`/api/Favorites/${serviceId}`, { method: 'DELETE' });
+        if (res.ok) {
+            await loadFavoriteServices();
+        } else {
+            alert('Could not remove from favorites.');
+        }
+    } catch {
+        alert('Failed to remove from favorites.');
+    }
+};
 
-const purchasedServices = [
-    { image: "Images/wd.jpeg", title: "Web Development", provider: "Tech Solutions", price: "$500" },
-    { image: "Images/seo.jpeg", title: "SEO Optimization", provider: "Digital Boost", price: "$300" },
-    { image: "Images/mb.jpeg", title: "Mobile App Development", provider: "App Creators", price: "$800" }
-];
+// ── Purchased Services — GET /api/Orders/my-orders ────────────────────────────
+// OrderStatus enum: 0=Pending, 1=Accepted, 2=Completed, 3=Cancelled
 
-// Function to create a service card
-function createServiceCard(service, type) {
-    const card = document.createElement('div');
-    card.className = 'service-card';
-    card.innerHTML = `
-        <div class="service-image">
-            <img src="${service.image}" alt="${service.title}">
-        </div>
-        <div class="service-content">
-            <h3>${service.title}</h3>
-            <p class="service-provider">By ${service.provider}</p>
-            <div class="service-footer">
-                <span class="price">${service.price}</span>
-                <button class="action-btn">
-                    <i class="fas ${type === 'favorite' ? 'fa-heart' : 'fa-shopping-bag'}"></i>
-                </button>
-            </div>
-        </div>
-    `;
-    return card;
-}
+async function loadPurchasedServices() {
+    const container = document.getElementById('purchasedServicesContainer');
+    if (!container) return;
 
-// Load Favorite Services
-function loadFavoriteServices() {
-    const favoriteServicesGrid = document.getElementById('favoriteServices');
-    if (favoriteServicesGrid) {
-        favoriteServicesGrid.innerHTML = favoriteServices.map(service =>
-            createServiceCard(service, 'favorite').outerHTML
-        ).join('');
+    container.innerHTML = '<p class="loading-text">جاري التحميل...</p>';
+    try {
+        // Backend returns PagedResponse<OrderResponse>: { data:[…], totalCount, pageNumber, pageSize }
+        // Increase pageSize so all recent orders are visible without pagination UI
+        const response = await apiJSON('/api/Orders/my-orders?pageNumber=1&pageSize=50');
+        const orders   = Array.isArray(response) ? response : (response?.data ?? []);
+
+        if (orders.length === 0) {
+            container.innerHTML = '<p class="empty-msg">You have no purchased services yet.</p>';
+            return;
+        }
+
+        container.innerHTML = orders.map(order => {
+            // "Report Issue" button is only shown for Completed orders
+            // (OrderStatus.Completed is the post-payment state — equivalent to "Paid")
+            const isCompleted = (order.status || '').toLowerCase() === 'completed';
+            // Use generic report page params: targetType=Freelancer, targetId=freelancerID
+            const reportBtn   = isCompleted && order.freelancerID
+                ? `<a href="report.html?targetType=Freelancer&targetId=${order.freelancerID}"
+                       class="action-btn report-issue-btn"
+                       style="background:#e74c3c;text-decoration:none;font-size:0.8rem;padding:0.4rem 0.75rem;">
+                       <i class="fas fa-flag"></i> Report Issue
+                   </a>`
+                : '';
+
+            return `
+            <div class="service-card">
+                <div class="service-info">
+                    <h4>Order #${order.orderID ?? 'N/A'}</h4>
+                    ${order.freelancerName
+                        ? `<p><strong>Freelancer:</strong> ${order.freelancerName}</p>`
+                        : ''}
+                    <p><strong>Description:</strong> ${order.description || '—'}</p>
+                    <p><strong>Location:</strong>    ${order.location    || '—'}</p>
+                    <p><strong>Date:</strong>        ${order.orderDate
+                        ? new Date(order.orderDate).toLocaleDateString()
+                        : '—'}</p>
+                    <div class="service-footer">
+                        <span class="status-badge status-${(order.status || '').toLowerCase()}">
+                            ${_statusLabel(order.status)}
+                        </span>
+                        ${reportBtn}
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    } catch (err) {
+        console.error('Orders load error:', err);
+        // 404 means the user has no orders yet — show empty state, not an error
+        const is404 = err?.message?.includes('404') || err?.message?.toLowerCase().includes('not found');
+        container.innerHTML = is404
+            ? '<p class="empty-msg">You have no purchased services yet.</p>'
+            : '<p class="error-msg">Failed to load orders. Please try again.</p>';
     }
 }
 
-// Load Purchased Services
-function loadPurchasedServices() {
-    const purchasedServicesGrid = document.getElementById('purchasedServices');
-    if (purchasedServicesGrid) {
-        purchasedServicesGrid.innerHTML = purchasedServices.map(service =>
-            createServiceCard(service, 'purchased').outerHTML
-        ).join('');
-    }
+function _statusLabel(status) {
+    // Backend sends Status as a string enum: "Pending", "Accepted", "Completed", "Rejected"
+    const map = {
+        pending:   'Pending',
+        accepted:  'Accepted',
+        completed: 'Completed',
+        rejected:  'Rejected',
+        cancelled: 'Cancelled',
+    };
+    return map[(status || '').toLowerCase()] ?? status ?? 'Pending';
 }

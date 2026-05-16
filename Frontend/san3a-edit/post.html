@@ -11,14 +11,31 @@
 <body>
      <!-- Navigation Bar -->
     <header class="nav-container">
-    <a href="index.html" class="logo">صنعة <span style="color: #3498db;">Sana'a</span></a>
+        <a href="index.html" class="logo">صنعة <span style="color: #3498db;">Sana'a</span></a>
 
-    <div class="auth-buttons" >
-       <button class="currency-btn" id="currencyToggle">USD → JOD</button>
-        <button class="login-btn" onclick="window.location.href='Login.html'">Login</button>
-        <button class="register-btn" onclick="window.location.href='Register.html'">Register</button>
-    </div>
-</header>
+        <div class="nav-right">
+            <!-- Currency toggle — always visible regardless of auth state -->
+            <button class="currency-btn" id="currencyToggle">USD → JOD</button>
+
+            <!-- Guest: shown when NOT logged in -->
+            <div class="auth-buttons" id="authButtons">
+                <button class="login-btn" id="loginBtn">Login</button>
+                <button class="register-btn" id="registerBtn">Register</button>
+            </div>
+
+            <!-- User: shown when logged in (navbar.js controls visibility) -->
+            <div class="user-profile" id="userProfile" style="display: none;">
+                <img id="userAvatar"
+                     src="https://ui-avatars.com/api/?name=User&background=3498db&color=fff"
+                     alt="User Avatar"
+                     class="user-avatar">
+                <div class="dropdown-content">
+                    <a href="#" id="navProfileLink">لوحة التحكم</a>
+                    <a href="#" id="logoutBtn">تسجيل خروج</a>
+                </div>
+            </div>
+        </div>
+    </header>
 
         
     <!-- Sorting Controls -->
@@ -43,6 +60,9 @@
                 <div class="price-rating">
                     <span class="price">100$</span>
                     <div class="rating">⭐ 4.8</div>
+                    <button class="fav-btn" onclick="addToFavorites(1, this); event.stopPropagation();" aria-label="أضف للمفضلة">
+                        <i class="far fa-heart"></i>
+                    </button>
                 </div>
                 <div class="provider-info">
                     <img src="Images/a2.jpeg" alt="عبدالله" class="provider-image">
@@ -60,6 +80,9 @@
                 <div class="price-rating">
                     <span class="price">500$</span>
                     <div class="rating">⭐ 4.9</div>
+                    <button class="fav-btn" onclick="addToFavorites(2, this); event.stopPropagation();" aria-label="أضف للمفضلة">
+                        <i class="far fa-heart"></i>
+                    </button>
                 </div>
                 <div class="provider-info">
                     <img src="Images/provider2.jpg" alt="سارة" class="provider-image">
@@ -76,6 +99,9 @@
                 <div class="price-rating">
                     <span class="price">150$</span>
                     <div class="rating">⭐ 4.5</div>
+                    <button class="fav-btn" onclick="addToFavorites(3, this); event.stopPropagation();" aria-label="أضف للمفضلة">
+                        <i class="far fa-heart"></i>
+                    </button>
                 </div>
                 <div class="provider-info">
                     <img src="Images/provider3.jpg" alt="عمر" class="provider-image">
@@ -93,6 +119,9 @@
                 <div class="price-rating">
                     <span class="price">300$</span>
                     <div class="rating">⭐ 4.7</div>
+                    <button class="fav-btn" onclick="addToFavorites(4, this); event.stopPropagation();" aria-label="أضف للمفضلة">
+                        <i class="far fa-heart"></i>
+                    </button>
                 </div>
                 <div class="provider-info">
                     <img src="Images/provider4.jpg" alt="لينا" class="provider-image">
@@ -129,6 +158,7 @@
         </div>
     </footer>
 
-    <script src="js/post.js"></script>
+    <script type="module" src="js/post.js"></script>
+    <script src="js/navbar.js"></script>
 </body>
 </html>

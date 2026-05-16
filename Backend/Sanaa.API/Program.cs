@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Sanaa.API.Hubs;
@@ -20,6 +21,16 @@ namespace Sanaa.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // ── File upload limits (must be before AddControllers) ────────────────
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.Limits.MaxRequestBodySize = 10_485_760; // 10 MB
+            });
+            builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 10_485_760; // 10 MB
+            });
+
             // Add services to the container.
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
@@ -30,6 +41,7 @@ namespace Sanaa.API
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IFavoritesService, FavoritesService>();
 
 
             // 🌟 التعديل الأول: كود الـ Swagger الجديد انحط هون بدل السطر القديم
@@ -153,22 +165,41 @@ namespace Sanaa.API
 
             var app = builder.Build();
 
-            // 1. Configure the HTTP request pipeline.
+            // Resolve allowed origins — wildcard in dev, locked list in production
+            var allowedOrigins = app.Environment.IsDevelopment()
+                ? null  // null = allow any origin in dev (handled below)
+                : builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+                  ?? ["https://localhost:7101"];
+
+            // 1. Swagger (dev only)
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            // 2. تفعيل الـ CORS أول شيء (قبل الـ Auth والـ Redirection)
-            // هذا السطر يضمن أن المتصفح سيأخذ الإذن قبل البدء بأي عملية أخرى
-            app.UseCors(policy =>
-                policy.AllowAnyHeader()
-                      .AllowAnyMethod()
-                      .SetIsOriginAllowed(origin => true) // يسمح لأي أصل بالوصول (أضمن للـ Localhost)
-                      .AllowCredentials()); // مهم جداً إذا كنت بتستخدم SignalR أو Cookies
+            // 2. Routing must come before CORS so per-route CORS policies can resolve
+            app.UseRouting();
 
-            // 3. مطلوب لـ Stripe
+            // 3. CORS — wildcard in dev; locked to configured origins in production
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseCors(policy =>
+                    policy.AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .SetIsOriginAllowed(_ => true) // dev only — any localhost origin
+                          .AllowCredentials());          // required for SignalR
+            }
+            else
+            {
+                app.UseCors(policy =>
+                    policy.WithOrigins(allowedOrigins!)
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials());
+            }
+
+            // 4. مطلوب لـ Stripe — enable request body buffering
             app.Use(async (context, next) =>
             {
                 context.Request.EnableBuffering();
@@ -176,11 +207,21 @@ namespace Sanaa.API
             });
 
             app.UseHttpsRedirection();
+
+            // Serve files from wwwroot (default static files)
             app.UseStaticFiles();
 
-            // 4. الترتيب الصحيح لباقي الـ Middlewares
+            // Serve uploaded images from <ContentRoot>/uploads → /uploads
+            var uploadsPath = Path.Combine(app.Environment.ContentRootPath, "uploads");
+            Directory.CreateDirectory(uploadsPath); // create the folder on first run if it doesn't exist
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(uploadsPath),
+                RequestPath  = "/uploads"
+            });
+
+            // 5. الترتيب الصحيح لباقي الـ Middlewares
             app.UseRateLimiter();
-            app.UseRouting(); // أضف هذا السطر إذا لم يكن موجوداً
 
             app.UseAuthentication();
             app.UseAuthorization();

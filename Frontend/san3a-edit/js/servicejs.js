@@ -2,11 +2,16 @@
 
 
 
-// Simulate login status (replace with your actual authentication logic)
-let isLoggedIn = false; // Set to false by default
+const API_BASE_URL = 'https://localhost:7101';
+
+// Read real auth state from localStorage (written by auth.js on login)
+const _cu = (() => { try { return JSON.parse(localStorage.getItem('currentUser')); } catch { return null; } })();
+let isLoggedIn = Boolean(localStorage.getItem('accessToken') && _cu);
 const user = {
-    name: "Omar",
-    avatar: "Images/user.jpg",
+    name:   _cu?.fullName || 'User',
+    avatar: _cu
+        ? `https://ui-avatars.com/api/?name=${encodeURIComponent(_cu.fullName || 'User')}&background=3498db&color=fff`
+        : 'Images/m1.png',
 };
 
 // DOM Elements
@@ -18,43 +23,90 @@ const username = document.querySelector('.username');
 const submitCommentBtn = document.getElementById('submit-comment');
 const commentInput = document.getElementById('comment-input');
 
-// Function to update the UI based on login status
+// Update the navbar to reflect the current auth state
 function updateUI() {
-
-
     if (isLoggedIn) {
-        // Hide login and register links
-        loginLink.style.display = 'none';
+        loginLink.style.display    = 'none';
         registerLink.style.display = 'none';
+        userProfile.style.display  = 'flex';
+        userAvatar.src             = user.avatar;
+        username.textContent       = user.name;
 
-        // Show user profile
-        userProfile.style.display = 'flex';
-        userAvatar.src = user.avatar;
-        username.textContent = user.name;
+        // Inject a logout link once so the user can sign out from the service page
+        if (!userProfile.querySelector('.svc-logout')) {
+            const a = document.createElement('a');
+            a.className = 'svc-logout';
+            a.href      = '#';
+            a.textContent = 'خروج';
+            a.style.cssText = 'color:white;margin-right:0.75rem;font-size:0.85rem;text-decoration:underline;cursor:pointer;';
+            a.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+            userProfile.appendChild(a);
+        }
     } else {
-        // Show login and register links
-        loginLink.style.display = 'inline';
+        loginLink.style.display    = 'inline';
         registerLink.style.display = 'inline';
-
-        // Hide user profile
-        userProfile.style.display = 'none';
+        userProfile.style.display  = 'none';
     }
 }
 
-// Simulate login (for demonstration purposes)
-function login() {
-    isLoggedIn = true;
-    updateUI();
-}
+function login() { window.location.href = 'Login.html'; }
 
-// Simulate logout (for demonstration purposes)
 function logout() {
-    isLoggedIn = false;
-    updateUI();
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('currentUser');
+    window.location.href = 'Login.html';
 }
 
 // Update the UI on page load
 updateUI();
+
+// ── Favorite: set initial heart state on page load ────────────────────────────
+const favBtn = document.getElementById('favorite-btn');
+if (favBtn && isLoggedIn) {
+    const serviceId = parseInt(favBtn.dataset.serviceId);
+    (async () => {
+        try {
+            const res  = await fetch(`${API_BASE_URL}/api/Favorites`, {
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('accessToken') }
+            });
+            if (res.ok) {
+                const list = await res.json();
+                if (Array.isArray(list) && list.some(f => f.ServiceID === serviceId)) {
+                    _setFavActive(favBtn, true);
+                }
+            }
+        } catch { /* network error — default to unfilled heart */ }
+    })();
+}
+
+// Toggle favorite: POST to add, DELETE to remove
+window.toggleFavorite = async function (btn) {
+    if (!isLoggedIn) { loginModal.style.display = 'flex'; return; }
+    const serviceId = parseInt(btn.dataset.serviceId);
+    const isFav     = btn.classList.contains('is-favorited');
+    const method    = isFav ? 'DELETE' : 'POST';
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/Favorites/${serviceId}`, {
+            method,
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('accessToken') }
+        });
+        if (res.ok) {
+            _setFavActive(btn, !isFav);
+        } else {
+            alert(isFav ? 'Could not remove from favorites.' : 'Could not add to favorites.');
+        }
+    } catch { alert('Network error — please try again.'); }
+};
+
+function _setFavActive(btn, active) {
+    const icon = btn.querySelector('i');
+    if (!icon) return;
+    icon.className     = active ? 'fas fa-heart' : 'far fa-heart';
+    icon.style.color   = active ? '#e74c3c' : '';
+    btn.classList.toggle('is-favorited', active);
+}
 
 // Comment Submission Functionality
 submitCommentBtn.addEventListener('click', function (event) {
@@ -175,14 +227,38 @@ messageButton.addEventListener('click', () => {
     window.location.href = "https://wa.me/1234567890"; // استبدل بالرقم الفعلي
 });
 
-// Place Order Logic
-orderButton.addEventListener('click', (e) => {
+// Place Order — POST /api/Orders
+orderButton.addEventListener('click', async (e) => {
     e.preventDefault();
-    if (!isLoggedIn) {
-        loginModal.style.display = 'flex';
-    } else {
-        document.getElementById('credit-card-modal').style.display = 'flex';
-    }
+    if (!isLoggedIn) { loginModal.style.display = 'flex'; return; }
+
+    const serviceId    = parseInt(document.body.dataset.serviceId    || 0);
+    const freelancerId = parseInt(document.body.dataset.freelancerId || 0);
+    const location     = prompt('Enter your location / address for this order:');
+    if (!location) return; // user cancelled
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/Orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type':  'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+            },
+            body: JSON.stringify({
+                freelancerID: freelancerId, // CreateOrderRequest.freelancerID (int)
+                serviceID:    serviceId,    // CreateOrderRequest.serviceID (int)
+                description:  '',
+                location:     location
+            })
+        });
+
+        if (res.ok) {
+            alert('تم إرسال الطلب للصنايعي بنجاح! 🚀');
+        } else {
+            const err = await res.json().catch(() => ({}));
+            alert(err.message || 'Failed to place order. Please try again.');
+        }
+    } catch { alert('Network error — is the backend running?'); }
 });
 
 // Report Logic

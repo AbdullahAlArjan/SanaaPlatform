@@ -42,23 +42,32 @@
                     <input type="text" id="profile-location" placeholder="Enter your location" required>
                 </div>
                 
-                <!-- About Me -->
+                <!-- About Me / Bio -->
                 <div class="form-group">
-                    <label for="profile-description">About Me:</label>
-                    <textarea id="profile-description" rows="5" placeholder="Tell clients about yourself and your skills" required></textarea>
+                    <label for="aboutMeInput">About Me:</label>
+                    <textarea id="aboutMeInput" rows="5" placeholder="Tell clients about yourself and your skills" maxlength="1000"></textarea>
+                    <small style="color:#888">Max 1000 characters</small>
                 </div>
-                
-            
-                
+
+                <!-- WhatsApp Number -->
+                <div class="form-group">
+                    <label for="whatsAppNumber"><i class="fab fa-whatsapp"></i> WhatsApp Number:</label>
+                    <input type="tel" id="whatsAppNumber"
+                           placeholder="e.g., +962791234567"
+                           pattern="^\+?\d{7,15}$"
+                           title="7–15 digits, optionally starting with +">
+                    <small style="color:#888">Used for the WhatsApp contact button on your profile</small>
+                </div>
+
                 <!-- Submit Button -->
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Save Changes</button>
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href='../freelancer.html'">Cancel</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='freelancer.html'">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <script src="js/FreelancerJS.js"></script>
+    <script type="module" src="js/FreelancerJS.js"></script>
 </body>
 </html>

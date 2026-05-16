@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sanaa Platform — Developer Documentation</title>
+
+  <!-- Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sidebar-w: 270px;
+      --sidebar-bg: #1a1d23;
+      --sidebar-border: #2d3139;
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --content-bg: #ffffff;
+      --text: #1f2328;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --code-bg: #f6f8fa;
+      --blockquote-border: #3b82f6;
+      --blockquote-bg: #eff6ff;
+      --radius: 8px;
+
+      /* HTTP method badge colours */
+      --get:    #16a34a;
+      --post:   #2563eb;
+      --put:    #d97706;
+      --delete: #dc2626;
+      --patch:  #7c3aed;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+      background: #f0f2f5;
+      display: flex;
+    }
+
+    /* ── Sidebar ──────────────────────────────────────────────── */
+    #sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: var(--sidebar-bg);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      overflow-y: auto;
+      padding: 0 0 2rem;
+      border-right: 1px solid var(--sidebar-border);
+      flex-shrink: 0;
+    }
+
+    .sidebar-header {
+      padding: 1.5rem 1.25rem 1rem;
+      border-bottom: 1px solid var(--sidebar-border);
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-header .brand {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-header .brand .dot { color: var(--accent); }
+
+    .sidebar-header .version {
+      font-size: 0.7rem;
+      color: #6b7280;
+      margin-top: 0.2rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    #sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 1.25rem;
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.15s, background 0.15s;
+      border-left: 3px solid transparent;
+    }
+
+    #sidebar nav a:hover,
+    #sidebar nav a.active {
+      color: var(--accent-hover);
+      background: rgba(59,130,246,0.08);
+      border-left-color: var(--accent);
+    }
+
+    #sidebar nav .nav-section-label {
+      padding: 1rem 1.25rem 0.3rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #4b5563;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    #sidebar nav a .nav-num {
+      font-size: 0.7rem;
+      color: #4b5563;
+      min-width: 1.2rem;
+    }
+
+    /* ── Main Content ─────────────────────────────────────────── */
+    #content {
+      flex: 1;
+      min-width: 0;
+      padding: 2.5rem 3rem;
+      max-width: 960px;
+      background: var(--content-bg);
+      min-height: 100vh;
+    }
+
+    /* ── Typography ───────────────────────────────────────────── */
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #111827;
+      padding-bottom: 0.75rem;
+      border-bottom: 3px solid var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #111827;
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    h2 .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.8rem;
+      height: 1.8rem;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-right: 0.6rem;
+      flex-shrink: 0;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #374151;
+      margin: 1.8rem 0 0.6rem;
+    }
+
+    h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #4b5563;
+      margin: 1.2rem 0 0.4rem;
+    }
+
+    p { margin: 0.6rem 0; }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    ul, ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+    li { margin: 0.2rem 0; }
+
+    strong { color: #111827; }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    /* ── Blockquote ───────────────────────────────────────────── */
+    blockquote {
+      border-left: 4px solid var(--blockquote-border);
+      background: var(--blockquote-bg);
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      color: #1e40af;
+      font-size: 0.9rem;
+    }
+
+    blockquote code {
+      background: rgba(255,255,255,0.6);
+      color: #1e40af;
+    }
+
+    /* ── Inline Code ──────────────────────────────────────────── */
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.85em;
+      background: var(--code-bg);
+      color: #c7254e;
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      border: 1px solid #e5e7eb;
+    }
+
+    /* ── Code Blocks ──────────────────────────────────────────── */
+    pre {
+      margin: 1rem 0;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      border: 1px solid #30363d;
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 1rem 1.25rem;
+      font-size: 0.82rem;
+      border: none;
+      display: block;
+      line-height: 1.6;
+    }
+
+    .code-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #21262d;
+      padding: 0.4rem 1rem;
+      border-radius: var(--radius) var(--radius) 0 0;
+      font-size: 0.72rem;
+      color: #8b949e;
+      font-family: monospace;
+      border: 1px solid #30363d;
+      border-bottom: none;
+    }
+
+    pre.has-label {
+      border-radius: 0 0 var(--radius) var(--radius);
+      border-top: none;
+    }
+
+    /* ── Tables ───────────────────────────────────────────────── */
+    .table-wrap { overflow-x: auto; margin: 1rem 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    thead tr {
+      background: #f8fafc;
+      border-bottom: 2px solid var(--border);
+    }
+
+    th {
+      padding: 0.6rem 0.85rem;
+      text-align: left;
+      font-weight: 600;
+      color: #374151;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.55rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+
+    /* ── HTTP Method Badges ───────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: white;
+      font-family: monospace;
+    }
+    .badge.get    { background: var(--get); }
+    .badge.post   { background: var(--post); }
+    .badge.put    { background: var(--put); }
+    .badge.delete { background: var(--delete); }
+    .badge.patch  { background: var(--patch); }
+    .badge.lock   { background: #7c3aed; font-size: 0.8rem; }
+    .badge.open   { background: #6b7280; }
+
+    /* ── Feature Cards Grid ───────────────────────────────────── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0 1.5rem;
+    }
+
+    .feature-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      background: #fafafa;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-color: var(--accent);
+    }
+
+    .feature-card .icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
+    .feature-card .label { font-weight: 600; font-size: 0.9rem; color: #111827; }
+    .feature-card .desc  { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    /* ── Architecture Diagram ─────────────────────────────────── */
+    .arch-diagram {
+      background: #1a1d23;
+      color: #c9d1d9;
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      font-family: monospace;
+      font-size: 0.82rem;
+      line-height: 1.8;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    .arch-diagram .layer-api    { color: #79c0ff; }
+    .arch-diagram .layer-bll    { color: #a5f3fc; }
+    .arch-diagram .layer-dal    { color: #86efac; }
+    .arch-diagram .layer-db     { color: #fcd34d; }
+    .arch-diagram .arrow        { color: #6b7280; }
+    .arch-diagram .comment      { color: #6e7681; }
+
+    /* ── Checklist ────────────────────────────────────────────── */
+    .checklist { list-style: none; padding-left: 0; }
+    .checklist li { padding: 0.3rem 0; display: flex; align-items: flex-start; gap: 0.5rem; }
+    .checklist li::before {
+      content: "☐";
+      color: var(--accent);
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    /* ── Step Boxes ───────────────────────────────────────────── */
+    .step-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 0.75rem 0;
+      overflow: hidden;
+    }
+
+    .step-box-header {
+      background: #f8fafc;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step-num {
+      width: 1.6rem;
+      height: 1.6rem;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-box-body { padding: 0.75rem 1rem; }
+    .step-box-body pre { margin: 0.5rem 0 0; }
+
+    /* ── Role Routing Table ───────────────────────────────────── */
+    .role-pill {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .role-admin      { background: #fef3c7; color: #92400e; }
+    .role-client     { background: #dbeafe; color: #1e40af; }
+    .role-freelancer { background: #dcfce7; color: #166534; }
+
+    /* ── Appendix Numbered Checklist ──────────────────────────── */
+    .dev-checklist { counter-reset: dev-steps; list-style: none; padding: 0; }
+    .dev-checklist li {
+      counter-increment: dev-steps;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .dev-checklist li:last-child { border-bottom: none; }
+    .dev-checklist li::before {
+      content: counter(dev-steps);
+      min-width: 1.6rem;
+      height: 1.6rem;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .dev-checklist li .layer-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      background: #f3f4f6;
+      color: #374151;
+      margin-left: 0.3rem;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    .doc-footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      body { flex-direction: column; }
+      #sidebar {
+        width: 100%;
+        min-width: unset;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--sidebar-border);
+      }
+      #sidebar nav { display: flex; flex-wrap: wrap; padding: 0.5rem; }
+      #sidebar nav .nav-section-label { display: none; }
+      #sidebar nav a { border-left: none; border-bottom: 2px solid transparent; padding: 0.4rem 0.6rem; font-size: 0.78rem; }
+      #sidebar nav a.active { border-bottom-color: var(--accent); border-left: none; }
+      #content { padding: 1.5rem 1.25rem; }
+      h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══════════════════════════════════════════════════ -->
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <a class="brand" href="#top">
+      <span>صنعة</span><span class="dot">·</span><span>Sanaa</span>
+    </a>
+    <div class="version">Developer Docs · v1.0 · May 2026</div>
+  </div>
+  <nav>
+    <div class="nav-section-label">Overview</div>
+    <a href="#s1"><span class="nav-num">01</span> Project Overview</a>
+    <a href="#s2"><span class="nav-num">02</span> Tech Stack</a>
+    <a href="#s3"><span class="nav-num">03</span> Architecture</a>
+    <a href="#s4"><span class="nav-num">04</span> Folder Structure</a>
+
+    <div class="nav-section-label">Database</div>
+    <a href="#s5"><span class="nav-num">05</span> Database Schema</a>
+
+    <div class="nav-section-label">Backend</div>
+    <a href="#s6-auth">Auth</a>
+    <a href="#s6-admin">Admin</a>
+    <a href="#s6-freelancers">Freelancers</a>
+    <a href="#s6-services">Services</a>
+    <a href="#s6-orders">Orders</a>
+    <a href="#s6-favorites">Favorites</a>
+    <a href="#s6-reviews">Reviews</a>
+    <a href="#s6-misc">Other APIs</a>
+
+    <div class="nav-section-label">Frontend</div>
+    <a href="#s7"><span class="nav-num">07</span> Frontend Architecture</a>
+    <a href="#s8"><span class="nav-num">08</span> Auth Flow</a>
+
+    <div class="nav-section-label">Setup</div>
+    <a href="#s9"><span class="nav-num">09</span> Getting Started</a>
+    <a href="#s10"><span class="nav-num">10</span> Configuration</a>
+    <a href="#appendix">Appendix</a>
+  </nav>
+</aside>
+
+<!-- ═══ MAIN CONTENT ══════════════════════════════════════════════ -->
+<main id="content" id="top">
+
+  <h1>Sanaa Platform — Developer Documentation</h1>
+  <p class="subtitle">
+    <strong>صنعة</strong> is a full-stack freelance service marketplace connecting clients with skilled
+    freelancers. Clients browse and order services, freelancers manage their profiles and incoming
+    work, and admins oversee the entire platform.
+  </p>
+
+  <!-- ─── 1. Project Overview ─────────────────────────────────── -->
+  <h2 id="s1"><span class="section-num">1</span> Project Overview</h2>
+
+  <p>Sanaa is a two-sided marketplace where:</p>
+  <ul>
+    <li><strong>Clients</strong> browse a service catalog, place orders, save favorites, and leave reviews.</li>
+    <li><strong>Freelancers</strong> create profiles, list services, manage incoming orders, and upload portfolio images.</li>
+    <li><strong>Admins</strong> approve freelancer profiles, manage users, view platform-wide stats, and resolve reports.</li>
+  </ul>
+
+  <h3>Core Features</h3>
+  <div class="feature-grid">
+    <div class="feature-card"><div class="icon">🔐</div><div class="label">Auth &amp; OTP</div><div class="desc">JWT login/register with email OTP verification and refresh tokens</div></div>
+    <div class="feature-card"><div class="icon">👤</div><div class="label">Freelancer Profiles</div><div class="desc">Profession, city, experience, bio, profile image, portfolio gallery</div></div>
+    <div class="feature-card"><div class="icon">🗂️</div><div class="label">Service Catalog</div><div class="desc">Browseable/searchable services organized by category</div></div>
+    <div class="feature-card"><div class="icon">📦</div><div class="label">Order Management</div><div class="desc">Clients create orders; freelancers accept/reject; status tracking</div></div>
+    <div class="feature-card"><div class="icon">❤️</div><div class="label">Favorites</div><div class="desc">Clients save and remove favorite services</div></div>
+    <div class="feature-card"><div class="icon">⭐</div><div class="label">Reviews</div><div class="desc">Clients rate and review freelancers after completed orders</div></div>
+    <div class="feature-card"><div class="icon">💳</div><div class="label">Payments</div><div class="desc">Stripe payment intents linked to orders with invoice generation</div></div>
+    <div class="feature-card"><div class="icon">🤖</div><div class="label">AI Chatbot</div><div class="desc">Anthropic-powered assistant for platform guidance</div></div>
+    <div class="feature-card"><div class="icon">🔔</div><div class="label">Real-time Notifications</div><div class="desc">SignalR hub pushes alerts on order updates</div></div>
+    <div class="feature-card"><div class="icon">🚩</div><div class="label">Reports</div><div class="desc">Users can report freelancers or services; admins resolve them</div></div>
+    <div class="feature-card"><div class="icon">🛡️</div><div class="label">Admin Panel</div><div class="desc">Dashboard stats, user control, freelancer approval workflow</div></div>
+  </div>
+
+  <!-- ─── 2. Tech Stack ─────────────────────────────────────────── -->
+  <h2 id="s2"><span class="section-num">2</span> Tech Stack</h2>
+
+  <h3>Backend</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Component</th><th>Technology</th></tr></thead>
+    <tbody>
+      <tr><td>Framework</td><td>ASP.NET Core Web API (.NET 8)</td></tr>
+      <tr><td>Database</td><td>SQL Server</td></tr>
+      <tr><td>ORM</td><td>Entity Framework Core 8 (Code-First)</td></tr>
+      <tr><td>Authentication</td><td>JWT Bearer Tokens + Refresh Tokens</td></tr>
+      <tr><td>Real-time</td><td>SignalR</td></tr>
+      <tr><td>Email</td><td>SMTP via Gmail</td></tr>
+      <tr><td>Payments</td><td>Stripe API</td></tr>
+      <tr><td>AI</td><td>Anthropic Claude API</td></tr>
+      <tr><td>File Storage</td><td>Local file upload service</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Frontend</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Component</th><th>Technology</th></tr></thead>
+    <tbody>
+      <tr><td>Markup</td><td>Vanilla HTML5 (RTL / Arabic-first)</td></tr>
+      <tr><td>Styles</td><td>Vanilla CSS3 with CSS Variables &amp; Neumorphic design</td></tr>
+      <tr><td>Scripts</td><td>Vanilla JavaScript (ES6 Modules)</td></tr>
+      <tr><td>Icons</td><td>Font Awesome 6</td></tr>
+      <tr><td>Fonts</td><td>Google Fonts — Tajawal</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- ─── 3. Architecture ───────────────────────────────────────── -->
+  <h2 id="s3"><span class="section-num">3</span> Architecture Overview</h2>
+  <p>The backend follows a strict <strong>3-Tier Architecture</strong>. Each layer has a single responsibility and communicates only with its adjacent layer.</p>
+
+  <div class="arch-diagram">
+<span class="comment">┌─────────────────────────────────────────────────────┐</span>
+<span class="comment">│</span>              <strong style="color:#fff">CLIENT (Browser)</strong>                   <span class="comment">│</span>
+<span class="comment">│</span>      HTML + CSS + Vanilla JS (ES Modules)           <span class="comment">│</span>
+<span class="comment">└───────────────────────┬─────────────────────────────┘</span>
+                        <span class="arrow">│ HTTP (JSON + JWT)</span>
+                        <span class="arrow">▼</span>
+<span class="comment">┌─────────────────────────────────────────────────────┐</span>
+<span class="comment">│</span>    <span class="layer-api">Sanaa.API  (Presentation Layer)</span>                   <span class="comment">│</span>
+<span class="comment">│</span>   <span class="layer-api">Controllers · Program.cs · DTOs · SignalR Hubs</span>     <span class="comment">│</span>
+<span class="comment">│</span>   <span class="comment">• Routes HTTP requests &amp; enforces [Authorize]</span>       <span class="comment">│</span>
+<span class="comment">│</span>   <span class="comment">• Validates input via DTOs                         </span><span class="comment">│</span>
+<span class="comment">│</span>   <span class="comment">• Calls BLL services via injected interfaces        </span><span class="comment">│</span>
+<span class="comment">└───────────────────────┬─────────────────────────────┘</span>
+                        <span class="arrow">│ Interface contracts (DI)</span>
+                        <span class="arrow">▼</span>
+<span class="comment">┌─────────────────────────────────────────────────────┐</span>
+<span class="comment">│</span>    <span class="layer-bll">Sanaa.BLL  (Business Logic Layer)</span>                  <span class="comment">│</span>
+<span class="comment">│</span>    <span class="layer-bll">Interfaces · Services · DTOs</span>                       <span class="comment">│</span>
+<span class="comment">│</span>   <span class="comment">• Implements all business rules                     </span><span class="comment">│</span>
+<span class="comment">│</span>   <span class="comment">• Orchestrates calls to DAL                         </span><span class="comment">│</span>
+<span class="comment">│</span>   <span class="comment">• Maps Entities ↔ DTOs · Sends emails &amp; alerts     </span><span class="comment">│</span>
+<span class="comment">└───────────────────────┬─────────────────────────────┘</span>
+                        <span class="arrow">│ EF Core DbContext</span>
+                        <span class="arrow">▼</span>
+<span class="comment">┌─────────────────────────────────────────────────────┐</span>
+<span class="comment">│</span>    <span class="layer-dal">Sanaa.DAL  (Data Access Layer)</span>                     <span class="comment">│</span>
+<span class="comment">│</span>    <span class="layer-dal">SanaaDbContext · Entities · Migrations</span>             <span class="comment">│</span>
+<span class="comment">│</span>   <span class="comment">• Defines DB schema via Code-First                  </span><span class="comment">│</span>
+<span class="comment">│</span>   <span class="comment">• Fluent API configuration &amp; migrations             </span><span class="comment">│</span>
+<span class="comment">└───────────────────────┬─────────────────────────────┘</span>
+                        <span class="arrow">│ SQL</span>
+                        <span class="arrow">▼</span>
+                <span class="layer-db">┌──────────────┐
+                │   SanaaDB    │
+                │  SQL Server  │
+                └──────────────┘</span></div>
+
+  <blockquote>
+    <strong>Dependency Direction Rule:</strong> <strong>API → BLL → DAL</strong> — a lower layer never imports from a higher one.
+    The API project only knows about BLL interfaces; it never touches <code>SanaaDbContext</code> directly.
+  </blockquote>
+
+  <h3>Dependency Injection</h3>
+  <p>All services are registered in <code>Program.cs</code> as <strong>Scoped</strong> (one instance per HTTP request):</p>
+  <div class="code-label"><span>csharp · Program.cs</span></div>
+  <pre class="has-label"><code class="language-csharp">builder.Services.AddScoped&lt;IOrderService,     OrderService&gt;();
+builder.Services.AddScoped&lt;IFavoritesService, FavoritesService&gt;();
+builder.Services.AddScoped&lt;IFreelancerService, FreelancerService&gt;();
+// ... all 15 interfaces registered the same way</code></pre>
+
+  <!-- ─── 4. Folder Structure ───────────────────────────────────── -->
+  <h2 id="s4"><span class="section-num">4</span> Folder Structure</h2>
+  <div class="code-label"><span>Project Tree</span></div>
+  <pre class="has-label"><code class="language-plaintext">SanaaPlatform/
+│
+├── Backend/
+│   ├── SanaaPlatform.sln
+│   │
+│   ├── Sanaa.API/                        ← Presentation Layer
+│   │   ├── Program.cs                    (DI, JWT, CORS, Rate Limiting)
+│   │   ├── appsettings.json              (Connection string, JWT, SMTP, Stripe)
+│   │   ├── Controllers/
+│   │   │   ├── AdminController.cs
+│   │   │   ├── AuthController.cs
+│   │   │   ├── CategoriesController.cs
+│   │   │   ├── ChatbotController.cs
+│   │   │   ├── FavoritesController.cs
+│   │   │   ├── FreelancersController.cs
+│   │   │   ├── InvoicesController.cs
+│   │   │   ├── OrdersController.cs
+│   │   │   ├── PaymentsController.cs
+│   │   │   ├── ReportsController.cs
+│   │   │   ├── ReviewsController.cs
+│   │   │   ├── ServicesController.cs
+│   │   │   └── UsersController.cs
+│   │   ├── DTOs/                         (Request/Response models)
+│   │   ├── Hubs/
+│   │   │   └── NotificationHub.cs        (SignalR real-time)
+│   │   └── Services/
+│   │       ├── FileUploadService.cs
+│   │       └── SignalRNotificationService.cs
+│   │
+│   ├── Sanaa.BLL/                        ← Business Logic Layer
+│   │   ├── Interfaces/
+│   │   │   ├── IFavoritesService.cs
+│   │   │   ├── IFreelancerService.cs
+│   │   │   ├── IOrderService.cs
+│   │   │   ├── IEmailService.cs
+│   │   │   └── ... (15 interfaces total)
+│   │   ├── Services/
+│   │   │   ├── FavoritesService.cs
+│   │   │   ├── FreelancerService.cs
+│   │   │   ├── OrderService.cs
+│   │   │   └── ... (13 implementations)
+│   │   └── DTOs/                         (Shared contracts BLL ↔ API)
+│   │       ├── FavoriteDTOs.cs
+│   │       ├── OrderDTOs.cs
+│   │       ├── PaginationDTOs.cs         (Generic PagedResponse&lt;T&gt;)
+│   │       └── ... (16 total)
+│   │
+│   └── Sanaa.DAL/                        ← Data Access Layer
+│       ├── SanaaDbContext.cs             (EF Core DbContext — 13 DbSets)
+│       ├── Entities/
+│       │   ├── User.cs
+│       │   ├── FreeLancerProfile.cs
+│       │   ├── Service.cs
+│       │   ├── Category.cs
+│       │   ├── FreelancerService.cs      (Join: Freelancer ↔ Service)
+│       │   ├── FavoriteService.cs        (Join: User ↔ Service)
+│       │   ├── Order.cs
+│       │   ├── Review.cs
+│       │   ├── Payment.cs
+│       │   ├── Invoice.cs
+│       │   ├── OtpCode.cs
+│       │   ├── RefreshToken.cs
+│       │   └── Report.cs
+│       └── Migrations/                   (7 migration snapshots)
+│
+└── Frontend/
+    └── san3a-edit/
+        ├── index.html                    (Home page)
+        ├── post.html                     (Service catalog / browse)
+        ├── freelancer.html               (Freelancer dashboard)
+        ├── customer.html                 (Customer dashboard)
+        ├── js/
+        │   ├── api.js          ★ Central HTTP client (apiFetch)
+        │   ├── auth.js         ★ Auth state &amp; requireAuth guard
+        │   ├── FreelancerJS.js
+        │   ├── customerJS.js
+        │   ├── post.js
+        │   └── ... (15 JS files total)
+        └── css/
+            ├── CustomerStyle.css
+            ├── FreelancerStyle.css
+            ├── post.css
+            └── ... (13 CSS files total)</code></pre>
+
+  <!-- ─── 5. Database Schema ────────────────────────────────────── -->
+  <h2 id="s5"><span class="section-num">5</span> Database Schema</h2>
+
+  <h3>Entity Relationship Overview</h3>
+  <div class="code-label"><span>ERD (text)</span></div>
+  <pre class="has-label"><code class="language-plaintext">User ──────────────────── FreelancerProfile  (1:1, optional)
+ │                                │
+ │                                │  (via FreelancerService join table)
+ │                                └──────────── Service ──── Category
+ │                                                  │
+ │  (FavoriteService join table)                    │
+ └──── FavoriteService ───────────────────────────-─┘
+ │
+ ├── Order ──── Payment ──── Invoice
+ │      │
+ │      └── Review
+ │
+ ├── OtpCode
+ ├── RefreshToken
+ └── Report</code></pre>
+
+  <h3>Entity Descriptions</h3>
+
+  <h4><code>User</code> — Central identity entity</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>UserID</td><td>int PK</td><td>Auto-increment</td></tr>
+      <tr><td>FullName</td><td>string</td><td></td></tr>
+      <tr><td>Email</td><td>string</td><td>Unique</td></tr>
+      <tr><td>PasswordHash</td><td>string</td><td>BCrypt hashed</td></tr>
+      <tr><td>Phone</td><td>string</td><td></td></tr>
+      <tr><td>Role</td><td>string</td><td><code>"admin"</code> / <code>"client"</code> / <code>"freelancer"</code></td></tr>
+      <tr><td>IsActive</td><td>bool</td><td>Toggled by admin</td></tr>
+      <tr><td>IsEmailVerified</td><td>bool</td><td>Set after OTP</td></tr>
+      <tr><td>IsDeleted</td><td>bool</td><td>Soft delete flag</td></tr>
+      <tr><td>DeletedAt</td><td>DateTime?</td><td>Timestamp of soft delete</td></tr>
+    </tbody>
+  </table></div>
+  <blockquote><strong>Global Query Filter:</strong> All queries automatically exclude <code>IsDeleted = true</code> users.</blockquote>
+
+  <h4><code>FreelancerProfile</code> — Extended profile (1:1 with User)</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>FreelancerID</td><td>int PK, FK → User</td><td>Shared primary key</td></tr>
+      <tr><td>Profession</td><td>string</td><td>e.g., "Graphic Designer"</td></tr>
+      <tr><td>ExperienceYears</td><td>int</td><td></td></tr>
+      <tr><td>City</td><td>string</td><td></td></tr>
+      <tr><td>Bio</td><td>string</td><td></td></tr>
+      <tr><td>ProfileImageUrl</td><td>string</td><td>URL to uploaded image</td></tr>
+      <tr><td>PortfolioImagesJson</td><td>string</td><td>JSON array of image URLs</td></tr>
+      <tr><td>AverageRating</td><td>decimal(3,2)</td><td>Recalculated on new reviews</td></tr>
+      <tr><td>ApprovalStatus</td><td>enum</td><td><code>Pending(0)</code>, <code>Approved(1)</code>, <code>Rejected(2)</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h4><code>Service</code> — Platform-level service catalog entry</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>ServiceID</td><td>int PK</td><td></td></tr>
+      <tr><td>CategoryID</td><td>int? FK → Category</td><td>SetNull on category delete</td></tr>
+      <tr><td>Title</td><td>string</td><td></td></tr>
+      <tr><td>Description</td><td>string</td><td></td></tr>
+      <tr><td>BasePrice</td><td>decimal (money)</td><td></td></tr>
+      <tr><td>IsActive</td><td>bool</td><td></td></tr>
+      <tr><td>CreatedAt</td><td>DateTime</td><td></td></tr>
+    </tbody>
+  </table></div>
+
+  <h4><code>FreelancerService</code> — Join table (Freelancer ↔ Service)</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>FreelancerID</td><td>int (composite PK)</td><td>FK → FreelancerProfile</td></tr>
+      <tr><td>ServiceID</td><td>int (composite PK)</td><td>FK → Service</td></tr>
+      <tr><td>CustomPrice</td><td>decimal?</td><td>Overrides BasePrice if set</td></tr>
+      <tr><td>IsAvailable</td><td>bool</td><td>Toggled by freelancer</td></tr>
+    </tbody>
+  </table></div>
+
+  <h4><code>FavoriteService</code> — Join table (User ↔ Service)</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>UserID</td><td>int (composite PK)</td><td>FK → User (cascade delete)</td></tr>
+      <tr><td>ServiceID</td><td>int (composite PK)</td><td>FK → Service (cascade delete)</td></tr>
+      <tr><td>SavedAt</td><td>DateTime</td><td>UTC timestamp</td></tr>
+    </tbody>
+  </table></div>
+
+  <h4><code>Order</code> — Core transactional entity</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>OrderID</td><td>int PK</td><td></td></tr>
+      <tr><td>ClientID</td><td>int FK → User</td><td>Restrict delete</td></tr>
+      <tr><td>FreelancerID</td><td>int FK → FreelancerProfile</td><td>Restrict delete</td></tr>
+      <tr><td>ServiceID</td><td>int?</td><td></td></tr>
+      <tr><td>Description</td><td>string</td><td>Client's custom instructions</td></tr>
+      <tr><td>Location</td><td>string</td><td></td></tr>
+      <tr><td>ServicePriceSnapshot</td><td>decimal</td><td>Price at order time (immutable)</td></tr>
+      <tr><td>Status</td><td>enum</td><td><code>Pending(0)</code>, <code>Accepted(1)</code>, <code>Rejected(2)</code>, <code>Completed(3)</code></td></tr>
+      <tr><td>PaymentStatus</td><td>enum?</td><td>Linked payment state</td></tr>
+    </tbody>
+  </table></div>
+
+  <h4><code>Review</code></h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>ReviewID</td><td>int PK</td><td></td></tr>
+      <tr><td>OrderID / FreelancerID / ClientID</td><td>int FK</td><td>All Restrict delete</td></tr>
+      <tr><td>Rating</td><td>int</td><td>1–5 (validated via <code>[Range(1,5)]</code>)</td></tr>
+      <tr><td>Comment</td><td>string</td><td></td></tr>
+      <tr><td>ReviewDate</td><td>DateTime</td><td></td></tr>
+    </tbody>
+  </table></div>
+
+  <blockquote>
+    <strong>Report Unique Index:</strong> <code>(ReporterID, TargetType, TargetID)</code> — prevents duplicate reports from the same user on the same target.
+  </blockquote>
+
+  <!-- ─── 6. API Reference ──────────────────────────────────────── -->
+  <h2 id="s6"><span class="section-num">6</span> API Reference</h2>
+  <blockquote>
+    <strong>Base URL:</strong> <code>https://localhost:7101</code><br/>
+    <strong>Auth:</strong> Protected endpoints require <code>Authorization: Bearer &lt;token&gt;</code> in the request header.
+  </blockquote>
+
+  <h3 id="s6-auth">Auth Controller <code>/api/auth</code></h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge post">POST</span></td><td><code>/register</code></td><td><span class="badge open">public</span></td><td>Register new user. Body: <code>{ fullName, email, password, phone, role }</code></td></tr>
+      <tr><td><span class="badge post">POST</span></td><td><code>/login</code></td><td><span class="badge open">public</span></td><td>Login. Returns <code>accessToken</code> + <code>refreshToken</code></td></tr>
+      <tr><td><span class="badge post">POST</span></td><td><code>/send-otp</code></td><td><span class="badge open">public</span></td><td>Send OTP to email. Body: <code>{ email, purpose }</code></td></tr>
+      <tr><td><span class="badge post">POST</span></td><td><code>/verify-otp</code></td><td><span class="badge open">public</span></td><td>Verify OTP code. Body: <code>{ email, code, purpose }</code></td></tr>
+      <tr><td><span class="badge post">POST</span></td><td><code>/forgot-password</code></td><td><span class="badge open">public</span></td><td>Trigger password reset email</td></tr>
+      <tr><td><span class="badge post">POST</span></td><td><code>/reset-password</code></td><td><span class="badge open">public</span></td><td>Reset with OTP code. Body: <code>{ email, code, newPassword }</code></td></tr>
+      <tr><td><span class="badge post">POST</span></td><td><code>/refresh</code></td><td><span class="badge open">public</span></td><td>Exchange refresh token for new access token</td></tr>
+      <tr><td><span class="badge post">POST</span></td><td><code>/logout</code></td><td><span class="badge open">public</span></td><td>Invalidate refresh token</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="s6-admin">Admin Controller <code>/api/Admin</code> <span class="badge lock">🔒 admin</span></h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge get">GET</span></td><td><code>/dashboard-stats</code></td><td>Platform-wide stats (users, orders, revenue)</td></tr>
+      <tr><td><span class="badge put">PUT</span></td><td><code>/toggle-user-status/{id}</code></td><td>Activate or deactivate a user account</td></tr>
+      <tr><td><span class="badge delete">DELETE</span></td><td><code>/users/{id}</code></td><td>Soft-delete a user</td></tr>
+      <tr><td><span class="badge get">GET</span></td><td><code>/users/deleted</code></td><td>List all soft-deleted users</td></tr>
+      <tr><td><span class="badge get">GET</span></td><td><code>/freelancers</code></td><td>List all freelancers</td></tr>
+      <tr><td><span class="badge get">GET</span></td><td><code>/freelancers/pending</code></td><td>List freelancers awaiting approval</td></tr>
+      <tr><td><span class="badge put">PUT</span></td><td><code>/freelancers/{id}/approve</code></td><td>Approve a freelancer profile</td></tr>
+      <tr><td><span class="badge put">PUT</span></td><td><code>/freelancers/{id}/reject</code></td><td>Reject a freelancer profile</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="s6-freelancers">Freelancers Controller <code>/api/Freelancers</code></h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge post">POST</span></td><td><code>/profile</code></td><td><span class="badge lock">🔒 freelancer</span></td><td>Create profile. Body: <code>{ userID, profession, experienceYears, city, serviceIds[] }</code></td></tr>
+      <tr><td><span class="badge get">GET</span></td><td><code>/{userId}</code></td><td><span class="badge open">public</span></td><td>Get public profile for a freelancer</td></tr>
+      <tr><td><span class="badge get">GET</span></td><td><code>/search</code></td><td><span class="badge open">public</span></td><td>Search by <code>profession</code>, <code>city</code>, or <code>serviceId</code></td></tr>
+      <tr><td><span class="badge post">POST</span></td><td><code>/profile-image</code></td><td><span class="badge lock">🔒 freelancer</span></td><td>Upload profile picture (multipart/form-data)</td></tr>
+      <tr><td><span class="badge post">POST</span></td><td><code>/portfolio</code></td><td><span class="badge lock">🔒 freelancer</span></td><td>Add image to portfolio (multipart/form-data)</td></tr>
+      <tr><td><span class="badge delete">DELETE</span></td><td><code>/portfolio?imageUrl=</code></td><td><span class="badge lock">🔒 freelancer</span></td><td>Remove portfolio image</td></tr>
+      <tr><td><span class="badge get">GET</span></td><td><code>/{userId}/portfolio</code></td><td><span class="badge open">public</span></td><td>Get a freelancer's portfolio images</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="s6-services">Services Controller <code>/api/Services</code></h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge get">GET</span></td><td><code>/</code></td><td><span class="badge open">public</span></td><td>List all active services</td></tr>
+      <tr><td><span class="badge post">POST</span></td><td><code>/</code></td><td><span class="badge lock">🔒 admin</span></td><td>Create service. Body: <code>{ categoryID?, title, description, basePrice }</code></td></tr>
+      <tr><td><span class="badge get">GET</span></td><td><code>/{id}</code></td><td><span class="badge open">public</span></td><td>Get single service details</td></tr>
+      <tr><td><span class="badge put">PUT</span></td><td><code>/{id}</code></td><td><span class="badge lock">🔒 admin</span></td><td>Update service. Body: adds <code>isActive</code> flag</td></tr>
+      <tr><td><span class="badge delete">DELETE</span></td><td><code>/{id}</code></td><td><span class="badge lock">🔒 admin</span></td><td>Delete service</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="s6-orders">Orders Controller <code>/api/Orders</code> <span class="badge lock">🔒 required</span></h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Method</th><th>Endpoint</th><th>Role</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge post">POST</span></td><td><code>/</code></td><td><span class="role-pill role-client">client</span></td><td>Create order. Body: <code>{ freelancerID, serviceID, description, location }</code></td></tr>
+      <tr><td><span class="badge get">GET</span></td><td><code>/my-orders</code></td><td><span class="role-pill role-client">client</span></td><td>Paginated list of client's orders. <code>?pageNumber=&amp;pageSize=</code></td></tr>
+      <tr><td><span class="badge get">GET</span></td><td><code>/freelancer</code></td><td><span class="role-pill role-freelancer">freelancer</span></td><td>Paginated list of orders assigned to the freelancer</td></tr>
+      <tr><td><span class="badge put">PUT</span></td><td><code>/{orderId}/status</code></td><td><span class="role-pill role-freelancer">freelancer</span></td><td>Update status. <code>?status=</code> (0=Pending, 1=Accepted, 2=Rejected, 3=Completed)</td></tr>
+      <tr><td><span class="badge put">PUT</span></td><td><code>/{orderId}/cancel</code></td><td><span class="role-pill role-client">client</span></td><td>Cancel a pending order</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="s6-favorites">Favorites Controller <code>/api/Favorites</code> <span class="badge lock">🔒 client</span></h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge get">GET</span></td><td><code>/</code></td><td>Get all favorited services for the logged-in user (Title, BasePrice, SavedAt)</td></tr>
+      <tr><td><span class="badge post">POST</span></td><td><code>/{serviceId}</code></td><td>Add to favorites. Returns <code>400</code> if already saved or service inactive</td></tr>
+      <tr><td><span class="badge delete">DELETE</span></td><td><code>/{serviceId}</code></td><td>Remove from favorites. Returns <code>404</code> if not found</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="s6-reviews">Reviews Controller <code>/api/Reviews</code></h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge post">POST</span></td><td><code>/add</code></td><td><span class="badge lock">🔒 client</span></td><td>Submit review. Body: <code>{ orderID, freelancerID, rating(1-5), comment }</code></td></tr>
+      <tr><td><span class="badge get">GET</span></td><td><code>/freelancer/{freelancerId}</code></td><td><span class="badge open">public</span></td><td>Get all reviews for a freelancer</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="s6-misc">Additional Controllers</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Controller</th><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>Payments</td><td><span class="badge post">POST</span></td><td><code>/api/Payments/create-intent</code></td><td>Create Stripe payment intent. Body: <code>{ orderId, amount }</code></td></tr>
+      <tr><td>Payments</td><td><span class="badge post">POST</span></td><td><code>/api/Payments/webhook</code></td><td>Stripe webhook (called by Stripe, not the client)</td></tr>
+      <tr><td>Invoices</td><td><span class="badge get">GET</span></td><td><code>/api/Invoices/order/{orderId}</code></td><td>Fetch invoice for a completed/paid order</td></tr>
+      <tr><td>Reports</td><td><span class="badge post">POST</span></td><td><code>/api/Reports</code></td><td>Submit a report against a user or service</td></tr>
+      <tr><td>Reports</td><td><span class="badge get">GET</span></td><td><code>/api/Reports</code></td><td>(Admin) List all reports with optional <code>?status=</code></td></tr>
+      <tr><td>Reports</td><td><span class="badge put">PUT</span></td><td><code>/api/Reports/{id}/status</code></td><td>(Admin) Update report resolution status</td></tr>
+      <tr><td>Chatbot</td><td><span class="badge post">POST</span></td><td><code>/api/Chatbot/message</code></td><td>Send message to AI. Body: <code>{ message, conversationHistory[] }</code></td></tr>
+      <tr><td>Categories</td><td><span class="badge get">GET</span></td><td><code>/api/Categories</code></td><td>List with <code>?search=&amp;page=&amp;pageSize=</code></td></tr>
+      <tr><td>Users</td><td><span class="badge get">GET</span></td><td><code>/api/Users</code></td><td>Search by <code>SearchTerm</code>, <code>City</code>, <code>Profession</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Pagination Pattern</h3>
+  <p>All paginated endpoints return a consistent <code>PagedResponse&lt;T&gt;</code> envelope:</p>
+  <div class="code-label"><span>json · PagedResponse</span></div>
+  <pre class="has-label"><code class="language-json">{
+  "data": [ ... ],
+  "totalCount": 42,
+  "pageNumber": 1,
+  "pageSize": 10,
+  "totalPages": 5
+}</code></pre>
+
+  <!-- ─── 7. Frontend Architecture ──────────────────────────────── -->
+  <h2 id="s7"><span class="section-num">7</span> Frontend Architecture</h2>
+  <p>The entire frontend is coordinated by two central files that every protected page imports:</p>
+
+  <h3><code>js/api.js</code> — The HTTP Client</h3>
+  <p>All API calls go through <code>apiFetch()</code>. It automatically:</p>
+  <ul>
+    <li>Prepends the base URL (<code>https://localhost:7101</code>)</li>
+    <li>Injects the <code>Authorization: Bearer &lt;token&gt;</code> header</li>
+    <li>Handles <strong>401 responses</strong> by silently refreshing the access token and retrying (with a queue to prevent race conditions)</li>
+    <li>Redirects to <code>Login.html</code> if refresh also fails</li>
+  </ul>
+  <div class="code-label"><span>javascript · api.js usage</span></div>
+  <pre class="has-label"><code class="language-javascript">import { apiFetch } from './api.js';
+
+// GET — auto auth header injected
+const orders = await apiFetch('/api/Orders/my-orders?pageNumber=1&amp;pageSize=10');
+
+// POST with body
+await apiFetch(`/api/Favorites/${serviceId}`, { method: 'POST' });
+
+// File upload
+await apiUpload('/api/Freelancers/profile-image', formData);</code></pre>
+
+  <h3><code>js/auth.js</code> — Auth State &amp; Route Guards</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Function</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>login(email, password)</code></td><td>Calls <code>/api/auth/login</code>, stores token + user object in localStorage</td></tr>
+      <tr><td><code>logout()</code></td><td>Calls <code>/api/auth/logout</code>, clears localStorage</td></tr>
+      <tr><td><code>requireAuth(allowedRoles)</code></td><td><strong>Route guard</strong> — returns user object or redirects to login</td></tr>
+      <tr><td><code>getCurrentUser()</code></td><td>Returns parsed user object from localStorage</td></tr>
+      <tr><td><code>redirectByRole(role)</code></td><td>Navigates to the correct dashboard by role</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="code-label"><span>javascript · requireAuth pattern</span></div>
+  <pre class="has-label"><code class="language-javascript">import { requireAuth } from './auth.js';
+import { apiFetch }    from './api.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // Not logged in → auto redirect to Login.html
+    // Wrong role   → auto redirect to correct dashboard
+    const user = requireAuth(['client']);
+    if (!user) return; // halt execution
+
+    // ✅ Safe to proceed — fully authenticated
+    const favorites = await apiFetch('/api/Favorites');
+    renderFavorites(favorites);
+});</code></pre>
+
+  <h3>Adding a Favorites Heart Button</h3>
+  <div class="code-label"><span>javascript · addToFavorites</span></div>
+  <pre class="has-label"><code class="language-javascript">// post.js — window.* so inline onclick can reach it despite module scope
+window.addToFavorites = async function(serviceId, btnElement) {
+    const user = requireAuth(['client']);
+    if (!user) return;
+
+    await apiFetch(`/api/Favorites/${serviceId}`, { method: 'POST' });
+
+    // Visual feedback: outline → solid red heart
+    btnElement.querySelector('i').classList.replace('far', 'fas');
+    btnElement.querySelector('i').style.color = '#e74c3c';
+};</code></pre>
+  <div class="code-label"><span>html · card usage</span></div>
+  <pre class="has-label"><code class="language-html">&lt;!-- event.stopPropagation() prevents the &lt;a&gt; card from navigating --&gt;
+&lt;button class="fav-btn"
+        onclick="addToFavorites(1, this); event.stopPropagation();"
+        aria-label="أضف للمفضلة"&gt;
+    &lt;i class="far fa-heart"&gt;&lt;/i&gt;
+&lt;/button&gt;</code></pre>
+
+  <h3>Page-Level JS Files</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>File</th><th>Page</th><th>Key Responsibilities</th></tr></thead>
+    <tbody>
+      <tr><td><code>login.js</code></td><td><code>Login.html</code></td><td>Form submit, password toggle, OTP redirect</td></tr>
+      <tr><td><code>FreelancerJS.js</code></td><td><code>freelancer.html</code></td><td><code>requireAuth(['freelancer'])</code>, profile from API, service/order management</td></tr>
+      <tr><td><code>customerJS.js</code></td><td><code>customer.html</code></td><td><code>requireAuth(['client'])</code>, orders + favorites from API</td></tr>
+      <tr><td><code>post.js</code></td><td><code>post.html</code></td><td>Service catalog, sort, currency toggle, favorites</td></tr>
+      <tr><td><code>scripts.js</code></td><td><code>index.html</code></td><td>Home page, top freelancers section</td></tr>
+      <tr><td><code>AdminJS.js</code></td><td><code>Admin.html</code></td><td>Dashboard stats, user/freelancer management</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Token Storage</h3>
+  <div class="code-label"><span>localStorage keys</span></div>
+  <pre class="has-label"><code class="language-plaintext">accessToken   → JWT (short-lived, ~15 min)
+refreshToken  → Opaque token (long-lived, ~7 days)
+currentUser   → JSON: { userID, fullName, email, role, ... }</code></pre>
+
+  <!-- ─── 8. Auth Flow ──────────────────────────────────────────── -->
+  <h2 id="s8"><span class="section-num">8</span> Authentication Flow</h2>
+
+  <h3>Registration &amp; Email Verification</h3>
+  <div class="code-label"><span>flow</span></div>
+  <pre class="has-label"><code class="language-plaintext">1. POST /api/auth/register   → account created (IsEmailVerified = false)
+2. POST /api/auth/send-otp   → OTP emailed to user
+3. POST /api/auth/verify-otp → IsEmailVerified = true
+4. Redirect to Login page</code></pre>
+
+  <h3>Login &amp; Token Lifecycle</h3>
+  <div class="code-label"><span>flow</span></div>
+  <pre class="has-label"><code class="language-plaintext">1. POST /api/auth/login
+   ← { accessToken, refreshToken, user }
+
+2. Store both tokens in localStorage
+
+3. Every API request:
+   → Authorization: Bearer &lt;accessToken&gt;
+
+4. On 401 (token expired):
+   → api.js queues the failing request
+   → POST /api/auth/refresh  { refreshToken }
+   ← { accessToken, refreshToken (rotated) }
+   → Update localStorage
+   → Retry all queued requests
+
+5. On refresh failure:
+   → Clear localStorage
+   → Redirect to Login.html</code></pre>
+
+  <h3>Password Reset</h3>
+  <div class="code-label"><span>flow</span></div>
+  <pre class="has-label"><code class="language-plaintext">1. POST /api/auth/forgot-password  { email }
+2. User receives OTP via email
+3. POST /api/auth/verify-otp       { email, code, purpose: "PasswordReset" }
+4. POST /api/auth/reset-password   { email, code, newPassword }</code></pre>
+
+  <h3>Role-Based Routing</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Role</th><th>Destination after login</th></tr></thead>
+    <tbody>
+      <tr><td><span class="role-pill role-admin">admin</span></td><td><code>Admin.html</code></td></tr>
+      <tr><td><span class="role-pill role-client">client</span></td><td><code>customer.html</code></td></tr>
+      <tr><td><span class="role-pill role-freelancer">freelancer</span></td><td><code>freelancer.html</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- ─── 9. Getting Started ───────────────────────────────────── -->
+  <h2 id="s9"><span class="section-num">9</span> Getting Started</h2>
+
+  <h3>Prerequisites</h3>
+  <ul>
+    <li><a href="https://dotnet.microsoft.com/download/dotnet/8" target="_blank">.NET 8 SDK</a></li>
+    <li><a href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads" target="_blank">SQL Server</a> (Express or Developer edition)</li>
+    <li><a href="https://visualstudio.microsoft.com/" target="_blank">Visual Studio 2022</a> or <a href="https://code.visualstudio.com/" target="_blank">VS Code</a></li>
+    <li>A modern browser (Chrome, Edge, Firefox)</li>
+  </ul>
+
+  <h3>Backend Setup</h3>
+
+  <div class="step-box">
+    <div class="step-box-header"><div class="step-num">1</div><strong>Open the solution</strong></div>
+    <div class="step-box-body">
+      <div class="code-label"><span>bash</span></div>
+      <pre class="has-label"><code class="language-bash">cd Backend
+start SanaaPlatform.sln    # opens in Visual Studio</code></pre>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-box-header"><div class="step-num">2</div><strong>Configure the connection string</strong></div>
+    <div class="step-box-body">
+      <p>Open <code>Sanaa.API/appsettings.json</code> and update <code>DefaultConnection</code>:</p>
+      <div class="code-label"><span>json · appsettings.json</span></div>
+      <pre class="has-label"><code class="language-json">"ConnectionStrings": {
+  "DefaultConnection": "Server=.;Database=SanaaDB;Trusted_Connection=True;TrustServerCertificate=True;"
+}</code></pre>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-box-header"><div class="step-num">3</div><strong>Apply migrations</strong></div>
+    <div class="step-box-body">
+      <p>In Visual Studio → <strong>Package Manager Console</strong> (set Default Project to <code>Sanaa.DAL</code>):</p>
+      <div class="code-label"><span>Package Manager Console</span></div>
+      <pre class="has-label"><code class="language-plaintext">Update-Database</code></pre>
+      <p>Or via .NET CLI:</p>
+      <div class="code-label"><span>bash</span></div>
+      <pre class="has-label"><code class="language-bash">dotnet ef database update --project Backend/Sanaa.DAL --startup-project Backend/Sanaa.API</code></pre>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-box-header"><div class="step-num">4</div><strong>Run the API</strong></div>
+    <div class="step-box-body">
+      <div class="code-label"><span>bash</span></div>
+      <pre class="has-label"><code class="language-bash">cd Backend/Sanaa.API
+dotnet run</code></pre>
+      <p>API starts at <code>https://localhost:7101</code> · Swagger UI at <code>https://localhost:7101/swagger</code></p>
+    </div>
+  </div>
+
+  <h3>Frontend Setup</h3>
+  <p>The frontend is plain HTML/CSS/JS — no build step required.</p>
+  <blockquote>⚠️ ES6 modules (<code>import</code>/<code>export</code>) require a proper HTTP server — they do <strong>not</strong> work via <code>file://</code> protocol.</blockquote>
+
+  <div class="step-box">
+    <div class="step-box-header"><div class="step-num">A</div><strong>VS Code Live Server (recommended)</strong></div>
+    <div class="step-box-body">
+      <ol>
+        <li>Install the <a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer" target="_blank">Live Server</a> extension</li>
+        <li>Right-click <code>index.html</code> → <strong>Open with Live Server</strong></li>
+        <li>Browser opens at <code>http://127.0.0.1:5500</code></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-box-header"><div class="step-num">B</div><strong>Node.js serve</strong></div>
+    <div class="step-box-body">
+      <div class="code-label"><span>bash</span></div>
+      <pre class="has-label"><code class="language-bash">cd Frontend/san3a-edit
+npx serve .</code></pre>
+    </div>
+  </div>
+
+  <h3>First Run Checklist</h3>
+  <ul class="checklist">
+    <li>SQL Server is running</li>
+    <li><code>Update-Database</code> completed without errors (verify <code>SanaaDB</code> exists in SSMS)</li>
+    <li>API starts and Swagger loads at <code>https://localhost:7101/swagger</code></li>
+    <li>Frontend served over HTTP (not <code>file://</code>)</li>
+    <li><code>API_BASE_URL</code> in <code>js/api.js</code> matches the running API port</li>
+  </ul>
+
+  <!-- ─── 10. Environment Config ────────────────────────────────── -->
+  <h2 id="s10"><span class="section-num">10</span> Environment Configuration</h2>
+  <blockquote>Do <strong>not</strong> commit real credentials to version control — use <code>appsettings.Development.json</code> or .NET User Secrets for local development.</blockquote>
+
+  <div class="code-label"><span>json · appsettings.json template</span></div>
+  <pre class="has-label"><code class="language-json">{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.;Database=SanaaDB;Trusted_Connection=True;TrustServerCertificate=True;"
+  },
+  "Jwt": {
+    "Key": "YOUR_LONG_SECRET_KEY_MIN_32_CHARS",
+    "Issuer": "SanaaAPI",
+    "Audience": "SanaaUsers"
+  },
+  "Smtp": {
+    "Host": "smtp.gmail.com",
+    "Port": 587,
+    "Username": "your-email@gmail.com",
+    "Password": "your-app-password",
+    "SenderEmail": "your-email@gmail.com",
+    "SenderName": "Sanaa"
+  },
+  "Stripe": {
+    "PublishableKey": "pk_test_...",
+    "SecretKey": "sk_test_...",
+    "WebhookSecret": "whsec_..."
+  },
+  "Anthropic": {
+    "ApiKey": "sk-ant-..."
+  }
+}</code></pre>
+
+  <h3>Rate Limiting</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Policy</th><th>Limit</th></tr></thead>
+    <tbody>
+      <tr><td>OTP endpoints</td><td>3 requests / 10 minutes</td></tr>
+      <tr><td>Chatbot</td><td>20 requests / minute</td></tr>
+      <tr><td>Login</td><td>5 requests / minute</td></tr>
+      <tr><td>Global (all endpoints)</td><td>60 requests / minute</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- ─── Appendix ──────────────────────────────────────────────── -->
+  <h2 id="appendix">Appendix — Adding a New Feature</h2>
+  <p>Follow this checklist for every new feature to maintain the 3-tier pattern:</p>
+  <ol class="dev-checklist">
+    <li>Create Entity class in <code>Sanaa.DAL/Entities/</code> <span class="layer-tag">DAL</span></li>
+    <li>Add <code>DbSet&lt;T&gt;</code> to <code>SanaaDbContext.cs</code> <span class="layer-tag">DAL</span></li>
+    <li>Configure relationships in <code>OnModelCreating()</code> via Fluent API <span class="layer-tag">DAL</span></li>
+    <li>Run: <code>Add-Migration &lt;Name&gt;</code> → <code>Update-Database</code> <span class="layer-tag">DAL</span></li>
+    <li>Add response DTO to <code>Sanaa.BLL/DTOs/</code> <span class="layer-tag">BLL</span></li>
+    <li>Define interface in <code>Sanaa.BLL/Interfaces/IYourService.cs</code> <span class="layer-tag">BLL</span></li>
+    <li>Implement in <code>Sanaa.BLL/Services/YourService.cs</code> <span class="layer-tag">BLL</span></li>
+    <li>Create Controller in <code>Sanaa.API/Controllers/</code> <span class="layer-tag">API</span></li>
+    <li>Register: <code>builder.Services.AddScoped&lt;IYourService, YourService&gt;()</code> in <code>Program.cs</code> <span class="layer-tag">API</span></li>
+    <li>Import <code>{ apiFetch }</code> from <code>./api.js</code> <span class="layer-tag">Frontend</span></li>
+    <li>Import <code>{ requireAuth }</code> from <code>./auth.js</code> and guard the page <span class="layer-tag">Frontend</span></li>
+    <li>Call <code>apiFetch('/api/YourEndpoint', { method: 'POST', body: ... })</code> <span class="layer-tag">Frontend</span></li>
+  </ol>
+
+  <div class="doc-footer">
+    Sanaa Platform — Developer Documentation · v1.0 · May 2026
+  </div>
+
+</main>
+
+<script>
+  // Syntax highlighting
+  document.addEventListener('DOMContentLoaded', () => {
+    hljs.highlightAll();
+
+    // Active sidebar link on scroll
+    const sections = document.querySelectorAll('h2[id], h3[id]');
+    const navLinks = document.querySelectorAll('#sidebar nav a');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`#sidebar nav a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  });
+</script>
+</body>
+</html>

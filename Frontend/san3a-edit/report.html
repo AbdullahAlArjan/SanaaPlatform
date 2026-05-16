@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report an Issue — Sana'a</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ── Reset & base ─────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            padding: 2rem 1rem;
+        }
+
+        /* ── Glass card ───────────────────────────────────────────────── */
+        .report-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem 2.25rem 2rem;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+            color: #fff;
+        }
+
+        /* ── Header ───────────────────────────────────────────────────── */
+        .report-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .report-icon {
+            width: 46px; height: 46px;
+            background: rgba(231, 76, 60, 0.2);
+            border: 1.5px solid rgba(231, 76, 60, 0.5);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; color: #e74c3c; flex-shrink: 0;
+        }
+        .report-header h1 { font-size: 1.4rem; font-weight: 700; }
+        .report-header p  { font-size: 0.82rem; color: rgba(255,255,255,0.55); margin-top: 0.15rem; }
+        .report-meta {
+            background: rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 0.6rem 0.9rem;
+            margin: 1rem 0 1.5rem;
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.65);
+            display: flex; gap: 1.5rem; flex-wrap: wrap;
+        }
+        .report-meta span { display: flex; align-items: center; gap: 0.35rem; }
+        .report-meta i    { color: rgba(255,255,255,0.4); }
+
+        /* ── Form fields ──────────────────────────────────────────────── */
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label {
+            display: block;
+            font-size: 0.82rem; font-weight: 600;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 0.45rem;
+        }
+        .form-group select,
+        .form-group textarea,
+        .form-group input {
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border: 1.5px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+        .form-group select option { background: #1a1a2e; color: #fff; }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 140px;
+            line-height: 1.6;
+        }
+        .form-group select:focus,
+        .form-group textarea:focus,
+        .form-group input:focus {
+            border-color: rgba(231,76,60,0.7);
+            box-shadow: 0 0 0 3px rgba(231,76,60,0.15);
+        }
+        .form-group .char-count {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            text-align: right;
+            margin-top: 0.3rem;
+        }
+
+        /* ── Actions ──────────────────────────────────────────────────── */
+        .form-actions {
+            display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        .btn-cancel {
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: 1.5px solid rgba(255,255,255,0.2);
+            background: transparent; color: rgba(255,255,255,0.7);
+            font-weight: 600; font-size: 0.88rem; cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-cancel:hover { background: rgba(255,255,255,0.08); }
+        .btn-submit {
+            padding: 0.8rem;
+            border-radius: 10px; border: none;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 0.45rem;
+            box-shadow: 0 4px 14px rgba(231,76,60,0.4);
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn-submit:hover   { opacity: 0.9; transform: translateY(-1px); }
+        .btn-submit:active  { transform: scale(0.98); }
+        .btn-submit:disabled { background: rgba(255,255,255,0.15); box-shadow: none; cursor: not-allowed; transform: none; }
+
+        /* ── Toast ────────────────────────────────────────────────────── */
+        .toast {
+            position: fixed; bottom: 1.5rem; left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            padding: 0.85rem 1.5rem; border-radius: 12px;
+            font-size: 0.9rem; font-weight: 600; color: #fff;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 9999;
+            opacity: 0; transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none; white-space: nowrap;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.success { background: #27ae60; }
+        .toast.error   { background: #e74c3c; }
+
+        /* ── Error banner ─────────────────────────────────────────────── */
+        #missing-params {
+            display: none;
+            text-align: center; padding: 3rem 2rem;
+        }
+        #missing-params i { font-size: 3rem; color: #e74c3c; margin-bottom: 1rem; display: block; }
+        #missing-params p { color: rgba(255,255,255,0.7); margin-bottom: 1rem; }
+        #missing-params a { color: #3498db; }
+    </style>
+</head>
+<body>
+
+<div class="report-card">
+
+    <!-- Error state: missing URL params -->
+    <div id="missing-params">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>Invalid report link. Please go back and try again.</p>
+        <a href="customer.html">← Back to Dashboard</a>
+    </div>
+
+    <!-- Report form -->
+    <div id="report-form-wrap">
+        <div class="report-header">
+            <div class="report-icon"><i class="fas fa-flag"></i></div>
+            <div>
+                <h1>Report an Issue</h1>
+                <p>Your report will be reviewed by our admin team.</p>
+            </div>
+        </div>
+
+        <!-- Context strip populated by JS -->
+        <div class="report-meta" id="report-meta">
+            <span><i class="fas fa-spinner fa-spin"></i> Loading context…</span>
+        </div>
+
+        <form id="report-form" novalidate>
+            <div class="form-group">
+                <label for="report-category">Issue Category</label>
+                <select id="report-category" required>
+                    <option value="">-- Select a category --</option>
+                    <option value="Scam or Fraud">Scam or Fraud</option>
+                    <option value="Poor Quality Work">Poor Quality Work</option>
+                    <option value="No Show / Abandoned">No Show / Abandoned</option>
+                    <option value="Rude or Inappropriate Behaviour">Rude or Inappropriate Behaviour</option>
+                    <option value="Misleading Service Description">Misleading Service Description</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="report-reason">
+                    Detailed Reason <span style="color:#e74c3c">*</span>
+                </label>
+                <textarea id="report-reason" maxlength="200"
+                          placeholder="Describe what went wrong. Be as specific as possible…"
+                          required></textarea>
+                <div class="char-count"><span id="reason-count">0</span> / 200</div>
+            </div>
+
+            <div class="form-group">
+                <label for="report-description">
+                    Additional Details
+                    <span style="color:rgba(255,255,255,0.4);font-weight:400">(optional)</span>
+                </label>
+                <textarea id="report-description" maxlength="1000"
+                          placeholder="Any extra context, screenshots links, dates, etc."
+                          style="min-height:90px"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" onclick="history.back()">Cancel</button>
+                <button type="submit" class="btn-submit" id="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Submit Report
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+<script type="module" src="js/report.js"></script>
+</body>
+</html>

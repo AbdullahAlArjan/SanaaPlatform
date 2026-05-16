@@ -24,27 +24,27 @@ namespace Sanaa.BLL.Services
             _emailService = emailService;
         }
 
-        // 1. إنشاء طلب جديد
-        public async Task<bool> CreateOrderAsync(int clientId, CreateOrderRequest request)
+        // 1. إنشاء طلب جديد — returns the new OrderID on success, null on failure
+        public async Task<int?> CreateOrderAsync(int clientId, CreateOrderRequest request)
         {
             // Fetch service to get its price
             var service = await _context.Services.FindAsync(request.ServiceID);
-            if (service == null) return false;
+            if (service == null) return null;
 
             var order = new Order
             {
-                ClientID = clientId,
-                FreelancerID = request.FreelancerID,
-                ServiceID = request.ServiceID,
+                ClientID             = clientId,
+                FreelancerID         = request.FreelancerID,
+                ServiceID            = request.ServiceID,
                 ServicePriceSnapshot = service.BasePrice,
-                Description = request.Description,
-                Location = request.Location,
-                Status = OrderStatus.Pending
+                Description          = request.Description,
+                Location             = request.Location,
+                Status               = OrderStatus.Pending
             };
 
             _context.Orders.Add(order);
             var saved = await _context.SaveChangesAsync() > 0;
-            if (!saved) return false;
+            if (!saved) return null;
 
             // جلب بيانات الصنايعي لإرسال الإشعار والإيميل
             var freelancerUser = await _context.Users.FindAsync(request.FreelancerID);
@@ -65,7 +65,7 @@ namespace Sanaa.BLL.Services
                     $"<p>سجّل دخولك لمراجعة الطلب والرد عليه.</p></div>");
             }
 
-            return true;
+            return order.OrderID;   // return the new ID so the frontend can create a PaymentIntent
         }
 
         // 2. جلب طلبات صنايعي معين
@@ -118,17 +118,19 @@ namespace Sanaa.BLL.Services
             {
                 Data = orders.Select(o => new OrderResponse
                 {
-                    OrderID = o.OrderID,
-                    ClientName = "أنا",
+                    OrderID      = o.OrderID,
+                    ClientName   = "أنا",
+                    FreelancerID = o.FreelancerID,
                     FreelancerName = o.Freelancer.User?.FullName ?? "صنايعي",
-                    Description = o.Description,
-                    Location = o.Location,
-                    OrderDate = o.OrderDate,
-                    Status = o.Status.ToString()
+                    ServiceID    = o.ServiceID,
+                    Description  = o.Description,
+                    Location     = o.Location,
+                    OrderDate    = o.OrderDate,
+                    Status       = o.Status.ToString()
                 }),
                 TotalCount = totalCount,
-                PageNumber = pageNumber,
-                PageSize = pageSize
+                PageNumber  = pageNumber,
+                PageSize    = pageSize
             };
         }
 

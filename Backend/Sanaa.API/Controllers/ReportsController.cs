@@ -25,11 +25,15 @@ namespace Sanaa.API.Controllers
             if (userIdClaim == null) return Unauthorized();
 
             var reporterUserId = int.Parse(userIdClaim);
-            var result = await _reportService.SubmitReportAsync(reporterUserId, request);
+            var error = await _reportService.SubmitReportAsync(reporterUserId, request);
 
-            if (!result) return BadRequest("فشل رفع البلاغ. قد تكون رفعت بلاغاً مسبقاً على نفس الهدف.");
-
-            return Ok("تم رفع البلاغ بنجاح وسيتم مراجعته");
+            return error switch
+            {
+                null             => Ok(new { message = "تم رفع البلاغ بنجاح وسيتم مراجعته." }),
+                "NO_PAID_ORDER"  => StatusCode(403, new { message = "You can only report services you have purchased and paid for." }),
+                "DUPLICATE"      => BadRequest(new { message = "You have already submitted a report against this target." }),
+                _                => BadRequest(new { message = "Invalid report request." })
+            };
         }
 
         [HttpGet]

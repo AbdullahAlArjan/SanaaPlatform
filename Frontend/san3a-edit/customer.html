@@ -55,22 +55,18 @@
 
         <!-- Right Column - Services Section -->
         <div class="services-section">
-            <!-- Favorite Services -->
-            <section class="services-container">
-                <h2><i class="fas fa-heart text-danger"></i> Favorite Services</h2>
-                <div class="services-grid" id="favoriteServices">
-                    <!-- Dynamic content -->
-                </div>
-            </section>
+    <h3>الخدمات المفضلة</h3>
+    <div class="services-grid" id="favoriteServicesContainer">
+        <p class="loading-text">جاري التحميل...</p>
+    </div>
+</div>
 
-            <!-- Purchased Services -->
-            <section class="services-container">
-                <h2><i class="fas fa-shopping-bag text-success"></i> Purchased Services</h2>
-                <div class="services-grid" id="purchasedServices">
-                    <!-- Dynamic content -->
-                </div>
-            </section>
-        </div>
+<div class="services-section">
+    <h3>الخدمات المشتراة</h3>
+    <div class="services-grid" id="purchasedServicesContainer">
+        <p class="loading-text">جاري التحميل...</p>
+    </div>
+</div>
     </div>
 
     <!-- Notifications Dropdown -->
@@ -150,6 +146,6 @@
     </div>
 </div>
     <!-- Scripts -->
-    <script src="js/customerJS.js"></script>
+    <script type="module" src="js/customerJS.js"></script>
 </body>
 </html>
