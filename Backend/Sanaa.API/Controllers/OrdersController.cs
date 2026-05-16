@@ -34,8 +34,9 @@ namespace Sanaa.API.Controllers
             var orderId = await _orderService.CreateOrderAsync(clientId.Value, request);
             if (orderId == null) return BadRequest(new { message = "حدث خطأ أثناء إرسال الطلب." });
 
-            // Return the new orderID so the frontend can immediately create a PaymentIntent
-            return Ok(new { orderID = orderId.Value, message = "تم إرسال الطلب للصنايعي بنجاح! 🚀" });
+            // Shallow projection — avoids circular-reference crashes from EF navigation properties.
+            // Frontend reads: orderRes.orderId
+            return Ok(new { orderId = orderId.Value });
         }
 
         [Authorize]

@@ -509,8 +509,8 @@ function _closeCheckoutModal() {
 function _showStep(n) {
     const s1 = document.getElementById('co-step1');
     const s2 = document.getElementById('co-step2');
-    if (s1) s1.style.display = n === 1 ? 'block' : 'none';
-    if (s2) s2.style.display = n === 2 ? 'block' : 'none';
+    if (s1) s1.style.display = n === 1 ? '' : 'none';
+    if (s2) s2.style.display = n === 2 ? '' : 'none';
 }
 
 function _clearPaymentErrors() {
@@ -728,7 +728,7 @@ function _initializeEmbeddedStripeElements(clientSecret, publishableKey) {
     const submitBtn = document.getElementById('submit-stripe-btn');
     const msgEl     = document.getElementById('payment-message');
 
-     if (container) container.style.display = 'block';
+    if (container) container.style.display = '';
 
     // Surface inline Stripe validation errors in #payment-message
     _paymentEl.on('change', ev => {

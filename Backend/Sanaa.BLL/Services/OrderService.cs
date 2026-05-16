@@ -7,7 +7,6 @@ using Sanaa.DAL.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sanaa.BLL.DTOs;
 
 namespace Sanaa.BLL.Services
 {
@@ -24,7 +23,7 @@ namespace Sanaa.BLL.Services
             _emailService = emailService;
         }
 
-        // 1. إنشاء طلب جديد — returns the new OrderID on success, null on failure
+        // 1. إنشاء طلب جديد 
         public async Task<int?> CreateOrderAsync(int clientId, CreateOrderRequest request)
         {
             // Fetch service to get its price
@@ -46,26 +45,36 @@ namespace Sanaa.BLL.Services
             var saved = await _context.SaveChangesAsync() > 0;
             if (!saved) return null;
 
-            // جلب بيانات الصنايعي لإرسال الإشعار والإيميل
-            var freelancerUser = await _context.Users.FindAsync(request.FreelancerID);
             var clientUser = await _context.Users.FindAsync(clientId);
 
-            await _notificationService.SendNotificationToUserAsync(order.FreelancerID, $"إجالك طلب جديد من {clientUser?.FullName ?? "زبون"}!");
+            // Push notification 
+            await _notificationService.SendNotificationToUserAsync(
+                order.FreelancerID,
+                $"إجالك طلب جديد من {clientUser?.FullName ?? "زبون"}!");
 
+            // 🛑 [تم إيقاف الإيميل مؤقتاً لاختبار بوابة الدفع سترايب] 🛑
+            /*
+            var freelancerUser = await _context.Users.FindAsync(request.FreelancerID);
             if (freelancerUser != null)
             {
-                await _emailService.SendAsync(
-                    freelancerUser.Email,
-                    freelancerUser.FullName,
-                    "طلب جديد - منصة صناع",
-                    $"<div dir='rtl'><h3>مرحباً {freelancerUser.FullName}</h3>" +
-                    $"<p>لديك طلب جديد من {clientUser?.FullName ?? "زبون"}.</p>" +
-                    $"<p><strong>التفاصيل:</strong> {order.Description}</p>" +
-                    $"<p><strong>الموقع:</strong> {order.Location}</p>" +
-                    $"<p>سجّل دخولك لمراجعة الطلب والرد عليه.</p></div>");
-            }
+                var toEmail   = freelancerUser.Email;
+                var toName    = freelancerUser.FullName;
+                var clientName = clientUser?.FullName ?? "زبون";
+                var desc      = order.Description;
+                var loc       = order.Location;
 
-            return order.OrderID;   // return the new ID so the frontend can create a PaymentIntent
+                try
+                {
+                    await _emailService.SendAsync(toEmail, toName, "طلب جديد - منصة صناع", $"...");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Email skipped: {ex.Message}");
+                }
+            }
+            */
+
+            return order.OrderID;   // رح يرجع فوراً بدون أي تأخير!
         }
 
         // 2. جلب طلبات صنايعي معين
@@ -134,7 +143,7 @@ namespace Sanaa.BLL.Services
             };
         }
 
-        // 3. تحديث حالة الطلب (مقبول، مرفوض، مكتمل)
+        // 3. تحديث حالة الطلب
         public async Task<bool> UpdateOrderStatusAsync(int orderId, int freelancerId, OrderStatus status)
         {
             var order = await _context.Orders
@@ -146,26 +155,13 @@ namespace Sanaa.BLL.Services
             var saved = await _context.SaveChangesAsync() > 0;
             if (!saved) return false;
 
-            // إرسال إيميل للزبون حسب الحالة الجديدة
+            // 🛑 [تم إيقاف الإيميل مؤقتاً لاختبار بوابة الدفع سترايب] 🛑
+            /*
             if (order.Client != null && status != OrderStatus.Pending)
             {
-                var (subject, body) = status switch
-                {
-                    OrderStatus.Accepted => (
-                        "تم قبول طلبك - منصة صناع",
-                        $"<div dir='rtl'><h3>مرحباً {order.Client.FullName}</h3><p>تم <strong>قبول</strong> طلبك رقم {orderId}. سيتواصل معك الصنايعي قريباً.</p></div>"),
-                    OrderStatus.Rejected => (
-                        "تم رفض طلبك - منصة صناع",
-                        $"<div dir='rtl'><h3>مرحباً {order.Client.FullName}</h3><p>نأسف، تم <strong>رفض</strong> طلبك رقم {orderId}. يمكنك البحث عن صنايعي آخر.</p></div>"),
-                    OrderStatus.Completed => (
-                        "اكتمل طلبك - منصة صناع",
-                        $"<div dir='rtl'><h3>مرحباً {order.Client.FullName}</h3><p>تم <strong>إكمال</strong> طلبك رقم {orderId} بنجاح. يسعدنا سماع تقييمك!</p></div>"),
-                    _ => (string.Empty, string.Empty)
-                };
-
-                if (!string.IsNullOrEmpty(subject))
-                    await _emailService.SendAsync(order.Client.Email, order.Client.FullName, subject, body);
+                // ... Email logic
             }
+            */
 
             return true;
         }

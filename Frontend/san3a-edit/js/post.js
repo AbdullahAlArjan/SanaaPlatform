@@ -1,4 +1,4 @@
-import { requireAuth } from './auth.js';
+import { requireAuth, getCurrentUser } from './auth.js';
 import { apiFetch, apiJSON } from './api.js';
 
 // ── Category configuration (must match seeded DB: IDs 1–6) ───────────────────
@@ -11,7 +11,6 @@ const CATEGORY_NAMES = {
     6: 'مونتاج فيديو',
 };
 
-// Fallback images mapped to category IDs
 const CATEGORY_IMAGES = {
     1: 'Images/logo.png',
     2: 'Images/service2.jpg',
@@ -28,19 +27,23 @@ const postsContainer = document.querySelector('.posts-container');
 let isUSD        = true;
 const exchangeRate = 0.709;
 
+// ── Module-level favorites array ──────────────────────────────────────────────
+// Populated once per page load by _loadFavoriteIds(), then kept in sync by
+// addToFavorites() so that renderServiceCard() always reflects the true DB state
+// without needing an extra round-trip after each toggle.
+let userFavoriteIds = [];
+
 // ── Sort ──────────────────────────────────────────────────────────────────────
-// Always queries the DOM fresh so it works with both static and dynamically
-// rendered cards.
 function sortPosts() {
     if (!postsContainer || !sortSelect) return;
     const cards     = Array.from(postsContainer.querySelectorAll('.post-card'));
     const sortValue = sortSelect.value;
 
     cards.sort((a, b) => {
-        const aRating = parseFloat(a.dataset.rating)  || 0;
-        const bRating = parseFloat(b.dataset.rating)  || 0;
-        const aPrice  = parseFloat(a.dataset.price)   || 0;
-        const bPrice  = parseFloat(b.dataset.price)   || 0;
+        const aRating = parseFloat(a.dataset.rating) || 0;
+        const bRating = parseFloat(b.dataset.rating) || 0;
+        const aPrice  = parseFloat(a.dataset.price)  || 0;
+        const bPrice  = parseFloat(b.dataset.price)  || 0;
 
         switch (sortValue) {
             case 'rating_high': return bRating - aRating;
@@ -75,123 +78,185 @@ function toggleCurrency() {
     sortPosts();
 }
 
-// ── Dynamic service rendering ─────────────────────────────────────────────────
+// ── Favorite ID pre-fetch ─────────────────────────────────────────────────────
+// Populates `userFavoriteIds` before any card is rendered so the heart icon
+// reflects real DB state on load (fixes the refresh-reset bug).
+//
+// Strategy:
+//   1. Try POST /api/Favorites/my-favorites  (paginated, preferred endpoint)
+//   2. On any failure fall back to GET /api/Favorites (older / simpler endpoint)
+//   3. On second failure, silently set userFavoriteIds = [] — page still loads
+//
+// ID extraction normalises across all observed C# serialisation variants:
+//   serviceID  (PascalCase DTO)
+//   serviceId  (camelCase JSON default)
+//   id         (minimal DTO)
+async function _loadFavoriteIds() {
+    if (!getCurrentUser()) {
+        userFavoriteIds = [];
+        return;
+    }
 
-/**
- * Renders a single service card matching the existing .post-card HTML structure.
- * Uses the categoryId for a contextual fallback image.
- */
+    const _extract = response => {
+        if (response == null) return [];
+        const list = Array.isArray(response)
+            ? response
+            : (response.items || response.data || response.favorites || []);
+        return Array.isArray(list)
+            ? list
+                .map(f => Number(f.serviceID ?? f.serviceId ?? f.id ?? 0))
+                .filter(n => n > 0)
+            : [];
+    };
+
+    // ── Attempt 1: POST endpoint ──────────────────────────────────────────────
+    try {
+        const res = await apiJSON('/api/Favorites/my-favorites', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ pageSize: 200 }),
+        });
+        userFavoriteIds = _extract(res);
+        return;
+    } catch { /* fall through to GET fallback */ }
+
+    // ── Attempt 2: GET endpoint (fallback) ────────────────────────────────────
+    try {
+        const res = await apiJSON('/api/Favorites');
+        userFavoriteIds = _extract(res);
+    } catch {
+        userFavoriteIds = [];
+    }
+}
+
+// ── Service card renderer ─────────────────────────────────────────────────────
+// Reads `userFavoriteIds` (already loaded) — no async call needed here.
+// data-fav and data-service-id are written on the button so addToFavorites()
+// can toggle correctly and so DOM queries work when updating the overview panel.
 function renderServiceCard(service, catId) {
-    const img   = CATEGORY_IMAGES[catId] || 'Images/logo.png';
-    const price = parseFloat(service.basePrice ?? 0);
-    const title = service.title || 'Untitled Service';
-    const desc  = (service.description || '').slice(0, 80) +
-                  (service.description?.length > 80 ? '…' : '');
-    const id    = service.serviceID ?? service.serviceId ?? 0;
+    const img      = CATEGORY_IMAGES[catId] || 'Images/logo.png';
+    const price    = parseFloat(service.basePrice ?? 0);
+    const title    = service.title || 'Untitled Service';
+    const desc     = (service.description || '').slice(0, 80) +
+                     ((service.description?.length ?? 0) > 80 ? '…' : '');
+    const id       = Number(service.serviceID ?? service.serviceId ?? service.id ?? 0);
 
-    // Wrap the entire card in <a href="..."> so clicking anywhere navigates
-    // to the dynamic service-details page. The favourite button uses
-    // event.stopPropagation() to prevent the link from firing.
+    const isAlreadyFav = userFavoriteIds.includes(id);
+    const heartClass   = isAlreadyFav ? 'fas fa-heart' : 'far fa-heart';
+    const heartColor   = isAlreadyFav ? 'color:#ef4444;' : '';
+    const favLabel     = isAlreadyFav ? 'إزالة من المفضلة' : 'أضف للمفضلة';
+
     return `
         <a href="service-details.html?id=${id}" class="post-card"
            data-rating="0" data-price="${price}"
            style="text-decoration:none;color:inherit;">
-            <img src="${img}" alt="${title}" class="post-image"
+            <img src="${img}" alt="${_esc(title)}" class="post-image"
                  onerror="this.src='Images/logo.png'">
             <div class="post-details">
-                <h3>${title}</h3>
+                <h3>${_esc(title)}</h3>
                 <div class="price-rating">
                     <span class="price">${price}$</span>
                     <div class="rating">⭐ —</div>
                     <button class="fav-btn"
+                            data-fav="${isAlreadyFav}"
+                            data-service-id="${id}"
                             onclick="addToFavorites(${id}, this); event.stopPropagation();"
-                            aria-label="أضف للمفضلة">
-                        <i class="far fa-heart"></i>
+                            aria-label="${favLabel}"
+                            title="${favLabel}">
+                        <i class="${heartClass}" style="${heartColor}"></i>
                     </button>
                 </div>
-                ${desc ? `<p class="service-desc" style="font-size:.8rem;color:#666;margin-top:.4rem">${desc}</p>` : ''}
+                ${desc ? `<p class="service-desc" style="font-size:.8rem;color:#666;margin-top:.4rem">${_esc(desc)}</p>` : ''}
                 <div class="provider-info">
                     <i class="fas fa-tag" style="color:#1877f2"></i>
-                    <span>${CATEGORY_NAMES[catId] || 'General'}</span>
+                    <span>${_esc(CATEGORY_NAMES[catId] || 'General')}</span>
                 </div>
             </div>
         </a>`;
 }
 
-/**
- * Fetches services for the given category from the API and renders them.
- * Falls back to a friendly message if the API returns nothing.
- */
+// ── Load services by category ─────────────────────────────────────────────────
 async function loadServicesByCategory(catId) {
     if (!postsContainer) return;
 
-    // Show category heading above the grid
     _showCategoryHeading(catId);
 
+    // Clear static placeholder HTML immediately — no stale cards
     postsContainer.innerHTML =
         '<p style="text-align:center;padding:3rem;color:#666">جاري التحميل…</p>';
 
-    try {
-        const data = await apiJSON(`/api/Services?categoryId=${catId}`);
-        // Handle both plain array and paginated wrapper { data: [], total: n }
-        const services = Array.isArray(data) ? data : (data.data ?? data.items ?? []);
+    // Pre-fetch favorite IDs and service list in parallel
+    const [, serviceResult] = await Promise.allSettled([
+        _loadFavoriteIds(),
+        apiJSON(`/api/Services?categoryId=${catId}`),
+    ]);
 
-        if (!services.length) {
-            postsContainer.innerHTML =
-                `<p style="text-align:center;padding:3rem;color:#888">
-                    لا توجد خدمات في هذه الفئة بعد.
-                 </p>`;
-            return;
-        }
-
-        postsContainer.innerHTML = services.map(s => renderServiceCard(s, catId)).join('');
-
-        // Wire sort after dynamic render
-        sortPosts();
-
-    } catch (err) {
-        console.error('[post.js] Service load error:', err);
+    if (serviceResult.status === 'rejected') {
         postsContainer.innerHTML =
-            `<p style="text-align:center;padding:3rem;color:#e74c3c">
-                خطأ أثناء التحميل: ${err.message}
-             </p>`;
+            `<p style="text-align:center;padding:3rem;color:#e74c3c">خطأ أثناء التحميل.</p>`;
+        return;
     }
+
+    const rawData  = serviceResult.value;
+    const services = Array.isArray(rawData)
+        ? rawData
+        : (rawData?.data || rawData?.items || []);
+
+    if (!services.length) {
+        postsContainer.innerHTML =
+            `<p style="text-align:center;padding:3rem;color:#888">لا توجد خدمات في هذه الفئة بعد.</p>`;
+        return;
+    }
+
+    // renderServiceCard reads userFavoriteIds synchronously — no extra arg needed
+    postsContainer.innerHTML = services.map(s => renderServiceCard(s, catId)).join('');
+    sortPosts();
 }
 
-/**
- * loadAllServices — no catId in the URL; loads every active service from the DB
- * and renders them into the grid. Falls back to the static HTML cards on error.
- */
+// ── Load all active services ──────────────────────────────────────────────────
 async function loadAllServices() {
     if (!postsContainer) return;
 
+    // Wipe container immediately — never leave static HTML cards visible
     postsContainer.innerHTML =
         '<p style="text-align:center;padding:3rem;color:#666">جاري التحميل…</p>';
 
-    try {
-        const data     = await apiJSON('/api/Services');
-        const services = Array.isArray(data) ? data : (data.data ?? data.items ?? []);
+    // Pre-fetch favorites and services in parallel; favorites degrade silently
+    const [, serviceResult] = await Promise.allSettled([
+        _loadFavoriteIds(),
+        apiJSON('/api/Services'),
+    ]);
 
-        if (!services.length) {
-            postsContainer.innerHTML =
-                '<p style="text-align:center;padding:3rem;color:#888">لا توجد خدمات متاحة حالياً.</p>';
-            return;
-        }
+    if (serviceResult.status === 'rejected') {
+        postsContainer.innerHTML =
+            `<p style="text-align:center;padding:3rem;color:#e74c3c">
+                تعذّر تحميل الخدمات. يرجى المحاولة مجدداً.
+             </p>`;
+        return;
+    }
 
-        postsContainer.innerHTML = services
-            .map(s => renderServiceCard(s, s.categoryID ?? 0))
-            .join('');
-        sortPosts();
+    const rawData  = serviceResult.value;
+    const services = Array.isArray(rawData)
+        ? rawData
+        : (rawData?.data || rawData?.items || []);
 
-    } catch (err) {
-        console.warn('[post.js] API unavailable, using static cards:', err.message);
-        // Static HTML cards are already in the DOM from post.html — just sort them
+    if (!services.length) {
+        postsContainer.innerHTML =
+            `<p style="text-align:center;padding:3rem;color:#888">لا توجد خدمات متاحة حالياً.</p>`;
+        return;
+    }
+
+    postsContainer.innerHTML = services
+        .map(s => renderServiceCard(s, s.categoryID ?? s.categoryId ?? 0))
+        .join('');
+
+    if (sortSelect) {
         sortSelect.value = 'rating_high';
         sortPosts();
     }
 }
 
-/** Inserts or updates a category heading above the services grid. */
+// ── Category heading ──────────────────────────────────────────────────────────
 function _showCategoryHeading(catId) {
     const name = CATEGORY_NAMES[catId] || `Category ${catId}`;
     let heading = document.getElementById('category-page-heading');
@@ -207,39 +272,77 @@ function _showCategoryHeading(catId) {
 
 // ── Bootstrap ─────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
-    // Wire currency toggle
     const currencyToggle = document.getElementById('currencyToggle');
     if (currencyToggle) currencyToggle.addEventListener('click', toggleCurrency);
 
-    // Check for category filter in the URL query string
     const params = new URLSearchParams(window.location.search);
     const catId  = params.get('catId');
 
     if (catId) {
-        // Filtered mode: fetch only this category's services
         await loadServicesByCategory(parseInt(catId, 10));
     } else {
-        // All-services mode: fetch everything from the DB
         await loadAllServices();
     }
 });
 
-// ── Global: Add to Favourites ─────────────────────────────────────────────────
+// ── Global: Favourite toggle ──────────────────────────────────────────────────
+// Uses data-fav="true|false" written by renderServiceCard to distinguish add vs
+// remove without a re-fetch.  Keeps `userFavoriteIds` in sync so any subsequent
+// re-render within the same session respects the latest state.
 window.addToFavorites = async function (serviceId, btnElement) {
     const user = requireAuth(['client']);
     if (!user) return;
 
+    const numId  = Number(serviceId);
+    const isFav  = btnElement?.dataset.fav === 'true';
+    const icon   = btnElement?.querySelector('i');
+    const method = isFav ? 'DELETE' : 'POST';
+
+    // ── Optimistic UI ─────────────────────────────────────────────────────────
+    if (icon) {
+        icon.className   = isFav ? 'far fa-heart' : 'fas fa-heart';
+        icon.style.color = isFav ? '' : '#ef4444';
+    }
+    if (btnElement) {
+        btnElement.dataset.fav = String(!isFav);
+        btnElement.title       = isFav ? 'أضف للمفضلة' : 'إزالة من المفضلة';
+        btnElement.ariaLabel   = btnElement.title;
+    }
+
+    // ── Optimistic array update ───────────────────────────────────────────────
+    if (isFav) {
+        userFavoriteIds = userFavoriteIds.filter(id => id !== numId);
+    } else {
+        if (!userFavoriteIds.includes(numId)) userFavoriteIds.push(numId);
+    }
+
     try {
-        await apiFetch(`/api/Favorites/${serviceId}`, { method: 'POST' });
-        if (btnElement) {
-            const icon = btnElement.querySelector('i');
-            if (icon) {
-                icon.classList.replace('far', 'fas');
-                icon.style.color = '#e74c3c';
-            }
-        }
-        alert('تمت إضافة الخدمة للمفضلة بنجاح! ❤️');
+        await apiFetch(`/api/Favorites/${numId}`, { method });
+        // API confirmed — nothing more to do; array is already updated above.
     } catch {
-        alert('الخدمة موجودة مسبقاً في المفضلة، أو حدث خطأ.');
+        // ── Revert everything on failure ──────────────────────────────────────
+        if (icon) {
+            icon.className   = isFav ? 'fas fa-heart' : 'far fa-heart';
+            icon.style.color = isFav ? '#ef4444' : '';
+        }
+        if (btnElement) btnElement.dataset.fav = String(isFav);
+
+        // Revert array
+        if (isFav) {
+            if (!userFavoriteIds.includes(numId)) userFavoriteIds.push(numId);
+        } else {
+            userFavoriteIds = userFavoriteIds.filter(id => id !== numId);
+        }
+
+        alert(isFav
+            ? 'تعذّرت إزالة الخدمة من المفضلة. حاول مجدداً.'
+            : 'الخدمة موجودة مسبقاً في المفضلة، أو حدث خطأ.');
     }
 };
+
+// ── Internal escape helper ────────────────────────────────────────────────────
+function _esc(str) {
+    return String(str ?? '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}

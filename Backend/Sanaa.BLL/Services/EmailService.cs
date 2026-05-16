@@ -26,6 +26,8 @@ namespace Sanaa.BLL.Services
             message.Body = new TextPart("html") { Text = htmlBody };
 
             using var client = new SmtpClient();
+client.Timeout = 3000;
+            
             await client.ConnectAsync(
                 _configuration["Smtp:Host"],
                 int.Parse(_configuration["Smtp:Port"]!),

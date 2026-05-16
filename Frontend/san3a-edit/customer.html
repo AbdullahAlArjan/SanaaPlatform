@@ -3,149 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Dashboard - Sana'a</title>
+    <title>Customer Dashboard — Sana'a Platform</title>
     <link rel="stylesheet" href="css/CustomerStyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-   <!-- Top Navigation Bar -->
-<div class="top-bar">
-    <div class="top-bar-left">
-        <a href="index.html" class="website-name">Sana'a</a> <!-- Added link -->
-    </div>
-    <div class="top-bar-right">
-        <div class="notification-icon" onclick="toggleNotifications()">
-            <i class="fas fa-bell"></i>
-            <span class="notification-count">3</span>
-        </div>
-    </div>
-</div>
 
-    <!-- Main Content -->
-    <div class="customer-dashboard">
-        <!-- Left Column - Profile Section -->
-        <div class="profile-section">
-            <div class="profile-card">
-                <div class="avatar-container">
-                    <div class="avatar">
-                        <img src="https://placehold.co/200x200" class="profile-pic" alt="Profile Photo" id="profileImage">
-                    </div>
-                    <button class="edit-profile-btn" onclick="openProfileEditor()">
-                        <i class="fas fa-edit"></i> Edit Profile
-                    </button>
-                </div>
-               <div class="profile-info">
-    <h1 id="fullName"></h1>
-    <div class="contact-info">
-        <p><i class="fas fa-venus-mars"></i> <span id="genderDisplay"></span></p>
-        
-        <!-- Redesigned Birthday Field -->
-        <div class="birthday-container">
-            <i class="fas fa-calendar-alt"></i> <!-- Updated icon -->
-            <span id="birthdayDisplay"></span>
+    <!-- ── Top Navigation Bar ─────────────────────────────────────────── -->
+    <header class="top-bar">
+        <div class="top-bar-left">
+            <a href="index.html" class="site-logo">Sana'a</a>
         </div>
-
-        <p><i class="fas fa-phone"></i> <span id="phoneDisplay"></span></p>
-        <p><i class="fas fa-map-marker-alt"></i> <span id="cityDisplay"></span></p>
-    </div>
-</div>
+        <div class="top-bar-right">
+            <div class="notif-trigger" onclick="toggleNotifications()">
+                <i class="fas fa-bell"></i>
+                <span class="notif-badge">3</span>
             </div>
         </div>
+    </header>
 
-        <!-- Right Column - Services Section -->
-        <div class="services-section">
-    <h3>الخدمات المفضلة</h3>
-    <div class="services-grid" id="favoriteServicesContainer">
-        <p class="loading-text">جاري التحميل...</p>
-    </div>
-</div>
-
-<div class="services-section">
-    <h3>الخدمات المشتراة</h3>
-    <div class="services-grid" id="purchasedServicesContainer">
-        <p class="loading-text">جاري التحميل...</p>
-    </div>
-</div>
+    <!-- ── Notifications Dropdown ─────────────────────────────────────── -->
+    <div class="notif-dropdown" id="notificationsDropdown">
+        <div id="notificationsList"></div>
     </div>
 
-    <!-- Notifications Dropdown -->
-    <div class="notifications-dropdown" id="notificationsDropdown">
-        <div class="notifications-list" id="notificationsList">
-            <!-- Notifications will be dynamically added here -->
+    <!-- ── Welcome Banner ─────────────────────────────────────────────── -->
+    <section class="welcome-banner">
+        <div class="welcome-copy">
+            <h2>Welcome back, <span id="fullName">Valued Client</span> 👋</h2>
+            <p>Here's what's happening with your account today.</p>
         </div>
-    </div>
+        <div class="stats-row">
+            <div class="stat-chip">
+                <span class="stat-icon-wrap orders-icon"><i class="fas fa-shopping-bag"></i></span>
+                <div>
+                    <span class="stat-num" id="statTotalOrders">—</span>
+                    <span class="stat-lbl">Total Orders</span>
+                </div>
+            </div>
+            <div class="stat-chip">
+                <span class="stat-icon-wrap active-icon"><i class="fas fa-clock"></i></span>
+                <div>
+                    <span class="stat-num" id="statActiveOrders">—</span>
+                    <span class="stat-lbl">Active Orders</span>
+                </div>
+            </div>
+            <div class="stat-chip">
+                <span class="stat-icon-wrap fav-icon"><i class="fas fa-heart"></i></span>
+                <div>
+                    <span class="stat-num" id="statFavorites">—</span>
+                    <span class="stat-lbl">Saved Favorites</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Edit Profile Modal -->
-<div id="profileEditorModal" class="modal">
-    <div class="modal-content">
-        <!-- Close Button -->
-        <span class="close" onclick="closeModal('profileEditorModal')">&times;</span>
-        
-        <h3>Edit Profile</h3>
-        
-        <!-- Avatar Upload Button -->
-        <div class="form-group">
-            <label for="avatarUpload">Change Profile Picture</label>
-            <button class="upload-btn" onclick="document.getElementById('avatarUpload').click()">
-                <i class="fas fa-upload"></i> Upload Photo
+    <!-- ── Main Dashboard Grid ────────────────────────────────────────── -->
+    <main class="dashboard-grid">
+
+        <!-- Profile Sidebar -->
+        <aside class="profile-sidebar">
+            <div class="avatar-wrap">
+                <img src="https://placehold.co/200x200" id="profileImage" alt="Profile Photo" class="avatar-img">
+                <button class="edit-avatar-btn" onclick="document.getElementById('avatarUpload').click()">
+                    <i class="fas fa-camera"></i>
+                </button>
+                <input type="file" id="avatarUpload" accept="image/*" style="display:none;">
+            </div>
+            <div class="profile-meta">
+                <h3 id="sidebarName">—</h3>
+                <ul class="meta-list">
+                    <li><i class="fas fa-venus-mars"></i><span id="genderDisplay">—</span></li>
+                    <li><i class="fas fa-calendar-alt"></i><span id="birthdayDisplay">—</span></li>
+                    <li><i class="fas fa-phone"></i><span id="phoneDisplay">—</span></li>
+                    <li><i class="fas fa-map-marker-alt"></i><span id="cityDisplay">—</span></li>
+                </ul>
+            </div>
+            <button class="btn-edit-profile" onclick="openProfileEditor()">
+                <i class="fas fa-pen"></i> Edit Profile
             </button>
-            <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
-        </div>
+        </aside>
 
-        <!-- Gender Selection -->
-        <div class="form-group">
-            <label for="genderInput">Gender</label>
-            <select id="genderInput">
-                <option value="" disabled selected>Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                
-            </select>
-        </div>
+        <!-- Workspace -->
+        <div class="workspace">
 
-        <!-- Birthday Input -->
-        <div class="form-group">
-            <label for="birthdayInput">Birthday</label>
-            <input type="date" id="birthdayInput">
-        </div>
+            <!-- Tab Navigation -->
+            <nav class="workspace-tabs">
+                <button class="workspace-tab-btn active" data-tab="overview">
+                    <i class="fas fa-th-large"></i> Overview
+                </button>
+                <button class="workspace-tab-btn" data-tab="orders">
+                    <i class="fas fa-receipt"></i> My Orders
+                </button>
+                <button class="workspace-tab-btn" data-tab="favorites">
+                    <i class="fas fa-heart"></i> Favorites
+                </button>
+            </nav>
 
-        <!-- Phone Number -->
-        <div class="form-group">
-            <label for="phoneInput">Phone Number</label>
-            <input
-                type="tel"
-                id="phoneInput"
-                placeholder="Enter new phone number"
-              
-            >
-            <div class="error-message" id="phoneError">Phone number must be exactly 10 digits</div>
-        </div>
-        <!-- City Selection -->
-        <div class="form-group">
-            <label for="cityInput">City</label>
-            <select id="cityInput">
-                <option value="Amman">Amman</option>
-                <option value="Zarqa">Zarqa</option>
-                <option value="Irbid">Irbid</option>
-                <option value="Aqaba">Aqaba</option>
-                <option value="Mafraq">Mafraq</option>
-                <option value="Salt">Salt</option>
-                <option value="Madaba">Madaba</option>
-                <option value="Jerash">Jerash</option>
-                <option value="Karak">Karak</option>
-                <option value="Tafilah">Tafilah</option>
-                <option value="Ma'an">Ma'an</option>
-                <option value="Ajloun">Ajloun</option>
-                <option value="Ramtha">Ramtha</option>
-            </select>
-        </div>
+            <!-- ── Overview Tab ──────────────────────────────────────── -->
+            <div class="tab-pane active" id="tab-overview">
+                <div class="overview-cols">
+                    <div class="widget-card">
+                        <div class="widget-header">
+                            <h4><i class="fas fa-receipt"></i> Recent Orders</h4>
+                            <button class="widget-see-all" onclick="window.switchTab('orders')">See all</button>
+                        </div>
+                        <div id="recentOrdersSummary" class="widget-list">
+                            <div class="skeleton-row"></div>
+                            <div class="skeleton-row"></div>
+                            <div class="skeleton-row"></div>
+                        </div>
+                    </div>
+                    <div class="widget-card">
+                        <div class="widget-header">
+                            <h4><i class="fas fa-heart"></i> Saved Services</h4>
+                            <button class="widget-see-all" onclick="window.switchTab('favorites')">See all</button>
+                        </div>
+                        <div id="savedServicesSummary" class="widget-list">
+                            <div class="skeleton-row"></div>
+                            <div class="skeleton-row"></div>
+                            <div class="skeleton-row"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="explore-cta">
+                    <i class="fas fa-compass"></i>
+                    <p>Looking for something new?</p>
+                    <a href="index.html" class="btn-explore-green">
+                        Browse Services <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
 
-        <!-- Save Button -->
-        <button class="save-btn" onclick="saveProfileChanges()">Save Changes</button>
+            <!-- ── My Orders Tab ─────────────────────────────────────── -->
+            <div class="tab-pane" id="tab-orders">
+                <div class="services-grid" id="purchasedServicesContainer">
+                    <p class="loading-hint">
+                        <i class="fas fa-spinner fa-spin"></i> Loading orders…
+                    </p>
+                </div>
+            </div>
+
+            <!-- ── Favorites Tab ─────────────────────────────────────── -->
+            <div class="tab-pane" id="tab-favorites">
+                <div class="services-grid" id="favoriteServicesContainer">
+                    <p class="loading-hint">
+                        <i class="fas fa-spinner fa-spin"></i> Loading favorites…
+                    </p>
+                </div>
+            </div>
+
+        </div><!-- /.workspace -->
+    </main>
+
+    <!-- ── Edit Profile Modal ─────────────────────────────────────────── -->
+    <div id="profileEditorModal"
+         class="modal-overlay"
+         onclick="if(event.target===this) closeModal('profileEditorModal')">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('profileEditorModal')">&times;</button>
+            <h3>Edit Profile</h3>
+
+            <div class="form-field">
+                <label for="genderInput">Gender</label>
+                <select id="genderInput">
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label for="birthdayInput">Date of Birth</label>
+                <input type="date" id="birthdayInput">
+            </div>
+
+            <div class="form-field">
+                <label for="phoneInput">Phone Number</label>
+                <input type="tel" id="phoneInput" placeholder="10-digit number">
+                <span class="field-error" id="phoneError">Must be exactly 10 digits.</span>
+            </div>
+
+            <div class="form-field">
+                <label for="cityInput">City</label>
+                <select id="cityInput">
+                    <option value="Amman">Amman</option>
+                    <option value="Zarqa">Zarqa</option>
+                    <option value="Irbid">Irbid</option>
+                    <option value="Aqaba">Aqaba</option>
+                    <option value="Mafraq">Mafraq</option>
+                    <option value="Salt">Salt</option>
+                    <option value="Madaba">Madaba</option>
+                    <option value="Jerash">Jerash</option>
+                    <option value="Karak">Karak</option>
+                    <option value="Tafilah">Tafilah</option>
+                    <option value="Ma'an">Ma'an</option>
+                    <option value="Ajloun">Ajloun</option>
+                    <option value="Ramtha">Ramtha</option>
+                </select>
+            </div>
+
+            <button class="btn-save-profile" onclick="saveProfileChanges()">Save Changes</button>
+        </div>
     </div>
-</div>
-    <!-- Scripts -->
+
     <script type="module" src="js/customerJS.js"></script>
 </body>
 </html>

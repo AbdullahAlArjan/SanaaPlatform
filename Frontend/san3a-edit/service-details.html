@@ -570,7 +570,7 @@
       </form>
     </div>
 
-    <!-- ── STEP 2: Real Stripe Payment Element ──────────────────────── -->
+    <!-- ── STEP 2: Stripe Payment Element ──────────────────────────── -->
     <div id="co-step2">
       <button class="co-step-back" id="co-back-btn">
         <i class="fas fa-arrow-left"></i> Back to order details
@@ -578,16 +578,24 @@
 
       <p class="checkout-section-label">Payment Information</p>
 
-      <!-- Stripe Payment Element mounts here -->
-      <div id="payment-element"></div>
+      <!-- Hidden until initializeEmbeddedStripeElements() mounts the Stripe iframe.
+           Showing it before mount leaves a blank white box, so display:none is intentional. -->
+      <div id="stripePaymentContainer" style="display:none;">
+        <!-- Stripe.js injects the card form here -->
+        <div id="payment-element"></div>
 
-      <div id="payment-errors" style="color:#e74c3c;font-size:0.85rem;margin-top:0.5rem;min-height:1.2rem"></div>
+        <!-- Inline validation / decline messages from Stripe -->
+        <div id="payment-message"
+             style="color:#ef4444;font-size:0.85rem;margin-top:8px;display:none;"></div>
+
+        <button id="submit-stripe-btn" type="button" class="co-btn-pay"
+                style="width:100%;margin-top:15px;">
+          <i class="fas fa-lock"></i> Pay Now
+        </button>
+      </div>
 
       <div class="checkout-actions" style="margin-top:1.25rem">
         <button type="button" class="co-btn-cancel" id="co-cancel-step2-btn">Cancel</button>
-        <button type="button" class="co-btn-pay" id="checkout-pay-btn" disabled>
-          <i class="fas fa-lock"></i> Pay Now
-        </button>
       </div>
 
       <p class="secure-notice" style="margin-top:1rem">
