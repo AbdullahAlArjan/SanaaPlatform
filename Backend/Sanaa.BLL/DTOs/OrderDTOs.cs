@@ -16,8 +16,9 @@ namespace Sanaa.BLL.DTOs
         public int FreelancerID { get; set; }
         public string FreelancerName { get; set; }
         public int? ServiceID { get; set; }
-        public string ServiceTitle { get; set; }     // Service.Title
-        public decimal ServicePriceSnapshot { get; set; } // Order.ServicePriceSnapshot
+        public string ServiceTitle { get; set; }
+        public decimal ServicePriceSnapshot { get; set; }
+        public decimal Price { get; set; }           // alias for ServicePriceSnapshot — used by frontend earnings calc
         public string Description { get; set; }
         public string Location { get; set; }
         public DateTime OrderDate { get; set; }

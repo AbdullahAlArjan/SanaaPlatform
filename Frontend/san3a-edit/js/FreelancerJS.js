@@ -190,11 +190,14 @@ async function initFreelancerDashboard(user) {
     const orders = await _loadDashboardOrders();
 
     // ── 4. Stats computed from live order data ─────────────────────────────────
+    // Count completed orders and sum earnings across completed + accepted + paid
+    // (accepted orders have confirmed work commitment; completed = fully paid out).
     const completed = orders.filter(o => _normaliseStatus(o.status) === 'completed');
-    const earnings  = completed.reduce((sum, o) => sum + (Number(o.servicePriceSnapshot) || 0), 0);
+    const earned    = orders.filter(o => ['completed', 'accepted', 'paid'].includes(_normaliseStatus(o.status)));
+    const earnings  = earned.reduce((sum, o) => sum + (Number(o.price ?? o.servicePriceSnapshot) || 0), 0);
 
     _setText('completed-count', String(completed.length));
-    _setText('total-earnings',  `$${earnings.toFixed(0)}`);
+    _setText('total-earnings',  `$${earnings.toFixed(2)}`);
 
     // ── 5. Services list ───────────────────────────────────────────────────────
     try {
@@ -241,9 +244,8 @@ function _renderDashboardOrderCard(o) {
 
     const oid   = o.orderID ?? o.id ?? '—';
     const title = o.serviceTitle ? _esc(o.serviceTitle) : `Order #${oid}`;
-    const price = o.servicePriceSnapshot > 0
-        ? `$${Number(o.servicePriceSnapshot).toFixed(2)}`
-        : '';
+    const priceVal = Number(o.price ?? o.servicePriceSnapshot ?? 0);
+    const price    = priceVal > 0 ? `$${priceVal.toFixed(2)}` : '';
 
     // WhatsApp link for contacting the client
     const clientPhone   = (o.clientPhone || '').replace(/\D/g, '');
@@ -439,45 +441,159 @@ async function initOrdersList() {
     const container = document.getElementById('order-list-container');
     if (!container) return;
 
-    container.innerHTML = '<p>Loading orders…</p>';
+    container.innerHTML = `
+        <div style="text-align:center;padding:2rem;color:#6c757d;">
+            <i class="fas fa-spinner fa-spin" style="font-size:1.5rem;"></i>
+            <p style="margin-top:.5rem;">Loading orders…</p>
+        </div>`;
 
     try {
-        const data   = await apiJSON('/api/Orders/freelancer?pageNumber=1&pageSize=10');
+        const data   = await apiJSON('/api/Orders/freelancer?pageNumber=1&pageSize=20');
         const orders = Array.isArray(data) ? data : (data.data ?? data.items ?? []);
 
         if (!orders.length) {
-            container.innerHTML = '<p>No orders yet.</p>';
+            container.innerHTML = `
+                <div style="text-align:center;padding:3rem 1rem;color:#6c757d;">
+                    <i class="fas fa-clipboard" style="font-size:2.5rem;opacity:.35;display:block;margin-bottom:.75rem;"></i>
+                    <p style="font-size:.95rem;">No orders yet. Share your services to start receiving orders!</p>
+                </div>`;
             return;
         }
 
-        container.innerHTML = orders.map(o => {
-            const oid      = o.orderID ?? o.id;
-            const statusKey = _normaliseStatus(o.status);
-            const isPending = statusKey === 'pending';
-            return `
-            <div class="order-item">
-                <div class="order-info">
-                    <h4>Order #${oid}${o.serviceTitle ? ` — ${_esc(o.serviceTitle)}` : ''}</h4>
-                    <p>${_esc(o.description || 'No description provided')}</p>
-                    ${o.clientName ? `<p><i class="fas fa-user"></i> ${_esc(o.clientName)}</p>` : ''}
-                    <p><i class="fas fa-map-marker-alt"></i> ${_esc(o.location || '—')}</p>
-                    <span class="status-badge">${_orderStatusLabel(o.status)}</span>
-                </div>
-                ${isPending ? `
-                <div class="order-actions" style="margin-top:0.75rem;display:flex;gap:0.5rem;">
-                    <button class="btn btn-primary" onclick="respondToOrder(${oid}, ${ORDER_STATUS.Accepted})">
-                        <i class="fas fa-check"></i> Accept
-                    </button>
-                    <button class="btn btn-secondary" onclick="respondToOrder(${oid}, ${ORDER_STATUS.Rejected})">
-                        <i class="fas fa-times"></i> Decline
-                    </button>
-                </div>` : ''}
-            </div>`;
-        }).join('');
+        container.innerHTML = orders.map(o => _renderManageOrderCard(o)).join('');
 
     } catch (err) {
-        container.innerHTML = `<p style="color:red">Failed to load orders: ${_esc(err.message)}</p>`;
+        container.innerHTML = `
+            <div style="text-align:center;padding:2rem;color:#e74c3c;">
+                <i class="fas fa-exclamation-triangle" style="font-size:1.5rem;display:block;margin-bottom:.5rem;"></i>
+                <p style="font-size:.88rem;">Failed to load orders: ${_esc(err.message)}</p>
+            </div>`;
     }
+}
+
+// ── Professional order card for FL-manage-services.html ───────────────────────
+function _renderManageOrderCard(o) {
+    const oid        = o.orderID ?? o.id ?? '—';
+    const statusKey  = _normaliseStatus(o.status);
+    const statusLabel = _orderStatusLabel(o.status);
+    const isPending  = statusKey === 'pending';
+    const isAccepted = statusKey === 'accepted';
+
+    // Price — prefer the explicit `price` field, fall back to snapshot
+    const priceVal = Number(o.price ?? o.servicePriceSnapshot ?? 0);
+    const priceStr = priceVal > 0 ? `$${priceVal.toFixed(2)}` : '—';
+
+    // Service title and client details
+    const serviceTitle = o.serviceTitle ? _esc(o.serviceTitle) : `Service #${o.serviceID ?? '—'}`;
+    const clientName   = _esc(o.clientName  || 'Unknown Client');
+    const location     = _esc(o.location    || '—');
+    const description  = _esc((o.description || '—').slice(0, 120)) + ((o.description?.length ?? 0) > 120 ? '…' : '');
+    const dateStr      = o.orderDate
+        ? new Date(o.orderDate).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
+        : '—';
+
+    // Status badge colours
+    const badgeStyle = {
+        pending:   'background:#fff3cd;color:#856404;',
+        accepted:  'background:#cce5ff;color:#004085;',
+        completed: 'background:#d4edda;color:#155724;',
+        paid:      'background:#d4edda;color:#155724;',
+        rejected:  'background:#f8d7da;color:#721c24;',
+    }[statusKey] ?? 'background:#e2e8f0;color:#2c3e50;';
+
+    // WhatsApp button
+    const rawPhone   = (o.clientPhone || '').replace(/\D/g, '');
+    const waText     = encodeURIComponent(`مرحباً، بخصوص طلبك رقم ${oid}`);
+    const waHref     = rawPhone ? `https://wa.me/${rawPhone}?text=${waText}` : null;
+    const waBtn      = waHref
+        ? `<a href="${waHref}" target="_blank" rel="noopener noreferrer"
+               style="display:inline-flex;align-items:center;gap:.35rem;padding:.38rem .85rem;
+                      background:#25d366;color:#fff;border-radius:8px;text-decoration:none;
+                      font-size:.8rem;font-weight:600;white-space:nowrap;">
+               <i class="fab fa-whatsapp"></i> WhatsApp Client
+           </a>`
+        : `<button disabled
+               style="display:inline-flex;align-items:center;gap:.35rem;padding:.38rem .85rem;
+                      background:#d1d5db;color:#6b7280;border:none;border-radius:8px;
+                      font-size:.8rem;font-weight:600;cursor:not-allowed;">
+               <i class="fab fa-whatsapp"></i> No Phone
+           </button>`;
+
+    // Accept / Decline (pending) and Mark Complete (accepted)
+    const actionBtns = isPending ? `
+        <button onclick="respondToOrder(${oid}, ${ORDER_STATUS.Accepted})"
+                style="display:inline-flex;align-items:center;gap:.35rem;padding:.38rem .85rem;
+                       background:#27ae60;color:#fff;border:none;border-radius:8px;
+                       font-size:.8rem;font-weight:600;cursor:pointer;">
+            <i class="fas fa-check"></i> Accept
+        </button>
+        <button onclick="respondToOrder(${oid}, ${ORDER_STATUS.Rejected})"
+                style="display:inline-flex;align-items:center;gap:.35rem;padding:.38rem .85rem;
+                       background:#e74c3c;color:#fff;border:none;border-radius:8px;
+                       font-size:.8rem;font-weight:600;cursor:pointer;">
+            <i class="fas fa-times"></i> Decline
+        </button>` : isAccepted ? `
+        <button onclick="respondToOrder(${oid}, ${ORDER_STATUS.Completed})"
+                style="display:inline-flex;align-items:center;gap:.35rem;padding:.38rem .85rem;
+                       background:#1877f2;color:#fff;border:none;border-radius:8px;
+                       font-size:.8rem;font-weight:600;cursor:pointer;">
+            <i class="fas fa-flag-checkered"></i> Mark Complete
+        </button>` : '';
+
+    return `
+    <div style="background:#fff;border-radius:14px;box-shadow:0 2px 14px rgba(44,62,80,0.09);
+                border:1px solid #e9ecef;overflow:hidden;margin-bottom:1rem;">
+
+        <!-- ── Card Header ── -->
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;
+                    padding:1rem 1.25rem;border-bottom:1px solid #e9ecef;">
+            <div>
+                <div style="font-size:.72rem;font-weight:700;color:#6c757d;
+                            text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem;">
+                    Order #${oid} &nbsp;·&nbsp; ${dateStr}
+                </div>
+                <div style="font-size:1rem;font-weight:700;color:#2c3e50;">
+                    ${serviceTitle}
+                </div>
+            </div>
+            <div style="font-size:1.15rem;font-weight:700;color:#1877f2;white-space:nowrap;
+                        margin-left:1rem;padding-top:.1rem;">
+                ${priceStr}
+            </div>
+        </div>
+
+        <!-- ── Card Body ── -->
+        <div style="padding:1rem 1.25rem;display:grid;
+                    grid-template-columns:1fr 1fr;gap:.55rem .75rem;">
+            <div style="display:flex;align-items:center;gap:.5rem;font-size:.88rem;color:#2c3e50;">
+                <i class="fas fa-user" style="color:#1877f2;width:15px;text-align:center;flex-shrink:0;"></i>
+                <span>${clientName}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:.5rem;font-size:.88rem;color:#2c3e50;">
+                <i class="fas fa-map-marker-alt" style="color:#1877f2;width:15px;text-align:center;flex-shrink:0;"></i>
+                <span>${location}</span>
+            </div>
+            <div style="grid-column:span 2;display:flex;align-items:flex-start;gap:.5rem;
+                        font-size:.85rem;color:#6c757d;line-height:1.5;">
+                <i class="fas fa-align-left" style="color:#1877f2;width:15px;text-align:center;
+                          flex-shrink:0;margin-top:.15rem;"></i>
+                <span>${description}</span>
+            </div>
+        </div>
+
+        <!-- ── Card Footer ── -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+                    gap:.5rem;padding:.75rem 1.25rem;background:#f8f9fa;border-top:1px solid #e9ecef;">
+            <span style="display:inline-block;padding:.22rem .75rem;border-radius:999px;
+                         font-size:.76rem;font-weight:700;${badgeStyle}">
+                ${statusLabel}
+            </span>
+            <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                ${actionBtns}
+                ${waBtn}
+            </div>
+        </div>
+    </div>`;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════

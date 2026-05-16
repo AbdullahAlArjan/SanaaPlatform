@@ -7,6 +7,7 @@ using Sanaa.DAL.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sanaa.BLL.DTOs;
 
 namespace Sanaa.BLL.Services
 {
@@ -23,7 +24,7 @@ namespace Sanaa.BLL.Services
             _emailService = emailService;
         }
 
-        // 1. إنشاء طلب جديد 
+        // 1. إنشاء طلب جديد — returns the new OrderID on success, null on failure
         public async Task<int?> CreateOrderAsync(int clientId, CreateOrderRequest request)
         {
             // Fetch service to get its price
@@ -45,16 +46,17 @@ namespace Sanaa.BLL.Services
             var saved = await _context.SaveChangesAsync() > 0;
             if (!saved) return null;
 
+            // جلب بيانات الصنايعي لإرسال الإشعار والإيميل
+            var freelancerUser = await _context.Users.FindAsync(request.FreelancerID);
             var clientUser = await _context.Users.FindAsync(clientId);
 
-            // Push notification 
+            // Push notification — fast local DB write, safe to await inline
             await _notificationService.SendNotificationToUserAsync(
                 order.FreelancerID,
                 $"إجالك طلب جديد من {clientUser?.FullName ?? "زبون"}!");
 
-            // 🛑 [تم إيقاف الإيميل مؤقتاً لاختبار بوابة الدفع سترايب] 🛑
-            /*
-            var freelancerUser = await _context.Users.FindAsync(request.FreelancerID);
+            // Email — fire-and-forget so SMTP latency/failure never blocks the HTTP response.
+            // The orderId is returned to the frontend immediately after SaveChanges succeeds.
             if (freelancerUser != null)
             {
                 var toEmail   = freelancerUser.Email;
@@ -63,27 +65,38 @@ namespace Sanaa.BLL.Services
                 var desc      = order.Description;
                 var loc       = order.Location;
 
-                try
+                _ = Task.Run(async () =>
                 {
-                    await _emailService.SendAsync(toEmail, toName, "طلب جديد - منصة صناع", $"...");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Email skipped: {ex.Message}");
-                }
+                    try
+                    {
+                        await _emailService.SendAsync(
+                            toEmail, toName,
+                            "طلب جديد - منصة صناع",
+                            $"<div dir='rtl'><h3>مرحباً {toName}</h3>" +
+                            $"<p>لديك طلب جديد من {clientName}.</p>" +
+                            $"<p><strong>التفاصيل:</strong> {desc}</p>" +
+                            $"<p><strong>الموقع:</strong> {loc}</p>" +
+                            $"<p>سجّل دخولك لمراجعة الطلب والرد عليه.</p></div>");
+                    }
+                    catch (Exception ex)
+                    {
+                        // Email failure must never propagate back to the caller.
+                        // TODO: replace Console.WriteLine with ILogger once injected.
+                        Console.WriteLine($"[OrderService] Order notification email failed: {ex.Message}");
+                    }
+                });
             }
-            */
 
-            return order.OrderID;   // رح يرجع فوراً بدون أي تأخير!
+            return order.OrderID;   // returned immediately — email sends in the background
         }
 
         // 2. جلب طلبات صنايعي معين
         public async Task<PagedResponse<OrderResponse>> GetOrdersForFreelancerAsync(int freelancerId, int pageNumber, int pageSize)
         {
             var query = _context.Orders
-                .Include(o => o.Client)                              // ClientName + ClientPhone
-                .Include(o => o.Freelancer).ThenInclude(f => f.User) // FIX: was null → HTTP 500
-                .Include(o => o.Service)                             // ServiceTitle
+                .Include(o => o.Client)
+                .Include(o => o.Freelancer).ThenInclude(f => f.User)
+                .Include(o => o.Service)
                 .Where(o => o.FreelancerID == freelancerId)
                 .OrderByDescending(o => o.OrderDate);
 
@@ -93,25 +106,44 @@ namespace Sanaa.BLL.Services
                 .Take(pageSize)
                 .ToListAsync();
 
+            // Safe loop: one corrupted/orphaned order never crashes the whole response.
+            // Each row is mapped independently; any null-reference is caught and skipped.
+            var safeOrdersList = new List<OrderResponse>();
+
+            foreach (var o in orders)
+            {
+                try
+                {
+                    safeOrdersList.Add(new OrderResponse
+                    {
+                        OrderID              = o.OrderID,
+                        ClientName           = o.Client?.FullName           ?? "Unknown Client",
+                        ClientPhone          = o.Client?.Phone              ?? "",
+                        FreelancerID         = o.FreelancerID,
+                        FreelancerName       = o.Freelancer?.User?.FullName ?? "Unknown",
+                        ServiceID            = o.ServiceID,
+                        ServiceTitle         = o.Service?.Title             ?? "Unknown Service",
+                        ServicePriceSnapshot = o.ServicePriceSnapshot       ?? 0m,
+                        Price                = o.ServicePriceSnapshot       ?? 0m,
+                        Description          = o.Description                ?? "",
+                        Location             = o.Location                   ?? "",
+                        OrderDate            = o.OrderDate,
+                        Status               = o.Status.ToString()
+                    });
+                }
+                catch
+                {
+                    // Skip rows that cannot be mapped (orphaned FKs, corrupted data, etc.)
+                    continue;
+                }
+            }
+
             return new PagedResponse<OrderResponse>
             {
-                Data = orders.Select(o => new OrderResponse
-                {
-                    OrderID              = o.OrderID,
-                    ClientName           = o.Client.FullName,
-                    ClientPhone          = o.Client.Phone ?? string.Empty,
-                    FreelancerName       = o.Freelancer?.User?.FullName ?? "صنايعي",
-                    ServiceID            = o.ServiceID,
-                    ServiceTitle         = o.Service?.Title ?? string.Empty,
-                    ServicePriceSnapshot = o.ServicePriceSnapshot ?? 0m,
-                    Description          = o.Description,
-                    Location             = o.Location,
-                    OrderDate            = o.OrderDate,
-                    Status               = o.Status.ToString()
-                }),
+                Data       = safeOrdersList,
                 TotalCount = totalCount,
                 PageNumber = pageNumber,
-                PageSize = pageSize
+                PageSize   = pageSize
             };
         }
 
@@ -149,7 +181,7 @@ namespace Sanaa.BLL.Services
             };
         }
 
-        // 3. تحديث حالة الطلب
+        // 3. تحديث حالة الطلب (مقبول، مرفوض، مكتمل)
         public async Task<bool> UpdateOrderStatusAsync(int orderId, int freelancerId, OrderStatus status)
         {
             var order = await _context.Orders
@@ -161,13 +193,43 @@ namespace Sanaa.BLL.Services
             var saved = await _context.SaveChangesAsync() > 0;
             if (!saved) return false;
 
-            // 🛑 [تم إيقاف الإيميل مؤقتاً لاختبار بوابة الدفع سترايب] 🛑
-            /*
+            // إرسال إيميل للزبون حسب الحالة الجديدة — fire-and-forget (same reason as CreateOrderAsync)
             if (order.Client != null && status != OrderStatus.Pending)
             {
-                // ... Email logic
+                var (subject, body) = status switch
+                {
+                    OrderStatus.Accepted => (
+                        "تم قبول طلبك - منصة صناع",
+                        $"<div dir='rtl'><h3>مرحباً {order.Client.FullName}</h3><p>تم <strong>قبول</strong> طلبك رقم {orderId}. سيتواصل معك الصنايعي قريباً.</p></div>"),
+                    OrderStatus.Rejected => (
+                        "تم رفض طلبك - منصة صناع",
+                        $"<div dir='rtl'><h3>مرحباً {order.Client.FullName}</h3><p>نأسف، تم <strong>رفض</strong> طلبك رقم {orderId}. يمكنك البحث عن صنايعي آخر.</p></div>"),
+                    OrderStatus.Completed => (
+                        "اكتمل طلبك - منصة صناع",
+                        $"<div dir='rtl'><h3>مرحباً {order.Client.FullName}</h3><p>تم <strong>إكمال</strong> طلبك رقم {orderId} بنجاح. يسعدنا سماع تقييمك!</p></div>"),
+                    _ => (string.Empty, string.Empty)
+                };
+
+                if (!string.IsNullOrEmpty(subject))
+                {
+                    var clientEmail = order.Client.Email;
+                    var clientName  = order.Client.FullName;
+                    var subjectCopy = subject;
+                    var bodyCopy    = body;
+
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await _emailService.SendAsync(clientEmail, clientName, subjectCopy, bodyCopy);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"[OrderService] Status-change email failed: {ex.Message}");
+                        }
+                    });
+                }
             }
-            */
 
             return true;
         }
