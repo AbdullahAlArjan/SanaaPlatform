@@ -32,6 +32,7 @@ namespace Sanaa.API
             });
 
             // Add services to the container.
+            builder.Services.AddHttpClient(); // IHttpClientFactory used by ChatbotController
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {
@@ -90,7 +91,6 @@ namespace Sanaa.API
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IOtpService, OtpService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
-            builder.Services.AddScoped<IInvoiceService, InvoiceService>();
             builder.Services.AddScoped<IReportService, ReportService>();
             builder.Services.AddScoped<IChatbotService, ChatbotService>();
             builder.Services.AddScoped<IEmailService, EmailService>();

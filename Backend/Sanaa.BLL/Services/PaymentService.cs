@@ -13,20 +13,17 @@ namespace Sanaa.BLL.Services
         private readonly SanaaDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly INotificationService _notificationService;
-        private readonly IInvoiceService _invoiceService;
         private readonly IEmailService _emailService;
 
         public PaymentService(
             SanaaDbContext context,
             IConfiguration configuration,
             INotificationService notificationService,
-            IInvoiceService invoiceService,
             IEmailService emailService)
         {
             _context = context;
             _configuration = configuration;
             _notificationService = notificationService;
-            _invoiceService = invoiceService;
             _emailService = emailService;
             StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"];
         }
@@ -160,13 +157,6 @@ namespace Sanaa.BLL.Services
             payment.Order.Status      = OrderStatus.Completed;
             payment.Order.PaymentStatus = PaymentStatus.Succeeded;
             await _context.SaveChangesAsync();
-
-            // Generate invoice
-            _ = Task.Run(async () =>
-            {
-                try { await _invoiceService.GenerateInvoiceAsync(payment.OrderId, payment.Id, payment.Amount); }
-                catch { /* non-fatal */ }
-            });
 
             // SignalR notification to the freelancer
             await _notificationService.SendNotificationToUserAsync(

@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Sanaa.BLL.DTOs;
 using Sanaa.BLL.Interfaces;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -13,13 +12,17 @@ namespace Sanaa.BLL.Services
         private readonly HttpClient _httpClient;
 
         private const string SystemPrompt =
-            "اسمك صناع، مساعد ذكي لمنصة صناع — منصة للعمل الحر تربط الزبائن بالحرفيين والصنايعية في الأردن. " +
-            "قدّم نفسك دائماً باسم 'صناع' عند السؤال عن هويتك. " +
+            "أنت المساعد الذكي الرسمي لمنصة 'صنعة' (Sanaa Platform). " +
+            "منصة صنعة هي سوق عمل حر يربط بين العملاء والصنايعية أو المستقلين (Freelancers) لتقديم خدمات احترافية. " +
+            "أجب على أسئلة المستخدمين بلهجة أردنية/عربية ودودة ومحترفة. " +
+            "لا تخترع أسماء صنايعية أو أسعار من رأسك. " +
+            "إذا سألك المستخدم عن كيفية الطلب، اشرح له أنه يمكنه تصفح الخدمات وطلبها مباشرة من لوحة التحكم.\n\n" +
+            "قدّم نفسك دائماً باسم 'صنّاع' عند السؤال عن هويتك.\n" +
             "مهمتك مساعدة المستخدمين في:\n" +
-            "- البحث عن الحرفيين المناسبين حسب التخصص والمدينة\n" +
+            "- البحث عن الصنايعية والحرفيين حسب التخصص والمدينة\n" +
             "- شرح كيفية إنشاء طلب (Order) وتتبع حالته\n" +
             "- الإجابة على أسئلة الدفع والفواتير\n" +
-            "- شرح كيفية التسجيل كصنايعي أو زبون\n" +
+            "- شرح كيفية التسجيل كصنايعي أو كزبون\n" +
             "- شرح نظام التقييمات والبلاغات\n" +
             "أجب دائماً بالعربية ما لم يتحدث المستخدم بلغة أخرى. كن ودوداً ومختصراً.";
 
@@ -31,40 +34,91 @@ namespace Sanaa.BLL.Services
 
         public async Task<string> GetResponseAsync(string message, List<ChatMessageDto> conversationHistory)
         {
-            var apiKey = _configuration["Anthropic:ApiKey"];
+            var apiKey = _configuration["Gemini:ApiKey"];
 
-            var messages = conversationHistory
-                .Select(h => new { role = h.Role, content = h.Content })
+            if (string.IsNullOrWhiteSpace(apiKey))
+                return "المساعد غير متاح حالياً. يرجى التواصل مع الدعم الفني.";
+
+            // ── Build the Gemini `contents` array from conversation history ────
+            // Gemini roles: "user" | "model"  (NOT "assistant")
+            var contents = conversationHistory
+                .Select(h => new
+                {
+                    role  = h.Role == "assistant" ? "model" : h.Role,
+                    parts = new[] { new { text = h.Content } }
+                })
                 .ToList<object>();
 
-            messages.Add(new { role = "user", content = message });
+            // Append the new user turn
+            contents.Add(new
+            {
+                role  = "user",
+                parts = new[] { new { text = message } }
+            });
 
+            // ── Gemini request body ────────────────────────────────────────────
             var requestBody = new
             {
-                model = "claude-haiku-4-5-20251001",
-                max_tokens = 1024,
-                system = SystemPrompt,
-                messages
+                systemInstruction = new
+                {
+                    parts = new[] { new { text = SystemPrompt } }
+                },
+                contents,
+                generationConfig = new
+                {
+                    maxOutputTokens = 1024,
+                    temperature     = 0.7
+                }
             };
 
             var json = JsonSerializer.Serialize(requestBody);
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.anthropic.com/v1/messages");
-            request.Headers.Add("x-api-key", apiKey);
-            request.Headers.Add("anthropic-version", "2023-06-01");
-            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.SendAsync(request);
+            // API key is passed as a query parameter — no Authorization header needed
+            var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={apiKey}";
+
+            var httpRequest = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            };
+
+            HttpResponseMessage response;
+            try
+            {
+                response = await _httpClient.SendAsync(httpRequest);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ChatbotService] HTTP error: {ex.Message}");
+                return "تعذّر الاتصال بالمساعد الذكي. حاول مرة أخرى.";
+            }
 
             if (!response.IsSuccessStatusCode)
+            {
+                var errBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"[ChatbotService] Gemini error {response.StatusCode}: {errBody}");
                 return "عذراً، لم أتمكن من الإجابة حالياً. حاول مرة أخرى.";
+            }
 
+            // ── Parse Gemini response ─────────────────────────────────────────
+            // Shape: { candidates: [ { content: { parts: [ { text: "..." } ] } } ] }
             var responseJson = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(responseJson);
 
-            return doc.RootElement
-                .GetProperty("content")[0]
-                .GetProperty("text")
-                .GetString() ?? "عذراً، لم أتمكن من الإجابة حالياً.";
+            try
+            {
+                using var doc = JsonDocument.Parse(responseJson);
+                return doc.RootElement
+                    .GetProperty("candidates")[0]
+                    .GetProperty("content")
+                    .GetProperty("parts")[0]
+                    .GetProperty("text")
+                    .GetString()
+                    ?? "عذراً، لم أتمكن من الإجابة حالياً.";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ChatbotService] Parse error: {ex.Message}\nRaw: {responseJson}");
+                return "عذراً، حدث خطأ في معالجة الرد. حاول مرة أخرى.";
+            }
         }
     }
 }

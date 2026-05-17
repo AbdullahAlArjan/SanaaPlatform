@@ -37,7 +37,6 @@ namespace Sanaa.DAL.Entities
         public PaymentStatus? PaymentStatus { get; set; }
 
         public virtual Payment? Payment { get; set; }
-        public virtual Invoice? Invoice { get; set; }
     }
 
     // هاد Enum بيسهل علينا التعامل مع حالات الطلب بدل ما نستخدم أرقام مبهمة

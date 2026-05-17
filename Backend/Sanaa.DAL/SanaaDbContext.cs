@@ -20,7 +20,6 @@ namespace Sanaa.DAL
         public DbSet<Review> Reviews { get; set; }
         public DbSet<OtpCode> OtpCodes { get; set; }
         public DbSet<Payment> Payments { get; set; }
-        public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -82,19 +81,6 @@ namespace Sanaa.DAL
                 .HasForeignKey<Payment>(p => p.OrderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Invoice - Order: 1:1
-            modelBuilder.Entity<Invoice>()
-                .HasOne(i => i.Order)
-                .WithOne(o => o.Invoice)
-                .HasForeignKey<Invoice>(i => i.OrderID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Invoice - Payment: 1:1
-            modelBuilder.Entity<Invoice>()
-                .HasOne(i => i.Payment)
-                .WithOne(p => p.Invoice)
-                .HasForeignKey<Invoice>(i => i.PaymentID)
-                .OnDelete(DeleteBehavior.Restrict);
 
             // Reports: Restrict delete + Unique index لمنع بلاغين من نفس المستخدم على نفس الـ target
             modelBuilder.Entity<Report>()

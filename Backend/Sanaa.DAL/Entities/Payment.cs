@@ -32,7 +32,5 @@ namespace Sanaa.DAL.Entities
         public string? StripePaymentIntentId { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public virtual Invoice? Invoice { get; set; }
     }
 }
